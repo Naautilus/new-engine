@@ -1,0 +1,3 @@
+struct model_interface {
+	
+}

@@ -1,0 +1,337 @@
+#pragma once
+#include "../simulation_logic/physics_step_logic.cpp"
+#include "../renderer/camera_properties.cpp"
+#include "../renderer/models.cpp"
+#include "../collision/collider_type.h"
+#include "../collision/collider.cpp"
+
+
+vector::localspace camera_offset;
+struct renderer;
+
+// chatGPT code below
+Eigen::Quaterniond adjust_quaternion_angle(Eigen::Quaterniond q, double angle_multiplier) {
+		double theta = 2 * acos(q.w());  // Original angle in radians
+		double sin_half_theta = sqrt(1 - q.w() * q.w());
+
+		// Axis of the original quaternion
+		vector::localspace axis;
+		if (sin_half_theta > 0.0001) {  // Check to avoid division by zero
+				axis.x() = q.x() / sin_half_theta;
+				axis.y() = q.y() / sin_half_theta;
+				axis.z() = q.z() / sin_half_theta;
+		} else {  // Quaternion is approximately a no-rotation, axis doesn't matter
+				axis.x() = 1.0;
+				axis.y() = 0.0;
+				axis.z() = 0.0;
+		}
+
+		Eigen::Quaterniond output;
+
+		// Adjust the angle
+		double new_theta = theta * angle_multiplier;
+		output.w() = cos(new_theta / 2);
+		output.x() = axis.x() * sin(new_theta / 2);
+		output.y() = axis.y() * sin(new_theta / 2);
+		output.z() = axis.z() * sin(new_theta / 2);
+		return output;
+}
+
+// https://math.stackexchange.com/questions/61146/averaging-quaternions
+Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats) {
+		Eigen::Quaterniond q_avg = Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0);
+		for (int i = 0; i < quats.size(); i++) {
+				Eigen::Quaterniond q = quats[i];
+				double weight = 1.0;
+				
+				// Correct for double cover, by ensuring that dot product
+				// of quats[i] and quats[0] is positive
+				if (i > 0 && quats[i].dot(quats[0]) < 0.0) {
+						weight = -weight;
+				}
+				
+				q_avg.w() += weight * q.w();
+				q_avg.x() += weight * q.x();
+				q_avg.y() += weight * q.y();
+				q_avg.z() += weight * q.z();
+		}
+		q_avg.normalize();
+		return q_avg;
+}
+
+mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_) {
+	//bool is_edge = abs(x_) == count_deadzone && abs(y_) == count_deadzone && !();
+	mesh model;
+	if (color_variation) {
+		model = *models::ground_color_varying;
+	} else {
+		model = *models::ground_color_uniform;
+	}
+	//double x_center = last_camera_position.x() + last_camera_forward_direction.x() * tile_size * count * 0;
+	//double y_center = last_camera_position.y() + last_camera_forward_direction.y() * tile_size * count * 0;
+	//double x_pos = (x_ + round(x_center/tile_size)) * tile_size;
+	//double y_pos = (y_ + round(y_center/tile_size)) * tile_size;
+	double x_pos = (x_ + round(last_camera_position_.x()/tile_size)) * tile_size;
+	double y_pos = (y_ + round(last_camera_position_.y()/tile_size)) * tile_size;
+	double z_pos = vertical_offset;
+	for (vertex& v : model.vertices) {
+		v.x *= tile_size;
+		v.y *= tile_size;
+	}
+	for (vertex& v : model.vertices) {
+		v.x += x_pos;
+		v.y += y_pos;
+		v.z += z_pos;
+	}
+	for (vertex& v : model.vertices) {
+		int sample_points_squared = round(fmin(tile_size/original_tile_size, 3.0)); //std::round(sqrt(tile_size / original_tile_size));
+		v.z += ground::get_ground_altitude_averaged(v.x, v.y, tile_size, sample_points_squared);
+		v.g += ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
+		//v.z += get_ground_altitude(v.x, v.y);
+		//v.g += get_ground_color(v.x, v.y);
+		//v.r = (rand()+pow(2,31))/pow(2, 32);
+		//v.g = (rand()+pow(2,31))/pow(2, 32);
+		//v.b = (rand()+pow(2,31))/pow(2, 32);
+	}
+	for (vertex& v : model.vertices) {
+		double x_ = v.x;
+		double y_ = v.y;
+		double z_ = v.z;
+		v.x = y_;
+		v.y = z_;
+		v.z = -x_;
+	}
+	return model;
+}
+
+const int GROUND_LODS = 14;
+const double GROUND_INITIAL_TILE_SIZE = 0.1;//25.0;
+int GROUND_TILE_COUNT = 30;
+const int GROUND_DEADZONE_TILES = 2;
+
+std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_) {
+	std::vector<mesh> output;
+	double tile_size = GROUND_INITIAL_TILE_SIZE;
+	double tile_deadzone = GROUND_TILE_COUNT / 2 - GROUND_DEADZONE_TILES;
+	for (int i = 0; i < GROUND_LODS; i++) {
+		for (int x_ = -GROUND_TILE_COUNT; x_ < GROUND_TILE_COUNT; x_++) {
+			for (int y_ = -GROUND_TILE_COUNT; y_ < GROUND_TILE_COUNT; y_++) {
+				if (i > 0 && abs(x_) < tile_deadzone && abs(y_) < tile_deadzone) continue;
+				mesh model = get_ground_model_sub(0, GROUND_INITIAL_TILE_SIZE, tile_size, GROUND_TILE_COUNT, i==0?0:tile_deadzone, color_variation, x_, y_, last_camera_position_);
+				output.push_back(model);
+			}
+		}
+		tile_size *= 2;
+	}
+	///*
+	for (int x_ = -1; x_ < 1; x_++) {
+		for (int y_ = -1; y_ < 1; y_++) {
+			mesh model = get_ground_model_sub(-1e6, 1, 1e6, 4, 0, false, x_, y_, last_camera_position_);
+			output.push_back(model);
+		}
+	}
+	//*/
+	return output;
+}
+
+void move_camera(std::vector<physics_object::object>& physics_objects_, camera_properties& camera_properties_) {
+	physics_object::object* o;
+	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(physics_objects_, camera_properties_.camera_target_name);
+	else o = get_physics_object_from_vector_reversed(physics_objects_, camera_properties_.camera_target_name);
+	if (!o) return;
+	camera_properties_.previous_camera_rotations.push_back(o->physics_state.rotation);
+	if (camera_properties_.previous_camera_rotations.size() > 30) {
+		camera_properties_.previous_camera_rotations.erase(camera_properties_.previous_camera_rotations.begin());
+	}
+	Eigen::Quaterniond averaged_camera_rotation = average_approx(camera_properties_.previous_camera_rotations);
+	//Eigen::Quaterniond averagedCameraRotation = o->physics_state.rotation;
+	vector::worldspace camera_position_ = camera_properties_.camera_target_offset.to_worldspace_positional(averaged_camera_rotation, o->physics_state.position);
+	camera_properties_.camera_position[0] =  camera_position_.y();
+	camera_properties_.camera_position[1] =  camera_position_.z();
+	camera_properties_.camera_position[2] = -camera_position_.x();
+	vector::worldspace camera_up_direction = vector::localspace(0, 0, 1).to_worldspace(averaged_camera_rotation);
+	camera_properties_.camera_y_direction[0] =  camera_up_direction.y();
+	camera_properties_.camera_y_direction[1] =  camera_up_direction.z();
+	camera_properties_.camera_y_direction[2] = -camera_up_direction.x();
+	vector::worldspace camera_forward_direction = vector::localspace(1, 0, 0).to_worldspace(averaged_camera_rotation);
+	camera_properties_.camera_z_direction[0] =  camera_forward_direction.y();
+	camera_properties_.camera_z_direction[1] =  camera_forward_direction.z();
+	camera_properties_.camera_z_direction[2] = -camera_forward_direction.x();
+	camera_properties_.last_camera_position = camera_position_;
+	camera_properties_.last_camera_target_velocity = o->physics_state.velocity;
+}
+
+vector::worldspace get_triangle_normal(int i, mesh& model) {
+	vector::worldspace v1 = vector::worldspace(model.vertices[model.indices[i+0]].x, model.vertices[model.indices[i+0]].y, model.vertices[model.indices[i+0]].z);
+	vector::worldspace v2 = vector::worldspace(model.vertices[model.indices[i+1]].x, model.vertices[model.indices[i+1]].y, model.vertices[model.indices[i+1]].z);
+	vector::worldspace v3 = vector::worldspace(model.vertices[model.indices[i+2]].x, model.vertices[model.indices[i+2]].y, model.vertices[model.indices[i+2]].z);
+	vector::worldspace a = v2 - v1;
+	vector::worldspace b = v3 - v1;
+	vector::worldspace normal;
+	normal.x() = a.y() * b.z() - a.z() * b.y();
+	normal.y() = a.z() * b.x() - a.x() * b.z();
+	normal.z() = a.x() * b.y() - a.y() * b.x();
+	normal /= normal.norm();
+	return normal;
+}
+
+float three_point_interpolate(double value_at_neg1, double value_at0, double value_at_pos1, double x) {
+	if (x > 0) {
+		return (1-x)*value_at0 + x*value_at_pos1;
+	} else {
+		return (1+x)*value_at0 - x*value_at_neg1;
+	}
+}
+
+float linear_interpolate(double value_at0, double value_at1, double x) {
+	return (1-x)*value_at0 + x*value_at1;
+}
+
+float smoothstep(double edge0, double edge1, double x) {
+		// scale, bias and saturate x to 0..1 range
+		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+		// evaluate polynomial
+		return x * x * (3 - 2 * x);
+}
+
+void set_vertex_colors_by_brightness(vertex& v, double brightness_unfiltered) {
+	double brightness = smoothstep(-1, 1, brightness_unfiltered)*2-1;
+	v.r = (1-v.sun_factor)*v.r + v.sun_factor*v.r*three_point_interpolate(0.5, 1, 1.5, brightness);
+	v.g = (1-v.sun_factor)*v.g + v.sun_factor*v.g*three_point_interpolate(0.6, 1, 1.4, brightness);
+	v.b = (1-v.sun_factor)*v.b + v.sun_factor*v.b*three_point_interpolate(0.8, 1, 1.3, brightness);
+    
+    /*
+    double brightness = fmax(brightness_unfiltered*10, 0);
+    v.r = (1-v.sun_factor)*v.r + v.sun_factor*v.r*brightness*1.5;
+    v.g = (1-v.sun_factor)*v.g + v.sun_factor*v.g*brightness*1.4;
+    v.b = (1-v.sun_factor)*v.b + v.sun_factor*v.b*brightness*1.3;
+    */
+}
+
+void apply_sunlight_to_model(mesh& model) {
+	for (int i = 0; i < model.indices.size(); i += 3) {
+		vector::worldspace normal = get_triangle_normal(i, model);
+		double brightness = normal.dot(globals::SUN_DIRECTION);
+		set_vertex_colors_by_brightness(model.vertices[model.indices[i+0]], brightness);
+		set_vertex_colors_by_brightness(model.vertices[model.indices[i+1]], brightness);
+		set_vertex_colors_by_brightness(model.vertices[model.indices[i+2]], brightness);
+	}
+}
+
+void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vector::worldspace last_camera_position, vector::worldspace last_camera_target_velocity) {
+	ground_ = get_ground_model(false, last_camera_position + 0.5*last_camera_target_velocity);
+	for (mesh& m : ground_) {
+		apply_sunlight_to_model(m);
+	}
+	new_ground_ready_ = true;
+}
+
+int ground_models_start_point = -1;
+
+void renderer::create_models_from_physics_objects(std::vector<physics_object::object>& physics_objects_, std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
+	//std::cout << "a\n";
+	if (ground_models_start_point == -1) {
+		models.clear();
+		auto models_ = get_ground_model(false, camera_properties_.last_camera_position + 1.5*camera_properties_.last_camera_target_velocity);
+		for (int i = 0; i < models_.size(); i++) {
+			models.push_back(models_[i]);
+		}
+		ground_models_start_point = models_.size();
+		new_ground_ready = true;
+	}
+
+	if (new_ground_ready) {
+		//auto time_initial = std::chrono::high_resolution_clock::now();
+		models.clear();
+		for (int i = 0; i < ground.size(); i++) {
+			models.push_back(ground[i]);
+		}
+		std::thread t(recalculate_ground, std::ref(new_ground_ready), std::ref(ground), camera_properties_.last_camera_position, camera_properties_.last_camera_target_velocity);
+		t.detach();
+		//auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time_initial);
+		//std::cout << "time taken (new_ground_ready swap): " << time_taken << std::endl;
+		new_ground_ready = false;
+	}
+
+	//std::cout << "ground_models_start_point: " << ground_models_start_point << "\t";
+	//std::cout << "models.size() before reduction: " << models.size() << "\t";
+
+    // clear models, but keep around the part of the vector that the ground recalculation will use
+	while(models.size() > ground_models_start_point) {
+		models.pop_back();
+	}
+
+	//std::cout << "models.size() after reduction: " << models.size() << "\t";
+	long total_vertices = 0;
+	for (mesh& m : models) {
+		total_vertices += m.indices.size();
+	}
+	//std::cout << "total_vertices: " << total_vertices << "\n";
+
+	move_camera(physics_objects_, camera_properties_);
+
+	std::vector<module::visual_model> original_models;
+	std::vector<vector::worldspace> original_positions;
+	std::vector<Eigen::Quaterniond> original_rotations;
+	for (physics_object::object& o : physics_objects_) {
+		for (std::shared_ptr<module::module>& module_ : o.properties.modules) {
+            for (module::visual_model& m : module_->models) {
+				original_models.push_back(m);
+				original_positions.push_back(o.physics_state.position);
+				original_rotations.push_back(o.physics_state.rotation);
+			}
+
+            ///*
+            if (module_->collider.type != collision::collider_type::model_collider) continue;
+            mesh m = mesh(module_->collider, 0.8, 0, 0, 0.8);
+            for (vertex& v : m.vertices) {
+                double x_ = v.x;
+			    double y_ = v.y;
+			    double z_ = v.z;
+			    v.x = y_;
+			    v.y = z_;
+			    v.z = -x_;
+            }
+            apply_sunlight_to_model(m);
+		    models.push_back(m);
+            //*/
+		}
+	}
+	for (int i = 0; i < original_models.size(); i++) {
+		module::visual_model& m = original_models[i];
+		mesh model_ = *(m.mesh_data);
+		mesh model_rotated = model_;
+		for (vertex& v : model_rotated.vertices) {
+			v.x *= m.scaling.x();
+			v.y *= m.scaling.y();
+			v.z *= m.scaling.z();
+		}
+		for (vertex& v : model_rotated.vertices) {
+			v.x += m.position.x();
+			v.y += m.position.y();
+			v.z += m.position.z();
+		}
+		for (vertex& v : model_rotated.vertices) {
+			vector::localspace v_unrotated = vector::localspace(v.x, v.y, v.z);
+			vector::worldspace v_rotated = v_unrotated.to_worldspace(original_rotations[i]);
+			v.x = v_rotated.x();
+			v.y = v_rotated.y();
+			v.z = v_rotated.z();
+		}
+		for (vertex& v : model_rotated.vertices) {
+			v.x += original_positions[i].x();
+			v.y += original_positions[i].y();
+			v.z += original_positions[i].z();
+		}
+		for (vertex& v : model_rotated.vertices) {
+			double x_ = v.x;
+			double y_ = v.y;
+			double z_ = v.z;
+			v.x = y_;
+			v.y = z_;
+			v.z = -x_;
+		}
+		apply_sunlight_to_model(model_rotated);
+		models.push_back(model_rotated);
+	}
+}

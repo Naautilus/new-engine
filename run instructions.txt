@@ -1,0 +1,28 @@
+for performance, open minGW64 and enter:
+C:/msys64/mingw64/bin/g++.exe -std=c++23 -fdiagnostics-color=always -I C:/Users/user/Documents/code_windows/new-engine/src/eigen -I C:/Users/user/Documents/code_windows/new-engine/src/f16 C:/Users/user/Documents/code_windows/new-engine/src/renderer/glad.c C:/Users/user/Documents/code_windows/new-engine/src/main.cpp -o C:/Users/user/Documents/code_windows/new-engine/bin/main.exe -Ofast -lglfw3 -lopengl32 -lm -march=native -flto=12 -ffast-math -fomit-frame-pointer
+
+for debugging, open minGW64 and enter:
+C:/msys64/mingw64/bin/g++.exe -std=c++23 -fdiagnostics-color=always -I C:/Users/user/Documents/code_windows/new-engine/src/eigen -I C:/Users/user/Documents/code_windows/new-engine/src/f16 C:/Users/user/Documents/code_windows/new-engine/src/renderer/glad.c C:/Users/user/Documents/code_windows/new-engine/src/main.cpp -o C:/Users/user/Documents/code_windows/new-engine/bin/main.exe -O0 -lglfw3 -lopengl32 -lm -march=native -ffast-math -g
+
+
+to use address sanitizer use drmemory.exe -- ./main.exe
+
+to start xperf (admin): xperf -on PROC_THREAD+LOADER+PROFILE -f profile.etl -stackwalk Profile
+
+or: xperf -start "NT Kernel Logger" -on PROC_THREAD+LOADER+PROFILE -stackwalk Profile
+
+
+to start recording with xperf: ./main.exe 
+
+to stop xperf (method 1): xperf.exe -stop my_trace -stop -d merged_trace.etl
+
+to stop xperf (method 2): xperf -d trace.etl
+
+
+gdb get object inside shared_ptr:
+print (the_shared_ptr._M_t)
+then take the address of [0]:
+print *(T*)0x12345678
+^ that is the object
+
+use Very Sleepy to measure time
