@@ -1,6 +1,8 @@
 #pragma once
 #include "shapes.cpp"
 #include "collider_type.h"
+#include "collision_data.cpp"
+
 
 namespace collision {
 
@@ -72,8 +74,8 @@ namespace collision {
 		bool check_collision_model_to_model(collider& c) {
             return _check_collision_model_to_model_prism(c);
 		}
-        vector::worldspace get_point_of_collision_point_to_model(collider& c) {
-            // just the raw position is good enough for things like missile and bullet hits  
+        vector::worldspace get_collision_position_point_to_model(collider& c) {
+            // just the raw position is good enough for things like missile and bullet hits, rather than factoring in the sub-tick movement
             return position;
             //double min_distance = 0;
             //ray r = ray(position, velocity);
@@ -82,7 +84,7 @@ namespace collision {
             //    double distance = tri()
             //}
         }
-        std::optional<vector::worldspace> get_point_of_collision_model_to_model(collider& c) {
+        std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c) {
             vector::worldspace line_segment_position_sum = vector::worldspace(0, 0, 0);
             double line_segment_length_sum = 0;
             for (triangle& tri1 : model_data) {
@@ -109,6 +111,24 @@ namespace collision {
                 return std::nullopt;
             }
             return line_segment_position_sum / (2 * line_segment_length_sum);
+        }
+        std::optional<vector::worldspace> get_collision_normal_point_to_model(collider& c) {
+            ray r = static_cast<ray>(line(position, velocity));
+            std::optional<triangle*> minimum_time_triangle = std::nullopt;
+            double minimum_time = std::numeric_limits<double>::max();
+            for (triangle& t : c.model_data) {
+                double time = t.is_intersecting_ray(r);
+                if (time = -1.0) continue;
+                if (time < minimum_time) {
+                    minimum_time_triangle = &t;
+                    minimum_time = time;
+                }
+            }
+            if (!minimum_time_triangle) return std::nullopt;
+            return minimum_time_triangle.value()->get_normal();
+        }
+        std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c) {
+            return vector::worldspace(0, 0, 1);
         }
 		void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {
 		  	model_data.clear();
@@ -177,15 +197,24 @@ namespace collision {
 		  	}
 		  	return false;
 		}
-        std::optional<vector::worldspace> get_point_of_collision(collider& c) {
+        std::optional<collision_data> get_collision_data(collider& c) {
 		  	if (type == model_collider && c.type == model_collider) {
-				return get_point_of_collision_model_to_model(c);
+				return collision_data::optional(
+                    get_collision_position_model_to_model(c),
+                    get_collision_normal_model_to_model(c)
+                );
 		  	}
 		  	if (type == point_collider && c.type == model_collider) {
-				return get_point_of_collision_point_to_model(c);
+				return collision_data::optional(
+                    get_collision_position_point_to_model(c),
+                    get_collision_normal_point_to_model(c)
+                );
 		  	}
 		  	if (type == model_collider && c.type == point_collider) {
-				return c.get_point_of_collision_point_to_model(*this);
+				return collision_data::optional(
+                    c.get_collision_position_point_to_model(*this),
+                    c.get_collision_normal_point_to_model(*this)
+                );
 		  	}
 		  	std::cout << "check_collision called on two point colliders\n";
 			std::abort();

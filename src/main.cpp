@@ -3,11 +3,23 @@
 #include "simulation_logic/initialize_physics_objects.cpp"
 #include "renderer/renderer_physics_object_connector.cpp"
 
-// x forward, y right, z down
+// x forward, y right, z up
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    /*
+    
+    inputs pattern:
+
+    ./main.exe -scenario scenario1.json
+    
+    */
+
+    std::vector<std::string> args;
+    for (int i = 0; i < argc; i++) args.push_back(argv[i]);
     
     models::initialize_models();
+    physics_object::blueprints::initialize_blueprints();
 
     /*
     collision::triangle t1, t2;
@@ -82,7 +94,7 @@ int main() {
 	globals::current_simulation_state = std::make_unique<simulation_state>(simulation_state());
 	globals::physics_objects.reserve(100000);
 	renderer r;
-	initialize_physics_objects();
+	initialize_physics_objects(args);
 	std::thread t(renderer_function, std::ref(globals::physics_objects));
 	for (double time = 0; time < constants::TIME_LIMIT || constants::TIME_LIMIT == -1; time += constants::DELTA_T) {
 		step_physics_objects();

@@ -56,14 +56,15 @@ namespace models {
 		std::string filename = MODELS_FILEPATH + model + ".stl";
 		std::ifstream f(filename, std::ios::binary);
 		if (!f.is_open()) {
-			std::cout << "failed to find file " << filename << "\n";
+            std::cout << "failed to find file " << filename << "\n";
 			std::abort();
 		}
 		{
-			char f_output[5];
+            char f_output[6];
 			f.read((char*)&f_output, 5);
+            f_output[5] = '\0';
 			if (std::string(f_output) == "solid") {
-				std::cout << "file " << filename << " is an ASCII STL, not a binary STL\n";
+                std::cout << "file " << filename << " is an ASCII STL, not a binary STL\n";
 				std::abort();
 			}
 		}

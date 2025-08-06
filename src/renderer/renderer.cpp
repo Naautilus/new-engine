@@ -37,9 +37,6 @@ struct renderer {
         fragment_shader_text = text;
     };
 
-	// create vertex and fragment shaders in text form (todo?: make them from files instead)
-
-
 	// callbacks
 
 	static void error_callback(int error, const char* description) {

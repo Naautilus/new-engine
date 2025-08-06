@@ -6,6 +6,7 @@ C:/msys64/mingw64/bin/g++.exe -std=c++23 -fdiagnostics-color=always -I C:/Users/
 
 
 to use address sanitizer use drmemory.exe -- ./main.exe
+(replace the -g with -gdwarf-2 to have the right debugging format for line numbers to show)
 
 to start xperf (admin): xperf -on PROC_THREAD+LOADER+PROFILE -f profile.etl -stackwalk Profile
 

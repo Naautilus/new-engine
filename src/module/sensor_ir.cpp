@@ -181,11 +181,11 @@ namespace module {
             apn_gain *= 1-get_g_limit_fraction(parent->physics_state.recorded_acceleration.norm(), 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
             guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, apn_gain);
             //guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent);
-
+            
             if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 0.1) {
                 guidance_pid_inputs = guidance_pid_inputs_prograde;
             }
-
+            
             
             //std::cout << interp << std::endl;
             pid_roll.update(guidance_pid_inputs.x());
@@ -201,6 +201,7 @@ namespace module {
                 std::cout << "bull shit\n";
                 std::cout << *(int*)nullptr;
             }
+
             last_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
             controls::input* pitch = parent->control_bindings.get_input(controls::pitch);
             if (pitch) pitch->response_unmultiplied = pid_pitch.output;
@@ -209,18 +210,18 @@ namespace module {
             controls::input* roll = parent->control_bindings.get_input(controls::roll);
             if (roll) roll->response_unmultiplied = pid_roll.output;
         }
-
+        
         double get_g_limit_fraction(double current_acceleration, double g_limit_min, double g_limit_max) {
             double g_limit_fraction = (current_acceleration-g_limit_min) / (g_limit_max-g_limit_min);
             g_limit_fraction = std::clamp(g_limit_fraction, 0.0, 1.0);
             return g_limit_fraction;
         }
-
+        
         vector::worldspace limit_g_forces(vector::worldspace unlimited_inputs, vector::localspace limited_inputs, double current_acceleration, double g_limit_min, double g_limit_max) {
             double g_limit_fraction = get_g_limit_fraction(current_acceleration, g_limit_min, g_limit_max);
             return (1 - g_limit_fraction) * unlimited_inputs + g_limit_fraction * limited_inputs;
         }
-
+        
         vector::worldspace get_enemy_velocity(vector::worldspace current_detection_worldspace, vector::worldspace last_detection_worldspace) {
             return (1/constants::DELTA_T) * (current_detection_worldspace - last_detection_worldspace);
         }

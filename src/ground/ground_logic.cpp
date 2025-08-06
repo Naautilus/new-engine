@@ -2,6 +2,7 @@
 #include "PerlinNoise.hpp"
 #include "../constants/constants.cpp"
 #include "../globals/globals.cpp"
+#include <mutex>
 
 namespace ground {
 
@@ -40,31 +41,77 @@ namespace ground {
     std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
     std::unordered_map<ground_info, double, ground_info_hash> ground_altitude;
     std::unordered_map<ground_info, double, ground_info_hash> ground_color;
+    std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
+    std::unordered_map<ground_info, double, ground_info_hash> ground_color_averaged;
+    std::mutex ground_altitude_mutex;
+    std::mutex ground_color_mutex;
+    std::mutex ground_altitude_averaged_mutex;
+    std::mutex ground_color_averaged_mutex;
 
     double get_ground_altitude(double x, double y) {
+
+        ground_info ground_info_(x, y, 0, 0);
+
+        /*
+        ground_altitude_mutex.lock();
+        if(ground_altitude.find(ground_info_) != ground_altitude.end()) {
+            double output = ground_altitude[ground_info_];
+            ground_altitude_mutex.unlock();
+            return output;
+        }
+        ground_altitude_mutex.unlock();
+        */
+
         double sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
             double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
             sum += noise * PERLIN_HEIGHT_EFFECT[i];
         }
         sum -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y);
+        
+        /*
+        ground_altitude_mutex.lock();
+        ground_altitude[ground_info_] = sum;
+        ground_altitude_mutex.unlock();
+        */
+       
         return sum;
     }
-
+    
     double get_ground_color(double x, double y) {
+
+        ground_info ground_info_(x, y, 0, 0);
+        ground_color_mutex.lock();
+        if(ground_color.find(ground_info_) != ground_color.end()) {
+            double output = ground_color[ground_info_];
+            ground_color_mutex.unlock();
+            return output;
+        }
+        ground_color_mutex.unlock();
+
         double sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
             double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
             sum += noise * PERLIN_COLOR_EFFECT[i];
         }
+
+        ground_color_mutex.lock();
+        ground_color[ground_info_] = sum;
+        ground_color_mutex.unlock();
         return sum;
     }
-
+    
     double get_ground_altitude_averaged(double x, double y, double width, int count) {
+
         ground_info ground_info_(x, y, width, count);
-        if(ground_altitude.find(ground_info_) != ground_altitude.end()) {
-            return ground_altitude[ground_info_];
+        ground_altitude_averaged_mutex.lock();
+        if(ground_altitude_averaged.find(ground_info_) != ground_altitude_averaged.end()) {
+            double output = ground_altitude_averaged[ground_info_];
+            ground_altitude_averaged_mutex.unlock();
+            return output;
         }
+        ground_altitude_averaged_mutex.unlock();
+        
         double sum = 0;
         for (int x_ = 0; x_ < count; x_++) {
             for (int y_ = 0; y_ < count; y_++) {
@@ -72,15 +119,24 @@ namespace ground {
             }
         }
         sum /= (count * count);
-        ground_altitude[ground_info_] = sum;
+
+        ground_altitude_averaged_mutex.lock();
+        ground_altitude_averaged[ground_info_] = sum;
+        ground_altitude_averaged_mutex.unlock();
         return sum;
     }
-
+    
     double get_ground_color_averaged(double x, double y, double width, int count) {
+
         ground_info ground_info_(x, y, width, count);
-        if(ground_color.find(ground_info_) != ground_color.end()) {
-            return ground_color[ground_info_];
+        ground_color_averaged_mutex.lock();
+        if(ground_color_averaged.find(ground_info_) != ground_color_averaged.end()) {
+            double output = ground_color_averaged[ground_info_];
+            ground_color_averaged_mutex.unlock();
+            return output;
         }
+        ground_color_averaged_mutex.unlock();
+
         double sum = 0;
         for (int x_ = 0; x_ < count; x_++) {
             for (int y_ = 0; y_ < count; y_++) {
@@ -88,7 +144,10 @@ namespace ground {
             }
         }
         sum /= (count * count);
-        ground_color[ground_info_] = sum;
+
+        ground_color_averaged_mutex.lock();
+        ground_color_averaged[ground_info_] = sum;
+        ground_color_averaged_mutex.unlock();
         return sum;
     }
 
@@ -103,6 +162,8 @@ namespace ground {
     }
 
     bool line_of_sight(vector::worldspace a, vector::worldspace& b) {
+        //std::cout << a.x() << "," << a.y() << "," << a.z() << "\n";
+        //std::cout << b.x() << "," << b.y() << "," << b.z() << "\n";
         vector::worldspace position_difference = b - a;
         vector::worldspace traveler_probe_location;
         double max_distance_per_altitude = 1;
@@ -111,6 +172,8 @@ namespace ground {
         while (distance_traveled < distance_total) {
             double fraction_traveled = distance_traveled / distance_total;
             traveler_probe_location = (1-fraction_traveled) * a + fraction_traveled * b;
+            // seems fine: std::cout << traveler_probe_location.x() << "," << traveler_probe_location.y() << "," << traveler_probe_location.z() << "\n";
+            // the error is here vvv
             double altitude = traveler_probe_location.z() - get_ground_altitude(traveler_probe_location.x(), traveler_probe_location.y());
             if (altitude < 5.0) return false;
             distance_traveled += altitude * max_distance_per_altitude;

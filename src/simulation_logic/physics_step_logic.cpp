@@ -64,7 +64,7 @@ void step_physics_object_movement_and_modules() {
         o.physics_state.velocity += constants::DELTA_T * vector::worldspace(0, 0, -globals::current_simulation_state->gravity);
         o.physics_state.position += constants::DELTA_T * o.physics_state.velocity;
         Eigen::Quaterniond angular_velocity_quaternion = 
-            Eigen::AngleAxisd(constants::DELTA_T * o.physics_state.angular_velocity.x(), Eigen::Vector3d::UnitX())
+        Eigen::AngleAxisd(constants::DELTA_T * o.physics_state.angular_velocity.x(), Eigen::Vector3d::UnitX())
         * Eigen::AngleAxisd(constants::DELTA_T * o.physics_state.angular_velocity.y(), Eigen::Vector3d::UnitY())
         * Eigen::AngleAxisd(constants::DELTA_T * o.physics_state.angular_velocity.z(), Eigen::Vector3d::UnitZ());
         o.physics_state.rotation *= angular_velocity_quaternion;
@@ -79,8 +79,6 @@ void step_physics_objects() {
     step_physics_object_deletion();
     step_physics_object_movement_and_modules();
     globals::tick++;
-    //physics_state& ps = globals::physics_objects[0].physics_state;
-    //std::cout << "z velocity of sample point: {" << ps.velocity_at_point(vector::localspace(0, 100, 0).to_worldspace_positional(ps.rotation, ps.position)).z() << "}\n";
 }
 
 void log_physics_objects(std::vector<physics_object::object>& p) {

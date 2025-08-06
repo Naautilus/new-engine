@@ -10,6 +10,7 @@
 #include "../math/random.cpp"
 #include "../collision/meshes.cpp"
 #include <GLFW/glfw3.h>
+#include "blueprint_definitions.cpp"
 
 /*
 physics_object_blueprints.cpp stores some commonly used physics objects so they don't
@@ -20,6 +21,16 @@ initialized at origin with 0 velocity, no name, and no control_bindings.
 
 namespace physics_object {
     namespace blueprints {
+
+        template <typename T>
+        struct named_blueprint {
+            T (*blueprint_creator)();
+            std::string name;
+        };
+
+        // named_blueprints can only hold blueprint creators without inputs, so only inputless creators will be added to these lists
+        std::vector<named_blueprint<object>> named_objects;
+        std::vector<named_blueprint<control_bindings>> named_control_bindings;
 
         object aim9x() {
             object o("aim9x");
@@ -78,7 +89,6 @@ namespace physics_object {
             return Eigen::Quaterniond(x, y, s*u, s*v);
         }
 
-
         object debris(double mass) {
             bool hot = (random(0, 1) < 0.7);
             double drag_side_multiplier = 1;
@@ -108,7 +118,7 @@ namespace physics_object {
             o.add_aerodynamic_surface(module::aerodynamic_surface(drag_front_multiplier*scale*scale, vector::localspace(0,0,1), vector::localspace(   random(-1,1)*0.2*scale,    random(-1,1)*0.2*scale, 0)));
             return o;
         }
-
+        
         object debris_1kg() {
             return debris(1.0);
         }
@@ -136,7 +146,7 @@ namespace physics_object {
             control_bindings_.inputs.push_back(gun1);
             return control_bindings_;
         }
-
+        
         control_bindings plane_control_bindings_ijkl() {
             control_bindings control_bindings_;
             controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.15, 0.15, 1);
@@ -160,7 +170,7 @@ namespace physics_object {
             control_bindings_.inputs.push_back(gun1);
             return control_bindings_;
         }
-
+        
         object f16_simple_forces_model() {
             object o("");
             o.add_physical_structure(module::physical_structure(collision::collider(collision::simple_jet_collider), models::f16));
@@ -192,7 +202,7 @@ namespace physics_object {
             o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
             return o;
         }
-
+        
         object sun() {
             object o("sun");
             o.properties.fixed = true;
@@ -204,7 +214,7 @@ namespace physics_object {
             o.physics_state.base_signal_strength = 1e+18;
             return o;
         }
-
+        
         object axes(vector::worldspace position_) {
             object o("axes");
             o.properties.fixed = true;
@@ -217,7 +227,7 @@ namespace physics_object {
             o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
             return o;
         }
-
+        
         object collider_visual(vector::worldspace position_, collision::collider collider_) {
             object o("collider visual");
             o.properties.fixed = true;
@@ -229,6 +239,16 @@ namespace physics_object {
             o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
             o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
             return o;
+        }
+
+        void initialize_blueprints() {
+            named_objects.push_back(named_blueprint<object>{aim9x, "aim9x"});
+            named_objects.push_back(named_blueprint<object>{bullet_20mm, "bullet_20mm"});
+            named_objects.push_back(named_blueprint<object>{debris_1kg, "debris_1kg"});
+            named_objects.push_back(named_blueprint<object>{f16_simple_forces_model, "f16_simple_forces_model"});
+            named_objects.push_back(named_blueprint<object>{sun, "sun"});
+            named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_wasd, "plane_control_bindings_wasd"});
+            named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_ijkl, "plane_control_bindings_ijkl"});
         }
         
     }

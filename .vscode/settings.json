@@ -111,8 +111,12 @@
     "__functional_base": "cpp",
     "locale": "cpp",
     "text_encoding": "cpp",
-    "stdlib.h": "c"
-  },
+    "stdlib.h": "c",
+    "any": "cpp",
+    "forward_list": "cpp",
+    "ranges": "cpp",
+    "valarray": "cpp"
+},
   "editor.tabSize": 4,
   "editor.detectIndentation": false,
   "C_Cpp.errorSquiggles": "disabled",

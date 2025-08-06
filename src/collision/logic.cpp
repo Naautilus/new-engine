@@ -5,6 +5,7 @@
 #include "../physics_object/blueprints.cpp"
 #include "collider.cpp"
 #include "../math/random.cpp"
+#include "collision_data.cpp"
 
 namespace collision {
 
@@ -68,20 +69,15 @@ namespace collision {
 		
 		}
 	}
-
-    struct collision_data {
-        vector::worldspace position;
-        vector::worldspace normal;
-    };
 	
 	void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
 		//std::cout << "process_colliding_physics_objects called\n";
-        std::optional<vector::worldspace> collision_point_optional = a_collider.get_point_of_collision(b_collider);
-        if (!collision_point_optional) {
+        std::optional<collision_data> collision_data_optional = a_collider.get_collision_data(b_collider);
+        if (!collision_data_optional) {
             //std::cout << "process_colliding_physics_objects(...): no collision point found\n";
             return;
         }
-        vector::worldspace collision_point = collision_point_optional.value();
+        vector::worldspace collision_point = collision_data_optional.value().position;
         if (std::isnan(collision_point.squaredNorm())) return;
         //std::cout << "point of collision: " << collision_point.transpose() << "\n";
 
@@ -168,14 +164,16 @@ namespace collision {
 		return angle;
 	}
 	
-    collider collider_representing_ground(vector::worldspace position) {
-        const double WIDTH = 1e4;
+    collider collider_representing_ground(collider& c) {
+        vector::worldspace position = c.position;
+        double width = 2 * sqrt(c.bounding_box_width_squared);
+        //std::cout << "width: " << width << "\n";
         position.z() = ground::get_ground_altitude(position.x(), position.y());
         vector::worldspace normal = ground::get_surface_normal(position.x(), position.y());
         vector::worldspace x = normal.cross(vector::worldspace(0, 1, 0));
         vector::worldspace y = normal.cross(x);
-        x *= WIDTH;
-        y *= WIDTH;
+        x *= width;
+        y *= width;
         vector::worldspace p0 = position + x;
         vector::worldspace p1 = position + -0.5*x + 0.866*y;
         vector::worldspace p2 = position + -0.5*x - 0.866*y;
@@ -199,18 +197,18 @@ namespace collision {
     
 	void process_ground_collision(physics_object::object& o) {
 	
-        collider ground_collider = collider_representing_ground(o.physics_state.position);
         physics_object::object ground_object = physics_object::object();
         ground_object.physics_state.mass = 6e24;
         ground_object.physics_state.health = 6e24;
         
         for (std::shared_ptr<module::module>& m : o.properties.modules) {
+            collider ground_collider = collider_representing_ground(m->collider);
             if (!m->collider.check_collision(ground_collider)) continue;
             process_colliding_physics_objects(m->collider, ground_collider, o, ground_object);
             //o.physics_state.position += vector::worldspace(0, 0, 0.01);
         }
         
-        globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
+        //globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
 
         /*
 		double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());
