@@ -81,7 +81,7 @@ namespace collision {
         if (std::isnan(collision_point.squaredNorm())) return;
         //std::cout << "point of collision: " << collision_point.transpose() << "\n";
 
-        //globals::physics_objects.push_back(physics_object::blueprints::axes(collision_point));
+        //globals::physics_objects.push_back(physics_object::blueprints::axes(collision_point));		
 
         Eigen::Matrix3d impulse_response_per_axis;
         vector::worldspace axes[3] = {
@@ -133,8 +133,10 @@ namespace collision {
         double maximum_health = fmax(a.physics_state.health, b.physics_state.health);
         damage = fmin(damage, maximum_health);
         
-        //a.physics_state.health -= damage;
-        //b.physics_state.health -= damage;
+        a.physics_state.health -= damage;
+        b.physics_state.health -= damage;
+
+        std::cout << "damage: " << damage << "\n";
 
         double total_mass = a.physics_state.mass + b.physics_state.mass;
 
@@ -201,6 +203,11 @@ namespace collision {
         ground_object.physics_state.mass = 6e24;
         ground_object.physics_state.health = 6e24;
         
+        if (!o.properties.functional) {
+            double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());
+            if (altitude < 0) o.physics_state.health = 0;
+            return;
+        }
         for (std::shared_ptr<module::module>& m : o.properties.modules) {
             collider ground_collider = collider_representing_ground(m->collider);
             if (!m->collider.check_collision(ground_collider)) continue;
@@ -208,7 +215,9 @@ namespace collision {
             //o.physics_state.position += vector::worldspace(0, 0, 0.01);
         }
         
-        //globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
+		
+		//globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
+		
 
         /*
 		double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());

@@ -43,6 +43,7 @@ void step_physics_object_collisions() {
 void step_physics_object_ground_collisions() {
     for (int i = 0; i < globals::physics_objects.size(); i++) {
         if (globals::physics_objects[i].properties.fixed) continue;
+        //if (!globals::physics_objects[i].properties.functional) continue;
         collision::process_ground_collision(globals::physics_objects[i]);
     }
 }
@@ -72,12 +73,32 @@ void step_physics_object_movement_and_modules() {
 }
 
 void step_physics_objects() {
+    //std::lock_guard<std::mutex>(globals::physics_objects_mutex);
+    
+    globals::physics_objects_mutex.lock();
     step_physics_object_controls();
+    globals::physics_objects_mutex.unlock();
+
+    globals::physics_objects_mutex.lock();
     step_physics_object_lifespans();
+    globals::physics_objects_mutex.unlock();
+
+    globals::physics_objects_mutex.lock();
     step_physics_object_collisions();
+    globals::physics_objects_mutex.unlock();
+
+    globals::physics_objects_mutex.lock();
     step_physics_object_ground_collisions();
+    globals::physics_objects_mutex.unlock();
+
+    globals::physics_objects_mutex.lock();
     step_physics_object_deletion();
+    globals::physics_objects_mutex.unlock();
+
+    globals::physics_objects_mutex.lock();
     step_physics_object_movement_and_modules();
+    globals::physics_objects_mutex.unlock();
+
     globals::tick++;
 }
 

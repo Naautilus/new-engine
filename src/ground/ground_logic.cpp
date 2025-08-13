@@ -80,6 +80,7 @@ namespace ground {
     
     double get_ground_color(double x, double y) {
 
+        /*
         ground_info ground_info_(x, y, 0, 0);
         ground_color_mutex.lock();
         if(ground_color.find(ground_info_) != ground_color.end()) {
@@ -88,6 +89,7 @@ namespace ground {
             return output;
         }
         ground_color_mutex.unlock();
+        */
 
         double sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
@@ -95,14 +97,17 @@ namespace ground {
             sum += noise * PERLIN_COLOR_EFFECT[i];
         }
 
+        /*
         ground_color_mutex.lock();
         ground_color[ground_info_] = sum;
         ground_color_mutex.unlock();
+        */
         return sum;
     }
     
     double get_ground_altitude_averaged(double x, double y, double width, int count) {
 
+        /*
         ground_info ground_info_(x, y, width, count);
         ground_altitude_averaged_mutex.lock();
         if(ground_altitude_averaged.find(ground_info_) != ground_altitude_averaged.end()) {
@@ -111,6 +116,7 @@ namespace ground {
             return output;
         }
         ground_altitude_averaged_mutex.unlock();
+        */
         
         double sum = 0;
         for (int x_ = 0; x_ < count; x_++) {
@@ -120,14 +126,17 @@ namespace ground {
         }
         sum /= (count * count);
 
+        /*
         ground_altitude_averaged_mutex.lock();
         ground_altitude_averaged[ground_info_] = sum;
         ground_altitude_averaged_mutex.unlock();
+        */
         return sum;
     }
     
     double get_ground_color_averaged(double x, double y, double width, int count) {
 
+        /*
         ground_info ground_info_(x, y, width, count);
         ground_color_averaged_mutex.lock();
         if(ground_color_averaged.find(ground_info_) != ground_color_averaged.end()) {
@@ -136,6 +145,7 @@ namespace ground {
             return output;
         }
         ground_color_averaged_mutex.unlock();
+        */
 
         double sum = 0;
         for (int x_ = 0; x_ < count; x_++) {
@@ -145,9 +155,11 @@ namespace ground {
         }
         sum /= (count * count);
 
+        /*
         ground_color_averaged_mutex.lock();
         ground_color_averaged[ground_info_] = sum;
         ground_color_averaged_mutex.unlock();
+        */
         return sum;
     }
 
