@@ -72,6 +72,14 @@ namespace vector {
         scopespace() {
             v = localspace();
         }
+
+        std::string str() {
+            std::string output = "{";
+            output += std::format(constants::FORMAT_STRING_POSITION, distance()) + ", (";
+            output += std::format(constants::FORMAT_STRING_UNIT, scope_x()) + ", ";
+            output += std::format(constants::FORMAT_STRING_UNIT, scope_y()) + ")}";
+            return output;
+        }
     };
 
     localspace worldspace::to_localspace(Eigen::Quaterniond q) {

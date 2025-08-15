@@ -27,10 +27,7 @@ namespace module {
             position_scopespace.distance() = position_localspace.x();
             position_scopespace.scope_x() = position_localspace.y() / position_localspace.x();
             position_scopespace.scope_y() = position_localspace.z() / position_localspace.x();
-            //std::cout << "position_scopespace: {" << 
-            //position_scopespace.distance() << ", " << 
-            //position_scopespace.scope_x() << ", " << 
-            //position_scopespace.scope_y() << "}\n";
+            //std::cout << "position_scopespace: " << position_scopespace.str() << "\n";
             signal_strength = base_signal_strength / (position_localspace.squaredNorm());
             //std::cout << "signal_strength: " << signal_strength << "\n";
         }
@@ -39,6 +36,14 @@ namespace module {
             position_scopespace.scope_x() = scope_x_;
             position_scopespace.scope_y() = scope_y_;
             signal_strength = signal_strength_;
+        }
+        std::string str() {
+            std::string output = "";
+            output += position_scopespace.str();
+            output += "[";
+            output += signal_strength;
+            output += "]";
+            return output;
         }
     };
 
@@ -177,6 +182,11 @@ namespace module {
             //std::cout << "largest signal: [" << max_signal_point.position_scopespace.scope_x() << "][" << max_signal_point.position_scopespace.scope_y() << "] @ " << max_signal_strength << "\n";
             return max_signal_point;
         }
+        double distance_between_grid_cells() {
+            double output = points[1][0].position_scopespace.scope_x() - points[0][0].position_scopespace.scope_x();
+            //std::cout << "distance_between_grid_cells: " << output << "\n";
+            return output;
+        }
         void print(vector::scopespace target, vector::scopespace center) {
             std::string LEVELS = " `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@";
             int target_index = index_from_coordinates(target.scope_x(), target.scope_y());
@@ -242,9 +252,11 @@ namespace module {
         }
 
         void update(physics_object::object* parent) override {
+            //std::cout << "\n-----------------\n\n";
             //if (health <= 0) return;
             time_since_launch += constants::DELTA_T;
             vector::worldspace current_detection_relative_worldspace = get_target_position(parent);
+
             double target_distance = current_detection_relative_worldspace.norm();
             if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
             //std::cout << "record target distance: " << record_target_distance << std::endl;
@@ -257,9 +269,11 @@ namespace module {
             guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, apn_gain);
             //guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent);
             
+            /*
             if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 0.1) {
                 guidance_pid_inputs = guidance_pid_inputs_direct;
             }
+            */
             
             
             //std::cout << interp << std::endl;
@@ -340,7 +354,7 @@ namespace module {
                 -current_detection.scope_y(),
                 current_detection.scope_x()
             );
-            std::cout << "get_guidance_direct output: " << output.str() << "\n";
+            //std::cout << "get_guidance_direct output: " << output.str() << "\n";
             return output;
         }
 
@@ -365,26 +379,23 @@ namespace module {
         vector::localspace get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
             double LOOK_AHEAD_TIME = 1; // for turning an acceleration request into an aimpoint request
             vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
-            std::cout << "current_detection_worldspace: " << current_detection_worldspace.str() << "\n";
+            //std::cout << "current_detection_worldspace: " << current_detection_worldspace.str() << "\n";
             vector::worldspace missile_velocity = parent->physics_state.velocity;
             vector::worldspace enemy_velocity = get_enemy_velocity(current_detection_worldspace, last_detection_worldspace);
-            std::cout << "enemy_velocity: " << enemy_velocity.str() << "\n";
+            //std::cout << "enemy_velocity: " << enemy_velocity.str() << "\n";
             vector::worldspace relative_velocity = enemy_velocity - missile_velocity;
             vector::worldspace relative_position = current_detection_relative_worldspace;
             vector::worldspace line_of_sight_rotation_vector = (relative_position.cross(relative_velocity)) / (relative_position.dot(relative_position));
             vector::worldspace desired_acceleration = -gain * ((relative_velocity.norm()) * (missile_velocity / missile_velocity.norm())).cross(line_of_sight_rotation_vector);
             vector::worldspace aimpoint = LOOK_AHEAD_TIME * missile_velocity + 0.5 * LOOK_AHEAD_TIME * LOOK_AHEAD_TIME * desired_acceleration;
-            std::cout << "aimpoint: " << aimpoint.str() << "\n";
+            //std::cout << "aimpoint: " << aimpoint.str() << "\n";
             vector::scopespace current_detection = signal_point(
                 aimpoint,
                 vector::worldspace(0, 0, 0),
                 rotation * parent->physics_state.rotation,
                 1.0 // unimportant
             ).position_scopespace;
-            std::cout << "current_detection: {" << 
-                current_detection.distance() << ", " << 
-                current_detection.scope_x() << ", " << 
-                current_detection.scope_y() << "}\n";
+            //std::cout << "current_detection: " << current_detection.str() << "\n";
             return get_guidance_direct(aimpoint, parent, gain);
         }
 
@@ -419,11 +430,7 @@ namespace module {
             /*
             std::cout << "signals_unfiltered [size " << signals_unfiltered.size() << "]:\n";
             for (signal_point& s : signals_unfiltered) {
-                std::cout << "{" <<
-                    s.position_scopespace.distance() << ", " <<
-                    s.position_scopespace.scope_x() << ", " <<
-                    s.position_scopespace.scope_y() << "} [" <<
-                    s.signal_strength << "]\n";
+                std::cout << s.str() << "\n";
             }
             */
             const int GRID_WIDTH = 30;
@@ -443,15 +450,43 @@ namespace module {
             }
             signal_point center = grid.get_largest_signal();
 
+            /*
+            since the get_largest_signal function will only select the
+            first index of the strongest signal's circle, that value
+            can be ever so slightly out of the bounds of the
+            target_recognition_radius due to the elements being on a
+            coarse grid where values are rounded all over the place;
+            increasing the target_recognition_radius by 1 grid cell
+            fixes that
+            */
+            target_recognition_radius += grid.distance_between_grid_cells();
+
+            //std::cout << "center (get_largest_signal): " << center.str() << "\n";
+            //std::cout << "target_recognition_radius: " << target_recognition_radius << "\n";
             std::vector<int> signal_indices_in_target_recognition_circle;
             for (int i = 0; i < signals_unfiltered.size(); i++) {
+                //std::cout << "  signals_unfiltered[" << i << "].position_scopespace.scope_x(): " << signals_unfiltered[i].position_scopespace.scope_x() << "\n";
+                //std::cout << "  signals_unfiltered[" << i << "].position_scopespace.scope_y(): " << signals_unfiltered[i].position_scopespace.scope_y() << "\n";
+                //std::cout << "  center.position_scopespace.scope_x(): " << center.position_scopespace.scope_x() << "\n";
+                //std::cout << "  center.position_scopespace.scope_y(): " << center.position_scopespace.scope_y() << "\n";
                 double distance_x = signals_unfiltered[i].position_scopespace.scope_x() - center.position_scopespace.scope_x();
                 double distance_y = signals_unfiltered[i].position_scopespace.scope_y() - center.position_scopespace.scope_y();
+                //std::cout << "  distance_x: " << distance_x << "\n";
+                //std::cout << "  distance_y: " << distance_y << "\n";
                 if (distance_x * distance_x + distance_y * distance_y < target_recognition_radius * target_recognition_radius) {
+                    //std::cout << "  pushed";
                     signal_indices_in_target_recognition_circle.push_back(i);
                 }
+                //std::cout << "\n\n";
             }
-
+            /*
+            std::cout << "signal_indices_in_target_recognition_circle: {";
+            for (int i : signal_indices_in_target_recognition_circle) {
+                std::cout << i << ", ";
+            }
+            std::cout << "\b\b}\n";
+            */
+            
             signal_point signals_averaged = signal_point(0, 0, 0, 0);
             for (int i : signal_indices_in_target_recognition_circle) {
                 signal_point& p = signals_unfiltered[i];
@@ -464,8 +499,8 @@ namespace module {
             vector::scopespace result = signals_averaged.position_scopespace;
             last_detection_scopespace = signals_averaged.position_scopespace;
             last_detection_signal_strength = signals_averaged.signal_strength;
-            if (globals::tick % 1 == 0) grid.print(result, center.position_scopespace);
-            //std::cout << "result: " << result.transpose() << std::endl;
+            //std::cout << "get_target_direction result: " << result.str() << "\n";
+            //if (globals::tick % 20 == 0) grid.print(result, center.position_scopespace);
             return result;
         }
 
