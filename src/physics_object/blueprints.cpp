@@ -10,7 +10,6 @@
 #include "../math/random.cpp"
 #include "../collision/meshes.cpp"
 #include <GLFW/glfw3.h>
-#include "blueprint_definitions.cpp"
 
 /*
 physics_object_blueprints.cpp stores some commonly used physics objects so they don't

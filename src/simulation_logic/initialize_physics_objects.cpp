@@ -19,7 +19,7 @@ void initialize_physics_objects(std::vector<std::string> args) {
         std::abort();
     }
     scenario_index++;
-    std::ifstream f(*scenario_index);
+    std::ifstream f("../scenarios/scenario_" + (*scenario_index) + ".json");
     json scenario_data = json::parse(f);
     if (!scenario_data.contains("physics_objects")) {
         std::cerr << "error in void initialize_physics_objects(args):" << "\n"
@@ -123,13 +123,15 @@ void initialize_physics_objects(std::vector<std::string> args) {
 
             vector::worldspace position = root_position + j * clone_offset; 
             
-            physics_object::object(o) = object_creator();
-            if (physics_object_.contains("name")) o.properties.name = physics_object_["name"];
-            if (physics_object_.contains("rotation")) o.physics_state.rotation = rotation;
-            if (physics_object_.contains("velocity")) o.physics_state.velocity = velocity;
-            if (physics_object_.contains("position")) o.physics_state.position = position;
-            if (physics_object_.contains("control_bindings")) o.control_bindings = control_bindings_creator();
+            auto o = std::make_shared<physics_object::object>(object_creator());
+            if (physics_object_.contains("name")) o->properties.name = physics_object_["name"];
+            if (physics_object_.contains("rotation")) o->physics_state.rotation = rotation;
+            if (physics_object_.contains("velocity")) o->physics_state.velocity = velocity;
+            if (physics_object_.contains("position")) o->physics_state.position = position;
+            if (physics_object_.contains("control_bindings")) o->control_bindings = control_bindings_creator();
+            globals::physics_objects_mutex.lock();
             globals::physics_objects.push_back(o);
+            globals::physics_objects_mutex.unlock();
 
         }
     }

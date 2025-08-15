@@ -1,5 +1,4 @@
 #pragma once
-#include "blueprint_definitions.cpp"
 #include "../simulation_state.cpp"
 
 namespace physics_object {

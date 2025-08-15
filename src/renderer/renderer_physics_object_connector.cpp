@@ -134,11 +134,16 @@ std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last
 	return output;
 }
 
-void move_camera(std::vector<physics_object::object>& physics_objects_, camera_properties& camera_properties_) {
-	physics_object::object* o;
-	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(physics_objects_, camera_properties_.camera_target_name);
-	else o = get_physics_object_from_vector_reversed(physics_objects_, camera_properties_.camera_target_name);
-	if (!o) return;
+/*
+move_camera returns a pointer to the object being tracked because its
+mutex is locked to prevent it from being moved inbetween here and the
+model rendering and the mutex needs to be unlocked later
+*/
+std::shared_ptr<physics_object::object> move_camera(camera_properties& camera_properties_) {
+	std::shared_ptr<physics_object::object> o;
+	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(camera_properties_.camera_target_name);
+	else o = get_physics_object_from_vector_reversed(camera_properties_.camera_target_name);
+	if (!o) return o;
 	camera_properties_.previous_camera_rotations.push_back(o->physics_state.rotation);
 	if (camera_properties_.previous_camera_rotations.size() > 30) {
 		camera_properties_.previous_camera_rotations.erase(camera_properties_.previous_camera_rotations.begin());
@@ -159,6 +164,7 @@ void move_camera(std::vector<physics_object::object>& physics_objects_, camera_p
 	camera_properties_.camera_z_direction[2] = -camera_forward_direction.x();
 	camera_properties_.last_camera_position = camera_position_;
 	camera_properties_.last_camera_target_velocity = o->physics_state.velocity;
+    return o;
 }
 
 vector::worldspace get_triangle_normal(int i, mesh& model) {
@@ -228,12 +234,11 @@ void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vec
 
 int ground_models_start_point = -1;
 
-void renderer::create_models_from_physics_objects(std::vector<physics_object::object>& physics_objects_, std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
+void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
 
-    //globals::physics_objects_mutex.lock();
-    //std::vector<physics_object::object> physics_objects = physics_objects_;
-    //globals::physics_objects_mutex.unlock();
-
+    globals::physics_objects_mutex.lock();
+    auto physics_objects_ = globals::physics_objects;
+    globals::physics_objects_mutex.unlock();
 
     if (ground_models_start_point == -1) {
 		models.clear();
@@ -273,26 +278,26 @@ void renderer::create_models_from_physics_objects(std::vector<physics_object::ob
 	}
 	//std::cout << "total_vertices: " << total_vertices << "\n";
 
-    //globals::physics_objects_mutex.lock();
-	move_camera(physics_objects_, camera_properties_);
-    //globals::physics_objects_mutex.unlock();
+	std::shared_ptr<physics_object::object> camera_tracked_object = move_camera(camera_properties_);
+    if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->lock();
 
 	std::vector<module::visual_model> original_models;
 	std::vector<vector::worldspace> original_positions;
 	std::vector<Eigen::Quaterniond> original_rotations;
-    //globals::physics_objects_mutex.lock();
-	for (physics_object::object& o : physics_objects_) {
-		for (std::shared_ptr<module::module>& module_ : o.properties.modules) {
+
+	for (auto o : physics_objects_) {
+        if (o->mutex && o != camera_tracked_object) std::lock_guard<std::mutex> lock(*o->mutex);
+		for (std::shared_ptr<module::module>& module_ : o->properties.modules) {
             if (!module_) {
                 std::cout << "void renderer::create_models_from_physics_objects(...): std::shared_ptr<module::module> is a nullptr\n";
-                std::cout << "deleting module from object " << &o << " (named \"" << o.properties.name << "\")\n";
-                o.properties.modules.erase(std::find(o.properties.modules.begin(), o.properties.modules.end(), module_));
+                std::cout << "deleting module from object " << o << " (named \"" << o->properties.name << "\")\n";
+                o->properties.modules.erase(std::find(o->properties.modules.begin(), o->properties.modules.end(), module_));
                 continue;
             }
             for (module::visual_model& m : module_->models) {
 				original_models.push_back(m);
-				original_positions.push_back(o.physics_state.position);
-				original_rotations.push_back(o.physics_state.rotation);
+				original_positions.push_back(o->physics_state.position);
+				original_rotations.push_back(o->physics_state.rotation);
 			}
             ///*
             if (module_->collider.type != collision::collider_type::model_collider) continue;
@@ -310,7 +315,8 @@ void renderer::create_models_from_physics_objects(std::vector<physics_object::ob
             //*/
 		}
 	}
-    //globals::physics_objects_mutex.unlock();
+
+    if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->unlock();
     
 	for (int i = 0; i < original_models.size(); i++) {
 		module::visual_model& m = original_models[i];

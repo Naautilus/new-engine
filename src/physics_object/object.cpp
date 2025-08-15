@@ -1,5 +1,6 @@
 #pragma once
 #include "properties.cpp"
+#include <mutex>
 
 namespace physics_object {
     struct object {
@@ -7,13 +8,16 @@ namespace physics_object {
         control_bindings control_bindings;
         physics_state physics_state;
         properties properties;
+        std::unique_ptr<std::mutex> mutex;
 
         object() {
             properties.name = "unnamed";
+            //mutex = std::make_unique<std::mutex>();
         }
-
+        
         object(std::string name_) {
             properties.name = name_;
+            //mutex = std::make_unique<std::mutex>();
         }
 
         // below is for applying forces - both force and torque

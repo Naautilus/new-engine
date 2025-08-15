@@ -43,7 +43,36 @@ namespace vector {
         }
     };
 
-    struct scopespace : localspace {};
+    struct scopespace {
+
+        private:
+
+        localspace v;
+
+        public:
+
+        double& distance() { return v[0]; }
+        const double& distance() const { return v[0]; }
+
+        double& scope_x() { return v[1]; }
+        const double& scope_x() const { return v[1]; }
+
+        double& scope_y() { return v[2]; }
+        const double& scope_y() const { return v[2]; }
+
+        scopespace& operator+=(const scopespace& s) {
+            v += s.v;
+            return *this;
+        }
+        scopespace& operator/=(double num) {
+            v /= num;
+            return *this;
+        }
+
+        scopespace() {
+            v = localspace();
+        }
+    };
 
     localspace worldspace::to_localspace(Eigen::Quaterniond q) {
         return q * (*this);

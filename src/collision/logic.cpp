@@ -50,22 +50,24 @@ namespace collision {
             vector::worldspace position = collision_point;
 			vector::worldspace velocity = (1-interp) * a.physics_state.velocity + interp * b.physics_state.velocity;
 			//std::cout << mass << std::endl;
-			physics_object::object d = physics_object::blueprints::debris(mass);
+            auto d = std::make_shared<physics_object::object>(physics_object::blueprints::debris(mass));
 			//std::cout << "position: " << position.transpose() << std::endl;
 			//std::cout << "velocity: " << velocity.transpose() << std::endl;
-			d.physics_state.position = position;
-			d.physics_state.velocity = velocity;
+			d->physics_state.position = position;
+			d->physics_state.velocity = velocity;
 		
 			vector::worldspace velocity_offset;
 			do {velocity_offset = vector::worldspace(random(-1,1), random(-1,1), random(-1,1));} while (velocity_offset.squaredNorm() > 1);
 			velocity_offset /= velocity_offset.norm();
 			velocity_offset *= random_velocity_offset(globals::rng);
 			velocity_offset *= velocity.norm();
-			d.physics_state.velocity += velocity_offset;
+			d->physics_state.velocity += velocity_offset;
 			double velocity_multiplier = random_velocity_magnitude(globals::rng);
-			d.physics_state.velocity *= velocity_multiplier;
+			d->physics_state.velocity *= velocity_multiplier;
 		
+            globals::physics_objects_mutex.lock();
 			globals::physics_objects.push_back(d);
+            globals::physics_objects_mutex.unlock();
 		
 		}
 	}
@@ -81,7 +83,11 @@ namespace collision {
         if (std::isnan(collision_point.squaredNorm())) return;
         //std::cout << "point of collision: " << collision_point.transpose() << "\n";
 
-        //globals::physics_objects.push_back(physics_object::blueprints::axes(collision_point));		
+        /*
+        globals::physics_objects_mutex.lock();
+        globals::physics_objects.push_back(physics_object::blueprints::axes(collision_point));		
+        globals::physics_objects_mutex.unlock();
+        */
 
         Eigen::Matrix3d impulse_response_per_axis;
         vector::worldspace axes[3] = {
@@ -216,8 +222,12 @@ namespace collision {
         }
         
 		
-		//globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
-		
+		/*
+        globals::physics_objects_mutex.lock();
+        globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
+        globals::physics_objects_mutex.unlock();
+		*/
+
 
         /*
 		double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());

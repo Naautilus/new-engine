@@ -95,11 +95,11 @@ int main(int argc, char* argv[]) {
 	globals::physics_objects.reserve(100000);
 	renderer r;
 	initialize_physics_objects(args);
-	std::thread t(renderer_function, std::ref(globals::physics_objects));
+	std::thread t(renderer_function);
 	for (double time = 0; time < constants::TIME_LIMIT || constants::TIME_LIMIT == -1; time += constants::DELTA_T) {
 		step_physics_objects();
 		if (fmod(time + constants::DELTA_T/2, constants::LOG_INTERVAL) < constants::DELTA_T) {
-			log_physics_objects(globals::physics_objects);
+			log_physics_objects();
 		}
 		wait_delta_t();
 	}

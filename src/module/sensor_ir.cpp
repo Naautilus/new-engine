@@ -6,29 +6,44 @@
 //struct vector::scopespace : vector::localspace {};
 
 namespace module {
+
+    
+
     struct signal_point {
         vector::scopespace position_scopespace;
         double signal_strength;
         double distance_weight = 0;
         signal_point() {
-            position_scopespace.x() = 0;
-            position_scopespace.y() = 0;
-            position_scopespace.z() = 0;
+            position_scopespace.distance() = 0;
+            position_scopespace.scope_x() = 0;
+            position_scopespace.scope_y() = 0;
             signal_strength = 0;
         }
         signal_point(vector::worldspace target_position, vector::worldspace sensor_position, Eigen::Quaterniond rotation, double base_signal_strength) {
             vector::worldspace position_relative_worldspace = target_position - sensor_position;
-            position_scopespace = static_cast<vector::scopespace>(position_relative_worldspace.to_localspace(rotation));
-            position_scopespace.y() /= position_scopespace.x();
-            position_scopespace.z() /= position_scopespace.x();
-            signal_strength = base_signal_strength / (position_scopespace.squaredNorm());
+            //std::cout << "position_relative_worldspace: " << position_relative_worldspace.str() << "\n";
+            vector::localspace position_localspace = position_relative_worldspace.to_localspace(rotation);
+            //std::cout << "position_localspace: " << position_localspace.str() << "\n";
+            position_scopespace.distance() = position_localspace.x();
+            position_scopespace.scope_x() = position_localspace.y() / position_localspace.x();
+            position_scopespace.scope_y() = position_localspace.z() / position_localspace.x();
+            //std::cout << "position_scopespace: {" << 
+            //position_scopespace.distance() << ", " << 
+            //position_scopespace.scope_x() << ", " << 
+            //position_scopespace.scope_y() << "}\n";
+            signal_strength = base_signal_strength / (position_localspace.squaredNorm());
+            //std::cout << "signal_strength: " << signal_strength << "\n";
         }
-        signal_point(double x_, double y_, double z_, double signal_strength_) {
-            position_scopespace.x() = x_;
-            position_scopespace.y() = y_;
-            position_scopespace.z() = z_;
+        signal_point(double distance_, double scope_x_, double scope_y_, double signal_strength_) {
+            position_scopespace.distance() = distance_;
+            position_scopespace.scope_x() = scope_x_;
+            position_scopespace.scope_y() = scope_y_;
             signal_strength = signal_strength_;
         }
+    };
+
+    struct sensor_point : Eigen::Vector2i {
+        using Eigen::Vector2i::Vector2i;
     };
 
     struct sensor_cell_grid {
@@ -36,44 +51,83 @@ namespace module {
         int size;
         double min;
         double max;
+
+        /* 
+        what indices of the cell grid would be contained within a
+        circle of a given radius positioned at (0, 0) (has negatives)
+        */
+        std::unordered_map<double, std::vector<sensor_point>> circle_radius_indices_offsets;
+
         public:
-        std::vector<signal_point> points;
+        std::vector<std::vector<signal_point>> points;
         sensor_cell_grid(int size_, double view_cone_halfarc) {
             double view_cone = tan(view_cone_halfarc * std::numbers::pi / 180);
             size = size_;
             min = -view_cone;
             max = view_cone;
-            points.clear();
-            for (int y = 0; y < size; y++) {
-                for (int x = 0; x < size; x++) {
+            for (int x = 0; x < size; x++) {
+                std::vector<signal_point> row;
+                for (int y = 0; y < size; y++) {
                     double x_ = 0;
                     double y_ = get_value_from_axis_index(x);
                     double z_ = get_value_from_axis_index(y);
-                    points.push_back(signal_point(x_, y_, z_, 0.0));
+                    row.push_back(signal_point(x_, y_, z_, 0.0));
                 }
+                points.push_back(row);
             }
             //std::cout << "min: " << min << std::endl;
             //std::cout << "max: " << max << std::endl;
         }
         void increase_signals_in_circle(double center_x, double center_y, double radius, double distance, double signal) {
-            std::vector<int> indices = get_indices_in_circle(center_x, center_y, radius);
-            for (int i : indices) {
-                points[i].signal_strength += signal;
-                points[i].position_scopespace.x() += distance * signal;
-                points[i].distance_weight += signal;
+            std::vector<sensor_point> indices = get_points_in_circle(center_x, center_y, radius);
+            for (sensor_point p : indices) {
+                points[p.x()][p.y()].signal_strength += signal;
+                points[p.x()][p.y()].position_scopespace.distance() += distance * signal;
+                points[p.x()][p.y()].distance_weight += signal;
             }
         }
-        std::vector<int> get_indices_in_circle(double center_x, double center_y, double radius) {\
-            std::vector<int> output;
-            for (int i = 0; i < points.size(); i++) {
-                vector::scopespace p_pos = points[i].position_scopespace;
-                p_pos.y() -= center_x;
-                p_pos.z() -= center_y;
-                if (p_pos.y() * p_pos.y() + p_pos.z() * p_pos.z() < radius * radius) {
-                    output.push_back(i);
-                }
+        std::vector<sensor_point> remove_invalid_indices(std::vector<sensor_point> indices) {
+            std::vector<sensor_point> output;
+            for (sensor_point p : indices) {
+                if (p.x() < 0) continue;
+                if (p.x() >= size) continue;
+                if (p.y() < 0) continue;
+                if (p.y() >= size) continue;
+                output.push_back(p);
             }
             return output;
+        }
+        void calculate_indices_in_circle(double radius) {
+            std::vector<sensor_point> output;
+            sensor_point origin = point_from_coordinates(0, 0);
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    vector::scopespace p_pos = points[x][y].position_scopespace;
+                    if (p_pos.scope_x() * p_pos.scope_x() + p_pos.scope_y() * p_pos.scope_y() < radius * radius) {
+                        output.push_back(sensor_point(x, y));
+                    }
+                }
+            }
+            circle_radius_indices_offsets[radius] = output;
+        }
+        std::vector<sensor_point> get_points_in_circle(double center_x, double center_y, double radius) {
+            sensor_point shift = point_from_coordinates(center_x, center_y) - point_from_coordinates(0, 0);
+            if(circle_radius_indices_offsets.find(radius) == circle_radius_indices_offsets.end()) calculate_indices_in_circle(radius);
+            std::vector<sensor_point> output = circle_radius_indices_offsets[radius];
+            for (sensor_point& p : output) p += shift;
+            return remove_invalid_indices(output);
+        }
+        sensor_point point_from_coordinates(double x, double y) {
+            x -= min;
+            y -= min;
+            x /= (max - min);
+            y /= (max - min);
+            x *= size;
+            y *= size;
+            int x_ = round(x);
+            int y_ = round(y);
+            sensor_point point = sensor_point{x_, y_};
+            return point;
         }
         int index_from_coordinates(double x, double y) {
             x -= min;
@@ -105,22 +159,43 @@ namespace module {
             value += min;
             return value;
         }
+        signal_point get_largest_signal() {
+            double max_signal_strength = points[0][0].signal_strength;
+            signal_point max_signal_point = points[0][0];
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    if (points[x][y].signal_strength > max_signal_strength) {
+                        max_signal_strength = points[x][y].signal_strength;
+                        max_signal_point = points[x][y];
+                    }
+                }
+            }
+            if (std::isnan(max_signal_strength) || max_signal_strength == 0) {
+                max_signal_point = signal_point(1, 0, 0, 123);
+                max_signal_point.distance_weight = 1.0;
+            }
+            //std::cout << "largest signal: [" << max_signal_point.position_scopespace.scope_x() << "][" << max_signal_point.position_scopespace.scope_y() << "] @ " << max_signal_strength << "\n";
+            return max_signal_point;
+        }
         void print(vector::scopespace target, vector::scopespace center) {
             std::string LEVELS = " `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@";
-            int target_index = index_from_coordinates(target.y(), target.z());
-            int center_index = index_from_coordinates(center.y(), center.z());
+            int target_index = index_from_coordinates(target.scope_x(), target.scope_y());
+            int center_index = index_from_coordinates(center.scope_x(), center.scope_y());
             double max = std::numeric_limits<double>::min();
             double min = std::numeric_limits<double>::max();
-            for (signal_point& s : points) {
-                max = fmax(s.signal_strength, max);
-                min = fmin(s.signal_strength, min);
+            for (auto& row : points) {
+                for (signal_point& s : row) {
+                    max = fmax(s.signal_strength, max);
+                    min = fmin(s.signal_strength, min);
+                }
             }
             for (int y = size - 1; y >= 0; y--) {
                 for (int x = 0; x < size; x++) {
                     int index = x + y*size;
-                    double value = points[index].signal_strength;
+                    double value = points[x][y].signal_strength;
                     value -= min;
                     value /= (max - min);
+                    value = sqrt(value);
                     int level = floor(value * (LEVELS.size()-1));
                     if (index == target_index) {
                         std::cout << "()";
@@ -174,7 +249,7 @@ namespace module {
             if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
             //std::cout << "record target distance: " << record_target_distance << std::endl;
             vector::localspace guidance_pid_inputs = vector::localspace(0, 0, 0);
-            vector::localspace guidance_pid_inputs_prograde = get_guidance_prograde(current_detection_relative_worldspace, parent);
+            vector::localspace guidance_pid_inputs_direct = get_guidance_direct(current_detection_relative_worldspace, parent, 5.0);
 
             double apn_gain = 5.0;
             apn_gain *= std::clamp((time_since_launch-0.1)*0.5, 0.0, 1.0);
@@ -183,7 +258,7 @@ namespace module {
             //guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent);
             
             if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 0.1) {
-                guidance_pid_inputs = guidance_pid_inputs_prograde;
+                guidance_pid_inputs = guidance_pid_inputs_direct;
             }
             
             
@@ -248,46 +323,28 @@ namespace module {
             return root2;
         }
 
-        vector::localspace get_guidance_prograde(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent) {
-            double GAIN = 1.0;
-            vector::scopespace current_detection = signal_point(
-                parent->physics_state.velocity,
-                vector::worldspace(0, 0, 0),
-                rotation * parent->physics_state.rotation,
-                1.0 // unimportant
-            ).position_scopespace;
-            if (current_detection.x() != current_detection.x() || current_detection.y() != current_detection.y() || current_detection.z() != current_detection.z()) {
-                current_detection = static_cast<vector::scopespace>(vector::localspace(0, 0, 0));
-            }
-            current_detection *= GAIN;
-            return vector::localspace(
-                -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
-                -current_detection.z(),
-                current_detection.y()
-            );
-        }
-
-        vector::localspace get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent) {
-            double GAIN = 1.0;
+        vector::localspace get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
             vector::scopespace current_detection = signal_point(
                 current_detection_relative_worldspace,
                 vector::worldspace(0, 0, 0),
                 rotation * parent->physics_state.rotation,
                 1.0 // unimportant
             ).position_scopespace;
-            if (current_detection.x() != current_detection.x() || current_detection.y() != current_detection.y() || current_detection.z() != current_detection.z()) {
-                current_detection = static_cast<vector::scopespace>(vector::localspace(0, 0, 0));
+            if (std::isnan(current_detection.distance()) || std::isnan(current_detection.scope_x()) || std::isnan(current_detection.scope_y())) {
+                current_detection = vector::scopespace();
             }
-            current_detection *= GAIN;
-            return vector::localspace(
+            current_detection.scope_x() *= gain;
+            current_detection.scope_y() *= gain;
+            vector::localspace output(
                 -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
-                -current_detection.z(),
-                current_detection.y()
+                -current_detection.scope_y(),
+                current_detection.scope_x()
             );
+            std::cout << "get_guidance_direct output: " << output.str() << "\n";
+            return output;
         }
 
         vector::localspace get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent) {
-            double GAIN = 1.0;
             vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
             vector::worldspace missile_velocity = parent->physics_state.velocity;
             vector::worldspace enemy_velocity = get_enemy_velocity(current_detection_worldspace, last_detection_worldspace);
@@ -302,118 +359,99 @@ namespace module {
 
             vector::worldspace aimpoint = current_detection_relative_worldspace + time * enemy_velocity;
 
-            vector::scopespace current_detection = signal_point(
-                aimpoint,
-                vector::worldspace(0, 0, 0),
-                rotation * parent->physics_state.rotation,
-                1.0 // unimportant
-            ).position_scopespace;
-            if (current_detection.x() != current_detection.x() || current_detection.y() != current_detection.y() || current_detection.z() != current_detection.z()) {
-                current_detection = static_cast<vector::scopespace>(vector::localspace(0, 0, 0));
-            }
-            current_detection *= GAIN;
-            return vector::localspace(
-                -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
-                -current_detection.z(),
-                current_detection.y()
-            );
+            return get_guidance_direct(aimpoint, parent, 1.0);
         }
 
         vector::localspace get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
             double LOOK_AHEAD_TIME = 1; // for turning an acceleration request into an aimpoint request
             vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
+            std::cout << "current_detection_worldspace: " << current_detection_worldspace.str() << "\n";
             vector::worldspace missile_velocity = parent->physics_state.velocity;
             vector::worldspace enemy_velocity = get_enemy_velocity(current_detection_worldspace, last_detection_worldspace);
+            std::cout << "enemy_velocity: " << enemy_velocity.str() << "\n";
             vector::worldspace relative_velocity = enemy_velocity - missile_velocity;
             vector::worldspace relative_position = current_detection_relative_worldspace;
             vector::worldspace line_of_sight_rotation_vector = (relative_position.cross(relative_velocity)) / (relative_position.dot(relative_position));
             vector::worldspace desired_acceleration = -gain * ((relative_velocity.norm()) * (missile_velocity / missile_velocity.norm())).cross(line_of_sight_rotation_vector);
-            if (desired_acceleration.x() != desired_acceleration.x() || desired_acceleration.y() != desired_acceleration.y() || desired_acceleration.z() != desired_acceleration.z()) {
-                desired_acceleration = vector::localspace(0, 0, 0);
-            }
             vector::worldspace aimpoint = LOOK_AHEAD_TIME * missile_velocity + 0.5 * LOOK_AHEAD_TIME * LOOK_AHEAD_TIME * desired_acceleration;
+            std::cout << "aimpoint: " << aimpoint.str() << "\n";
             vector::scopespace current_detection = signal_point(
                 aimpoint,
                 vector::worldspace(0, 0, 0),
                 rotation * parent->physics_state.rotation,
                 1.0 // unimportant
             ).position_scopespace;
-            return vector::localspace(
-                -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
-                -current_detection.z(),
-                current_detection.y()
-            );
+            std::cout << "current_detection: {" << 
+                current_detection.distance() << ", " << 
+                current_detection.scope_x() << ", " << 
+                current_detection.scope_y() << "}\n";
+            return get_guidance_direct(aimpoint, parent, gain);
         }
 
         std::vector<signal_point> get_signals_from_physics_objects(physics_object::object* parent) {
             std::vector<signal_point> output;
             double max_scopespace_offset = tan(view_cone_halfarc * std::numbers::pi / 180);
-            for (physics_object::object& o : globals::physics_objects) {
-                if (!o.properties.functional) continue;
+
+            globals::functional_physics_objects_mutex.lock();
+            auto functional_physics_objects_ = globals::functional_physics_objects;
+            globals::functional_physics_objects_mutex.unlock();
+            
+            for (auto o : functional_physics_objects_) {
+                if (o->mutex) std::lock_guard<std::mutex> lock(*o->mutex);
+                if (!o->properties.functional) continue;
                 signal_point s = signal_point(
-                    o.physics_state.position, 
+                    o->physics_state.position,
                     get_worldspace_position(parent),
                     rotation * parent->physics_state.rotation,
-                    o.physics_state.base_signal_strength
+                    o->physics_state.base_signal_strength
                 );
-                if (s.position_scopespace.x() <= 0) continue;
-                double scopespace_offset_squared = s.position_scopespace.y() * s.position_scopespace.y() + s.position_scopespace.z() * s.position_scopespace.z();
+                if (s.position_scopespace.distance() <= 0) continue;
+                double scopespace_offset_squared = s.position_scopespace.scope_x() * s.position_scopespace.scope_x() + s.position_scopespace.scope_y() * s.position_scopespace.scope_y();
                 if (scopespace_offset_squared > max_scopespace_offset * max_scopespace_offset) continue;
-                if (!ground::line_of_sight(get_worldspace_position(parent), o.physics_state.position)) continue;
+                if (!ground::line_of_sight(get_worldspace_position(parent), o->physics_state.position)) continue;
                 output.push_back(s);
             }
             return output;
         }
 
-        signal_point get_largest_signal(std::vector<signal_point> v) {
-            /*
-            for (signal_point& p : v) {
-                if (p.signal_strength == 0) continue;
-                std::cout << "p: " << p.position_scopespace.transpose() << ", s: " << p.signal_strength << std::endl;
-            }
-            */
-            if (v.size() == 0) return signal_point();
-            double max_signal_strength = v[0].signal_strength;
-            signal_point max_signal_point = v[0];
-            for (int i = 1; i < v.size(); i++) {
-                if (v[i].signal_strength > max_signal_strength) {
-                    max_signal_strength = v[i].signal_strength;
-                    max_signal_point = v[i];
-                }
-            }
-            if (max_signal_strength != max_signal_strength || max_signal_strength == 0) {
-                max_signal_point = signal_point(1, 0, 0, 123);
-                max_signal_point.distance_weight = 1.0;
-            }
-            return max_signal_point;
-        }
-
         vector::scopespace get_target_direction(physics_object::object* parent) {
             std::vector<signal_point> signals_unfiltered = get_signals_from_physics_objects(parent);
+            /*
+            std::cout << "signals_unfiltered [size " << signals_unfiltered.size() << "]:\n";
+            for (signal_point& s : signals_unfiltered) {
+                std::cout << "{" <<
+                    s.position_scopespace.distance() << ", " <<
+                    s.position_scopespace.scope_x() << ", " <<
+                    s.position_scopespace.scope_y() << "} [" <<
+                    s.signal_strength << "]\n";
+            }
+            */
             const int GRID_WIDTH = 30;
             const double LAST_TARGET_BONUS = 0.4;
             sensor_cell_grid grid = sensor_cell_grid(GRID_WIDTH, view_cone_halfarc);
             double target_recognition_radius = tan(target_recognition_cone_halfarc * std::numbers::pi / 180);
             for (signal_point& p : signals_unfiltered) {
-                grid.increase_signals_in_circle(p.position_scopespace.y(), p.position_scopespace.z(), target_recognition_radius, p.position_scopespace.x(), p.signal_strength);
+                grid.increase_signals_in_circle(p.position_scopespace.scope_x(), p.position_scopespace.scope_y(), target_recognition_radius, p.position_scopespace.distance(), p.signal_strength);
             }
             if (
-                !std::isnan(last_detection_scopespace.x()) &&
-                !std::isnan(last_detection_scopespace.y()) &&
-                !std::isnan(last_detection_scopespace.z()) &&
+                !std::isnan(last_detection_scopespace.distance()) &&
+                !std::isnan(last_detection_scopespace.scope_x()) &&
+                !std::isnan(last_detection_scopespace.scope_y()) &&
                 !std::isnan(last_detection_signal_strength)
             ) {
-                grid.increase_signals_in_circle(last_detection_scopespace.y(), last_detection_scopespace.z(), target_recognition_radius, last_detection_scopespace.x(), last_detection_signal_strength);
+                grid.increase_signals_in_circle(last_detection_scopespace.scope_x(), last_detection_scopespace.scope_y(), target_recognition_radius, last_detection_scopespace.distance(), last_detection_signal_strength);
             }
-            signal_point center = get_largest_signal(grid.points);
+            signal_point center = grid.get_largest_signal();
+
             std::vector<int> signal_indices_in_target_recognition_circle;
             for (int i = 0; i < signals_unfiltered.size(); i++) {
-                double distance_x = signals_unfiltered[i].position_scopespace.y() - center.position_scopespace.y();
-                double distance_y = signals_unfiltered[i].position_scopespace.z() - center.position_scopespace.z();
+                double distance_x = signals_unfiltered[i].position_scopespace.scope_x() - center.position_scopespace.scope_x();
+                double distance_y = signals_unfiltered[i].position_scopespace.scope_y() - center.position_scopespace.scope_y();
                 if (distance_x * distance_x + distance_y * distance_y < target_recognition_radius * target_recognition_radius) {
                     signal_indices_in_target_recognition_circle.push_back(i);
                 }
             }
+
             signal_point signals_averaged = signal_point(0, 0, 0, 0);
             for (int i : signal_indices_in_target_recognition_circle) {
                 signal_point& p = signals_unfiltered[i];
@@ -426,16 +464,19 @@ namespace module {
             vector::scopespace result = signals_averaged.position_scopespace;
             last_detection_scopespace = signals_averaged.position_scopespace;
             last_detection_signal_strength = signals_averaged.signal_strength;
-            //if (globals::tick % 20 == 0) grid.print(result, center.position_scopespace);
+            if (globals::tick % 1 == 0) grid.print(result, center.position_scopespace);
             //std::cout << "result: " << result.transpose() << std::endl;
             return result;
         }
 
         vector::worldspace get_target_position(physics_object::object* parent) {
             vector::scopespace result = get_target_direction(parent);
-            result.y() *= result.x();
-            result.z() *= result.x();
-            return result.to_worldspace(parent->physics_state.rotation);
+            vector::localspace result_localspace = {
+                result.distance(),
+                result.scope_x() * result.distance(),
+                result.scope_y() * result.distance()
+            };
+            return result_localspace.to_worldspace(parent->physics_state.rotation);
         }
 
     };

@@ -48,10 +48,14 @@ struct renderer {
 		return result;
 	}
 
-	static void apply_key_responses(GLFWwindow* window, std::vector<physics_object::object>& physics_objects_, float renderer_dt) {
+	static void apply_key_responses(GLFWwindow* window, float renderer_dt) {
+        globals::physics_objects_mutex.lock();
+        auto physics_objects_ = globals::physics_objects;
+        globals::physics_objects_mutex.unlock();
+
 		if (!glfwGetWindowAttrib(window, GLFW_FOCUSED)) return;
 		for (int i = 0; i < physics_objects_.size(); i++) {
-			physics_object::object* o = &physics_objects_[i];
+            auto o = physics_objects_[i];
 			for (controls::input& c : o->control_bindings.inputs) {
 				if (c.key_inputs.size() == 0) continue;
 				double response_ = 0;
@@ -113,10 +117,10 @@ struct renderer {
 		set_vertices(vertices, vertex_buffer);
 	}
 
-	static void create_models_from_physics_objects(std::vector<physics_object::object>& physics_objects_, std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);
+	static void create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);
 
 	// window creation + looping
-	static void run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, std::vector<physics_object::object>& physics_objects_, camera_properties camera_properties_) {
+	static void run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
 		// initialize
 		GLFWwindow* window;
 		GLuint vertex_shader, fragment_shader, program;
@@ -204,7 +208,7 @@ struct renderer {
 		int frame_count = 0;
 		while (!glfwWindowShouldClose(window)) {
 
-			create_models_from_physics_objects(physics_objects_, models, camera_properties_, ground, new_ground_ready);
+			create_models_from_physics_objects(models, camera_properties_, ground, new_ground_ready);
 			set_vertices_by_models(vertex_buffer, models);
 
 			// initialize variables
@@ -235,7 +239,7 @@ struct renderer {
 			// camera + rotation
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-			apply_key_responses(window, physics_objects_, renderer_dt);
+			apply_key_responses(window, renderer_dt);
 
 			glfwGetFramebufferSize(window, &width, &height);
 			ratio = width / (float) height;

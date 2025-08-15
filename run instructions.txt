@@ -30,3 +30,27 @@ use Very Sleepy to measure time
 
 use procdump with "procdump64.exe -t main.exe" to make postmortem dumps in .dmp,
 which WinDbg can open, which can read the failing function upon segfault but not the line numbers
+
+
+how to log mutex events in gdb:
+copy paste all the below
+
+break WaitForSingleObject
+y
+commands
+    silent
+    #finish
+    if $rax == 0
+        printf "[LOCK ACQUIRED] Thread ID=%u", (unsigned int) GetCurrentThreadId()
+    else
+        printf "[LOCK ATTEMPT] Thread ID=%u", (unsigned int) GetCurrentThreadId()
+    end
+    continue
+end
+break ReleaseMutex
+y
+commands
+    silent
+    printf "[LOCK RELEASED] Thread ID=%u", (unsigned int) GetCurrentThreadId()
+    continue
+end
