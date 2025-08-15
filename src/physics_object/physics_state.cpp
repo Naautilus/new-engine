@@ -5,8 +5,8 @@ struct physics_state {
 	double mass = 1.0;
 	double health = 1.0;
 	double base_signal_strength = 1.0;
-	vector::worldspace position;
-	vector::worldspace velocity;
+	vector::worldspace position = vector::worldspace(0,0,0);
+	vector::worldspace velocity = vector::worldspace(0,0,0);
 	Eigen::Quaterniond rotation = Eigen::Quaterniond::Identity();
 	vector::worldspace angular_velocity = vector::worldspace(0,0,0);
 	vector::localspace rotational_inertia = vector::localspace(1,1,1);

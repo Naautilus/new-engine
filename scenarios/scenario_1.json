@@ -41,7 +41,7 @@
         "z": 0
       },
       "control_bindings": "plane_control_bindings_ijkl",
-      "count": 3,
+      "count": 1,
       "clone_offset": {
         "localspace": true,
         "x": 0,

@@ -138,7 +138,7 @@ namespace collision {
                         fmax(delta_velocity.squaredNorm() - constants::SAFE_COLLISION_SPEED * constants::SAFE_COLLISION_SPEED, 0);
         double maximum_health = fmax(a.physics_state.health, b.physics_state.health);
         damage = fmin(damage, maximum_health);
-        
+
         a.physics_state.health -= damage;
         b.physics_state.health -= damage;
 
