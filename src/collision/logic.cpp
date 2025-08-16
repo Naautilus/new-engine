@@ -76,31 +76,40 @@ namespace collision {
 		//std::cout << "process_colliding_physics_objects called\n";
         std::optional<collision_data> collision_data_optional = a_collider.get_collision_data(b_collider);
         if (!collision_data_optional) {
-            //std::cout << "process_colliding_physics_objects(...): no collision point found\n";
+            //std::cout << "process_colliding_physics_objects(...): optional collision data not present\n";
             return;
         }
         vector::worldspace collision_point = collision_data_optional.value().position;
+        vector::worldspace collision_normal = collision_data_optional.value().normal;
         if (std::isnan(collision_point.squaredNorm())) return;
-        //std::cout << "point of collision: " << collision_point.transpose() << "\n";
+        //std::cout << "point of collision: " << collision_point.str() << "\n";
+        //std::cout << "normal of collision: " <<  collision_normal.str() << "\n";
 
-        /*
+        ///*
         globals::physics_objects_mutex.lock();
-        globals::physics_objects.push_back(physics_object::blueprints::axes(collision_point));		
+        auto axes_visual = std::make_shared<physics_object::object>(physics_object::blueprints::axes(collision_point));
+        globals::physics_objects.push_back(axes_visual);
         globals::physics_objects_mutex.unlock();
-        */
+        //*/
+        
+        physics_state original_physics_state_a = a.physics_state;
+        physics_state original_physics_state_b = b.physics_state;
 
+        vector::worldspace delta_velocity = b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point);
+        //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
+        // vector projection formula: set delta_velocity to its part that is exclusively parallel to collision_normal
+        // delta_velocity = collision_normal * (delta_velocity.dot(collision_normal) / collision_normal.squaredNorm());
+        //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
+        
+        
+        
         Eigen::Matrix3d impulse_response_per_axis;
         vector::worldspace axes[3] = {
             vector::worldspace(1, 0, 0),
             vector::worldspace(0, 1, 0),
             vector::worldspace(0, 0, 1)
         };
-        
-        physics_state original_physics_state_a = a.physics_state;
-        physics_state original_physics_state_b = b.physics_state;
 
-        vector::worldspace delta_velocity = b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point);
-        
         for (int i = 0; i < 3; i++) {
             a.apply_impulse(collision_point,  axes[i]);
             b.apply_impulse(collision_point, -axes[i]);
@@ -129,6 +138,8 @@ namespace collision {
 
         a.apply_impulse(collision_point,  result);
         b.apply_impulse(collision_point, -result);
+
+        
 
         //std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
 
@@ -192,6 +203,7 @@ namespace collision {
             Eigen::Quaterniond::Identity()
         );
 
+        
         /*
         std::cout << "collider representing ground created\n";
         std::cout << "position:" << position.transpose() << "\n";
@@ -214,11 +226,42 @@ namespace collision {
             if (altitude < 0) o.physics_state.health = 0;
             return;
         }
+        
         for (std::shared_ptr<module::module>& m : o.properties.modules) {
+            if (!m->collider.type == model_collider) continue;
             collider ground_collider = collider_representing_ground(m->collider);
+
+            globals::physics_objects_mutex.lock();
+            /*
+            std::cout << "ground_collider mesh:\n";
+            for (auto& t : ground_collider.model_data_unrotated) {
+                std::cout << "tri(" << 
+                t.points[0].str() << ", " <<
+                t.points[1].str() << ", " <<
+                t.points[2].str() << "}\n";
+            }
+            std::cout << "done\n";
+            */
+            auto collider_visual = std::make_shared<physics_object::object>(physics_object::blueprints::collider_visual(ground_object.physics_state.position, ground_collider));
+            /*
+            std::cout << "collider_visual mesh:\n";
+            for (auto& t : collider_visual->properties.modules[0]->collider.model_data_unrotated) {
+                std::cout << "tri(" << 
+                t.points[0].str() << ", " <<
+                t.points[1].str() << ", " <<
+                t.points[2].str() << "}\n";
+            }
+            std::cout << "done\n";
+            */
+            globals::physics_objects.push_back(collider_visual);
+            globals::physics_objects_mutex.unlock();
+
             if (!m->collider.check_collision(ground_collider)) continue;
+            std::cout << "ground collision\n";
             process_colliding_physics_objects(m->collider, ground_collider, o, ground_object);
-            //o.physics_state.position += vector::worldspace(0, 0, 0.01);
+            o.physics_state.position += vector::worldspace(0, 0, 0.01);
+
+            
         }
         
 		

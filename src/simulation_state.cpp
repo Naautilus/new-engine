@@ -14,7 +14,7 @@ struct simulation_state {
 		sky_r = 72;
 		sky_g = 116;
 		sky_b = 163;
-		gravity = 9.81;
+		gravity = 1;
 		air_density = 1.293;
 		timescale = 1;
 	}

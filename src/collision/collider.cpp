@@ -2,7 +2,7 @@
 #include "shapes.cpp"
 #include "collider_type.h"
 #include "collision_data.cpp"
-
+#include "../eigen_pca/eigen-pca.hpp"
 
 namespace collision {
 
@@ -84,34 +84,6 @@ namespace collision {
             //    double distance = tri()
             //}
         }
-        std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c) {
-            vector::worldspace line_segment_position_sum = vector::worldspace(0, 0, 0);
-            double line_segment_length_sum = 0;
-            for (triangle& tri1 : model_data) {
-                for (triangle& tri2 : c.model_data) {
-                    if (!tri1.is_intersecting_triangle(tri2)) continue;
-                    std::optional<line_segment> ls_optional = tri1.intersection(tri2);
-                    if (!ls_optional) continue;
-                    line_segment& ls = ls_optional.value();
-                    line_segment_position_sum += ls.line_.origin * ls.length;
-                    line_segment_position_sum += ls.line_.point_along_line(ls.length) * ls.length;
-                    line_segment_length_sum += ls.length;
-                }
-            }
-            if (line_segment_length_sum == 0) {
-                //std::cout << "get_point_of_collision_model_to_model(collider& c): line_segment_length_sum == 0\n";
-                return std::nullopt;
-            }
-            if (
-                std::isnan(line_segment_position_sum.x()) ||
-                std::isnan(line_segment_position_sum.y()) ||
-                std::isnan(line_segment_position_sum.z())
-            ) {
-                //std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
-                return std::nullopt;
-            }
-            return line_segment_position_sum / (2 * line_segment_length_sum);
-        }
         std::optional<vector::worldspace> get_collision_normal_point_to_model(collider& c) {
             ray r = static_cast<ray>(line(position, velocity));
             std::optional<triangle*> minimum_time_triangle = std::nullopt;
@@ -127,8 +99,68 @@ namespace collision {
             if (!minimum_time_triangle) return std::nullopt;
             return minimum_time_triangle.value()->get_normal();
         }
-        std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c) {
-            return vector::worldspace(0, 0, 1);
+        std::vector<line_segment> _get_line_segments_of_intersection_model_to_model(collider& c) {
+            std::vector<line_segment> output;
+            for (triangle& tri1 : model_data) {
+                for (triangle& tri2 : c.model_data) {
+                    if (!tri1.is_intersecting_triangle(tri2)) continue;
+                    std::optional<line_segment> ls_optional = tri1.intersection(tri2);
+                    if (!ls_optional) continue;
+                    output.push_back(ls_optional.value());
+                }
+            }
+            return output;
+        }
+        std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections) {
+            vector::worldspace line_segment_position_sum = vector::worldspace(0, 0, 0);
+            double line_segment_length_sum = 0;
+            for (line_segment& ls : intersections) {
+                line_segment_position_sum += ls.line_.origin * ls.length;
+                line_segment_position_sum += ls.line_.point_along_line(ls.length) * ls.length;
+                line_segment_length_sum += ls.length;
+            }
+            if (line_segment_length_sum == 0) {
+                std::cout << "get_point_of_collision_model_to_model(collider& c): line_segment_length_sum == 0\n";
+                return std::nullopt;
+            }
+            if (
+                std::isnan(line_segment_position_sum.x()) ||
+                std::isnan(line_segment_position_sum.y()) ||
+                std::isnan(line_segment_position_sum.z())
+            ) {
+                std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
+                return std::nullopt;
+            }
+            return line_segment_position_sum / (2 * line_segment_length_sum);
+        }
+        std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
+            std::vector<float> input_points;
+            std::vector<float> pca_output;
+            if (intersections.size() < 3) return std::nullopt;
+            for (line_segment& ls : intersections) {
+                input_points.push_back(ls.line_.origin.x());
+                input_points.push_back(ls.line_.origin.y());
+                input_points.push_back(ls.line_.origin.z());
+            }
+            size_t dimensions = 3;
+            size_t pca_output_count = 3; // max allowed for 3d
+            math::pca(input_points, dimensions, pca_output, pca_output_count);
+            
+            vector::worldspace collision_plane_a = vector::worldspace( // the 1st vector of pca_output
+                pca_output[0],
+                pca_output[1],
+                pca_output[2]
+            );
+            vector::worldspace collision_plane_b = vector::worldspace( // the 2nd vector of pca_output
+                pca_output[3],
+                pca_output[4],
+                pca_output[5]
+            );
+            vector::worldspace collision_normal = collision_plane_a.cross(collision_plane_b);
+            if (collision_normal.squaredNorm() == 0) return std::nullopt;
+            collision_normal.normalize();
+            std::cout << "collision_normal: " << collision_normal.str() << "\n";
+            return collision_normal;
         }
 		void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {
 		  	model_data.clear();
@@ -142,7 +174,7 @@ namespace collision {
 		}
         void set_bounding_box() {
             double max = std::numeric_limits<double>::max();
-            double min = std::numeric_limits<double>::min();
+            double min = std::numeric_limits<double>::lowest();
             bounding_box_min = vector::worldspace(max, max, max);
             bounding_box_max = vector::worldspace(min, min, min);
             
@@ -151,11 +183,15 @@ namespace collision {
                     bounding_box_min.x() = fmin(bounding_box_min.x(), v.x());
                     bounding_box_min.y() = fmin(bounding_box_min.y(), v.y());
                     bounding_box_min.z() = fmin(bounding_box_min.z(), v.z());
+                    
                     bounding_box_max.x() = fmax(bounding_box_max.x(), v.x());
                     bounding_box_max.y() = fmax(bounding_box_max.y(), v.y());
                     bounding_box_max.z() = fmax(bounding_box_max.z(), v.z());
                 }
             }
+
+            //std::cout << "bounding_box_min: " << bounding_box_min.str() << "\n";
+            //std::cout << "bounding_box_max: " << bounding_box_max.str() << "\n";
 
             bounding_box_width_squared = (bounding_box_max - bounding_box_min).squaredNorm();
         }
@@ -199,9 +235,10 @@ namespace collision {
 		}
         std::optional<collision_data> get_collision_data(collider& c) {
 		  	if (type == model_collider && c.type == model_collider) {
+                auto line_segments = _get_line_segments_of_intersection_model_to_model(c);
 				return collision_data::optional(
-                    get_collision_position_model_to_model(c),
-                    get_collision_normal_model_to_model(c)
+                    get_collision_position_model_to_model(c, line_segments),
+                    get_collision_normal_model_to_model(c, line_segments)
                 );
 		  	}
 		  	if (type == point_collider && c.type == model_collider) {

@@ -231,7 +231,9 @@ namespace physics_object {
             object o("collider visual");
             o.properties.fixed = true;
             o.properties.functional = false;
-            o.add_physical_structure(module::physical_structure(collision::collider(), std::shared_ptr<mesh>(new mesh(collider_, 1, 0.5, 0.2, 0.8)), vector::localspace(0,0,0), vector::localspace(1,1,1) * 0.001));
+            auto mesh_ = mesh(collider_, 1, 0.5, 0.2, 0.8);
+            //std::cout << "mesh_.vertices.size(): " << mesh_.vertices.size() << "\n";
+            o.add_physical_structure(module::physical_structure(collision::collider(), std::make_shared<mesh>(mesh_), vector::localspace(0,0,0), vector::localspace(1,1,1) * 1));
             o.physics_state.position = position_;
             o.physics_state.mass = 1;
             o.physics_state.health = 1;
