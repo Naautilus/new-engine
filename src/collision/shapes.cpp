@@ -106,15 +106,23 @@ namespace collision {
         }
     };
 
+    
+
 	struct line_segment {
+        enum line_segment_normalization {
+            NORMALIZED,
+            UNNORMALIZED
+        };
 		line line_ = line();
 		double length = 0;
         line_segment() {}
-		line_segment(vector::worldspace origin, vector::worldspace end) {
-		  	end -= origin;
-		  	length = end.norm();
-		  	end = end/end.norm();
-		  	line_ = line(origin, end);
+		line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED) {
+            end -= origin;
+            if (normalization == NORMALIZED) {
+                length = end.norm();
+                end = end/end.norm();
+            }
+            line_ = line(origin, end);
 		}
         line_segment intersection(line_segment& l) {
             // Assumes that the two line segments are intersecting
@@ -139,6 +147,11 @@ namespace collision {
 
 	struct triangle {
 		vector::worldspace points[3];
+        vector::worldspace centroid;
+        double radius;
+        line_segment edges[3];
+        vector::worldspace bounding_box_max;
+        vector::worldspace bounding_box_min;
 		triangle() {}
 		triangle(vector::worldspace points_[3]) {
 		  	points[0] = points_[0];
@@ -204,27 +217,36 @@ namespace collision {
 		  	return t;
 		}
 		bool is_intersecting_line_segment(line_segment& l) {
+            // this function is 95% of the runtime of the collisions algorithm
 		  	if (l.length == 0) return false;
 		  	double intersect_distance = is_intersecting_ray(static_cast<ray&>(l.line_));
 		  	if (intersect_distance < 0 || intersect_distance > l.length) return false;
+		  	//if (intersect_distance < 0 || intersect_distance > 1) return false; // for when the line_segment is unnormalized
 		  	return true;
 		}
 		bool is_intersecting_triangle(triangle& t) {
+            // this function is 99% of the runtime of the collisions algorithm            
 		  	for (int i = 0; i < 3; i++) {
-				line_segment edge = line_segment(t.points[i], t.points[(i+1)%3]);
-				if (is_intersecting_line_segment(edge)) {
+				if (is_intersecting_line_segment(t.edges[i])) {
 				  	//std::cout << "triangle {" << points[0].str() << ", " << points[1].str() << ", " << points[2].str() << "} intersecting triangle {" << t.points[0].str() << ", " << t.points[1].str() << ", " << t.points[2].str() << "}" << std::endl;
 				  	return true;
 				}
 		  	}
 		  	for (int i = 0; i < 3; i++) {
-				line_segment edge = line_segment(points[i], points[(i+1)%3]);
-				if (t.is_intersecting_line_segment(edge)) {
+				if (t.is_intersecting_line_segment(edges[i])) {
 				  	//std::cout << "triangle {" << points[0].str() << ", " << points[1].str() << ", " << points[2].str() << "} intersecting triangle {" << t.points[0].str() << ", " << t.points[1].str() << ", " << t.points[2].str() << "}" << std::endl;
 				  	return true;
 				}
 		  	}
 		  	return false;
+        }
+        bool is_intersecting_triangle_bounding_box(triangle& t) {
+            return (bounding_box_max.x() > t.bounding_box_min.x() &&
+                    bounding_box_min.x() < t.bounding_box_max.x() &&
+                    bounding_box_max.y() > t.bounding_box_min.y() &&
+                    bounding_box_min.y() < t.bounding_box_max.y() &&
+                    bounding_box_max.z() > t.bounding_box_min.z() &&
+                    bounding_box_min.z() < t.bounding_box_max.z());
         }
         plane to_plane() {
             return plane(points[0], get_normal());
@@ -274,30 +296,79 @@ namespace collision {
             //std::cout << "intersection(triangle& t): happy path\n";
             return t0_intersection.value().intersection(t1_intersection.value());
         }
+
+        private:
+        void update_centroid() {
+            centroid = (points[0] + points[1] + points[2]) / 3.0;
+        }
+        void update_radius() {
+            radius = 0;
+            for (int i = 0; i < 3; i++) {
+                radius = fmax(radius, (points[i] - centroid).squaredNorm());
+            }
+            radius = sqrt(radius);
+        }
+        void update_edges() {
+			for (int i = 0; i < 3; i++) {
+                edges[i] = line_segment(points[i], points[(i+1)%3]);
+            }
+        }
+        void update_bounding_box() {
+            double max = std::numeric_limits<double>::max();
+            double min = std::numeric_limits<double>::lowest();
+            bounding_box_min = vector::worldspace(max, max, max);
+            bounding_box_max = vector::worldspace(min, min, min);
+            
+            for(vector::worldspace& v : points) {
+                bounding_box_min.x() = fmin(bounding_box_min.x(), v.x());
+                bounding_box_min.y() = fmin(bounding_box_min.y(), v.y());
+                bounding_box_min.z() = fmin(bounding_box_min.z(), v.z());
+                
+                bounding_box_max.x() = fmax(bounding_box_max.x(), v.x());
+                bounding_box_max.y() = fmax(bounding_box_max.y(), v.y());
+                bounding_box_max.z() = fmax(bounding_box_max.z(), v.z());
+            }
+        }
+
+        public:
+        void update() {
+            update_centroid();
+            update_radius();
+            update_edges();
+            update_bounding_box();
+        }
 	};
 
+    /*
+    it could be useful later to replace every instance of two vectors
+    being O(n^2) iterated over with a function like this that can
+    optimize it
+    
+    bool is_intersecting(std::vector<triangle> v0, std::vector<triangle> v1) {}
+    */
+
 	struct triangular_prism {
-		triangle faces[8]; // base, end, (p0-p1)(base-end) quad tri-pair, (p1-p2)(base-end) quad tri-pair, (p2-p0)(base-end) quad tri-pair
+		std::vector<triangle> faces; // base, end, (p0-p1)(base-end) quad tri-pair, (p1-p2)(base-end) quad tri-pair, (p2-p0)(base-end) quad tri-pair
 		vector::worldspace central_point;
 		triangular_prism() {}
 		triangular_prism(triangle& base, vector::worldspace& extrude_direction) {
-		  	faces[0] = base;
-		  	faces[1] = triangle(
+		  	faces.push_back(base);
+		  	faces.push_back(triangle(
 				base.points[0] + extrude_direction,
 				base.points[1] + extrude_direction,
 				base.points[2] + extrude_direction
-		  	);
+		  	));
 		  	for (int side = 0; side < 3; side++) {
-				faces[side*2+2] = triangle(
+				faces.push_back(triangle(
 				  	base.points[(side+0)%3],
 				  	base.points[(side+1)%3],
 				  	base.points[(side+0)%3] + extrude_direction
-				);
-				faces[side*2+3] = triangle(
+				));
+				faces.push_back(triangle(
 				  	base.points[(side+1)%3] + extrude_direction,
 				  	base.points[(side+1)%3],
 				  	base.points[(side+0)%3] + extrude_direction
-				);
+				));
 		  	}
 		  	central_point = (base.points[0] + base.points[1] + base.points[2])/3.0 + extrude_direction/2.0; // used later for checking if a point is inside the prism
 		}

@@ -3,6 +3,7 @@
 #include "collider_type.h"
 #include "collision_data.cpp"
 #include "../eigen_pca/eigen-pca.hpp"
+#include "../renderer/mesh.h"
 
 namespace collision {
 
@@ -43,8 +44,16 @@ namespace collision {
 
             for (triangle& tri1 : model_data) {
 				for (triangle& tri2 : c.model_data) {
-				  if (tri1.is_intersecting_triangle(tri2)) return true;
-				}
+                    //std::cout << "tri1 centroid: " << tri1.centroid.str() << "\n";
+                    //std::cout << "tri2 centroid: " << tri2.centroid.str() << "\n";
+                    //std::cout << "tri1 radius: " << tri1.radius << "\n";
+                    //std::cout << "tri2 radius: " << tri2.radius << "\n";
+                    //std::cout << "dist^2: " << (tri1.centroid - tri2.centroid).squaredNorm() << "\n";
+                    //std::cout << "radius^2: " << (tri1.radius + tri2.radius) * (tri1.radius + tri2.radius) << "\n";
+                    if ((tri1.centroid - tri2.centroid).squaredNorm() > (tri1.radius + tri2.radius) * (tri1.radius + tri2.radius)) continue;
+                    if (!tri1.is_intersecting_triangle_bounding_box(tri2)) continue;
+				    if (tri1.is_intersecting_triangle(tri2)) return true;
+                }
 		  	}
             return false;
         }
@@ -72,7 +81,7 @@ namespace collision {
             return false;
         }
 		bool check_collision_model_to_model(collider& c) {
-            return _check_collision_model_to_model_prism(c);
+            return _check_collision_model_to_model_triangle(c);
 		}
         vector::worldspace get_collision_position_point_to_model(collider& c) {
             // just the raw position is good enough for things like missile and bullet hits, rather than factoring in the sub-tick movement
@@ -225,12 +234,32 @@ namespace collision {
         }
         public:
 		collider() {
-		  type = point_collider;
+		    type = point_collider;
 		}
 		collider(std::vector<triangle> model_data_unrotated_) {
-		  type = model_collider;
-		  model_data_unrotated = model_data_unrotated_;
+		    type = model_collider;
+		    model_data_unrotated = model_data_unrotated_;
 		}
+        collider(mesh m) {
+            type = model_collider;
+            std::vector<triangle> model_data_unrotated_;
+            std::vector<vector::worldspace> points;
+            for (int index : m.indices) {
+                points.push_back(vector::worldspace(
+                    m.vertices[index].x,
+                    m.vertices[index].y,
+                    m.vertices[index].z
+                ));
+            }
+            for (int i = 0; i < points.size(); i += 3) {
+                model_data_unrotated_.push_back(triangle(
+                    points[i],
+                    points[i+1],
+                    points[i+2]
+                ));
+            }
+            model_data_unrotated = model_data_unrotated_;
+        }
 		void update(vector::worldspace position_, vector::worldspace velocity_, Eigen::Quaterniond rotation_) {
 		  switch(type) {
 			case point_collider:
@@ -243,6 +272,7 @@ namespace collision {
 			  	rotation = rotation_;
 			  	rotate_model_data(position_, rotation_);
                 set_bounding_box();
+                for (triangle& t : model_data) t.update();
 			  	break;
 		  	}
 		}

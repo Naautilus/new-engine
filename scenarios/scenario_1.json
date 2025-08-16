@@ -5,9 +5,9 @@
       "name": "plane1",
       "position": {
         "relative_to_ground": false,
-        "x": -2000,
-        "y": 500,
-        "z": 10000
+        "x": -1030,
+        "y": 495,
+        "z": 20000
       },
       "velocity": {
         "localspace": true,
@@ -24,7 +24,7 @@
         "relative_to_ground": false,
         "x": -1000,
         "y": 500,
-        "z": 10000
+        "z": 20000
       },
       "rotation": {
         "degrees_around_axis": 0,

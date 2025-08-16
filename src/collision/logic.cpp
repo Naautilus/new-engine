@@ -3,9 +3,11 @@
 #include "../constants/constants.cpp"
 #include "../physics_object/object.cpp"
 #include "../physics_object/blueprints.cpp"
-#include "collider.cpp"
 #include "../math/random.cpp"
+#include "../timer/timer.h"
+#include "collider.cpp"
 #include "collision_data.cpp"
+#include <chrono>
 
 namespace collision {
 
@@ -73,8 +75,12 @@ namespace collision {
 	}
 	
 	void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-		//std::cout << "process_colliding_physics_objects called\n";
+
+        
+        timer::timer timer_("process_colliding_physics_objects timer", timer::timer::MILLISECONDS);
+        //std::cout << "process_colliding_physics_objects called\n";
         std::optional<collision_data> collision_data_optional = a_collider.get_collision_data(b_collider);
+        timer_.record("collision data");
         if (!collision_data_optional) {
             //std::cout << "process_colliding_physics_objects(...): optional collision data not present\n";
             return;
@@ -84,17 +90,17 @@ namespace collision {
         if (std::isnan(collision_point.squaredNorm())) return;
         //std::cout << "point of collision: " << collision_point.str() << "\n";
         //std::cout << "normal of collision: " <<  collision_normal.str() << "\n";
-
+        
         /*
         globals::physics_objects_mutex.lock();
         auto axes_visual = std::make_shared<physics_object::object>(physics_object::blueprints::axes(collision_point));
         globals::physics_objects.push_back(axes_visual);
         globals::physics_objects_mutex.unlock();
         */
-        
+       
         physics_state original_physics_state_a = a.physics_state;
         physics_state original_physics_state_b = b.physics_state;
-
+       
         vector::worldspace delta_velocity = b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point);
         //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
 
@@ -103,7 +109,7 @@ namespace collision {
 
         //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
         
-        
+        timer_.record("post collision data");
         
         Eigen::Matrix3d impulse_response_per_axis;
         vector::worldspace axes[3] = {
@@ -141,7 +147,7 @@ namespace collision {
         a.apply_impulse(collision_point,  result);
         b.apply_impulse(collision_point, -result);
 
-        
+        timer_.record("delta_velocity cancellation");
 
         //std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
 
@@ -160,24 +166,30 @@ namespace collision {
 
         double total_mass = a.physics_state.mass + b.physics_state.mass;
 
+        timer_.record("damage");
+
         create_debris_for_objects(a, b, damage, collision_point);
+
+        timer_.record("debris");
         
         if (a_collider.type != model_collider || b_collider.type != model_collider) return;
         ///*
         if (a.physics_state.health > 0 && b.physics_state.health > 0) {
             double min_size = sqrt(fmin(a_collider.bounding_box_width_squared, b_collider.bounding_box_width_squared));
             min_size = fmax(min_size, std::numeric_limits<double>::epsilon());
-            double distance_multiplier = 1e-5 * min_size;
+            double distance_multiplier = 1e-3 * min_size;
             while (a_collider.check_collision(b_collider)) {
                 //std::cout << "push iteration-------------------------------------\n";
                 a.physics_state.position += distance_multiplier * (a.physics_state.position - b.physics_state.position) * constants::DELTA_T * (b.physics_state.mass / total_mass);
                 b.physics_state.position += distance_multiplier * (b.physics_state.position - a.physics_state.position) * constants::DELTA_T * (a.physics_state.mass / total_mass);
                 a_collider.update(a.physics_state.position, a.physics_state.velocity, a.physics_state.rotation);
                 b_collider.update(b.physics_state.position, b.physics_state.velocity, b.physics_state.rotation);
-                distance_multiplier *= 1.2;
+                distance_multiplier *= 1.5;
             }
         }
         //*/
+        timer_.record("push back");
+        timer_.print();
 
     }
         
