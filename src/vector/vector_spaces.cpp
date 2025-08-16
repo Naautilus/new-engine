@@ -70,7 +70,7 @@ namespace vector {
         }
 
         scopespace() {
-            v = localspace();
+            v = localspace(0, 0, 0);
         }
 
         std::string str() {

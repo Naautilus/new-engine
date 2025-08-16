@@ -163,14 +163,17 @@ namespace ground {
         return sum;
     }
 
-    vector::worldspace get_surface_normal(double x, double y) {
-        double epsilon = 0.001;
+    vector::worldspace get_surface_normal(double x, double y, double epsilon) {
         double m_x = -(get_ground_altitude(x + epsilon, y) - get_ground_altitude(x, y))/epsilon;
         double m_y = -(get_ground_altitude(x, y + epsilon) - get_ground_altitude(x, y))/epsilon;
         double z = 1;
         vector::worldspace normal = vector::worldspace(m_x, m_y, z);
         normal /= normal.norm();
         return normal;
+    }
+    
+    vector::worldspace get_surface_normal(double x, double y) {
+        return get_surface_normal(x, y, 0.001);
     }
 
     bool line_of_sight(vector::worldspace a, vector::worldspace& b) {

@@ -4,14 +4,14 @@
       "blueprint": "f16_simple_forces_model",
       "name": "plane1",
       "position": {
-        "relative_to_ground": true,
+        "relative_to_ground": false,
         "x": -2000,
         "y": 500,
-        "z": 20
+        "z": 10000
       },
       "velocity": {
         "localspace": true,
-        "x": 0,
+        "x": 500,
         "y": 0,
         "z": 0
       },
@@ -22,8 +22,8 @@
       "name": "plane2",
       "position": {
         "relative_to_ground": false,
-        "x": 1000,
-        "y": 0,
+        "x": -1000,
+        "y": 500,
         "z": 10000
       },
       "rotation": {
@@ -41,7 +41,7 @@
         "z": 0
       },
       "control_bindings": "plane_control_bindings_ijkl",
-      "count": 0,
+      "count": 5,
       "clone_offset": {
         "localspace": true,
         "x": 0,

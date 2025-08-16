@@ -12,10 +12,10 @@ namespace collision {
         }
         static std::optional<collision_data> optional(std::optional<vector::worldspace> position_, std::optional<vector::worldspace> normal_) {
             if (!position_) {
-                std::cout << "collision_data.cpp: no collision position\n";
+                //std::cout << "collision_data.cpp: no collision position\n";
             }
             if (!normal_) {
-                std::cout << "collision_data.cpp: no collision normal\n";
+                //std::cout << "collision_data.cpp: no collision normal\n";
             }
             if (!position_) {
                 return std::nullopt;

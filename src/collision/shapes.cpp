@@ -16,9 +16,21 @@ namespace collision {
 		  	input_point -= origin; // offset the input point to be relative to the triangle
 		  	return input_point.dot(direction);
 		}
-        double distance_to_intersection(line& l) {
-            // Assumes that the lines are intersecting
+        std::optional<double> distance_to_intersection(line& l) {
+            // Original implementation was bugged. Original:
+            /*
             double t = (l.origin - origin).cross(l.direction).norm() / direction.cross(l.direction).norm();
+            return t;
+            */
+
+            vector::worldspace r = l.origin - origin;
+            vector::worldspace d1 = direction;
+            vector::worldspace d2 = l.direction;
+
+            double denominator = d1.cross(d2).squaredNorm();
+            if (denominator < std::numeric_limits<double>::epsilon()) return std::nullopt;
+
+            double t = r.cross(d2).dot(d1.cross(d2)) / denominator;
             return t;
         }
         vector::worldspace point_along_line(double t) {
@@ -44,7 +56,7 @@ namespace collision {
             // Assumes that the planes are not parallel
 
             if (fabs(fabs(direction.dot(p.direction)) - 1) < std::numeric_limits<double>::epsilon()) {
-                std::cout << "line_of_intersection(plane& p): parallel planes\n";
+                //std::cout << "line_of_intersection(plane& p): parallel planes\n";
                 return std::nullopt;
             }
             line l;
@@ -218,18 +230,18 @@ namespace collision {
             return plane(points[0], get_normal());
         }
         std::optional<line_segment> intersection(line& l) {
-            // Assumes that the triangles is confirmed to be intersecting the line segment
+            // Assumes that the triangle is confirmed to be intersecting the line segment
             std::vector<vector::worldspace> intersection_points;
             for (int i = 0; i < 3; i++) {
                 line edge = line(points[i], points[(i+1)%3] - points[i]);
-                double t = edge.distance_to_intersection(l);
-                if (t < 0) continue;
-                if (t > 1) continue;
-                intersection_points.push_back(edge.point_along_line(t));
+                std::optional<double> t = edge.distance_to_intersection(l);
+                if (!t) continue;
+                if (t.value() < 0) continue;
+                if (t.value() > 1) continue;
+                intersection_points.push_back(edge.point_along_line(t.value()));
             }
-            //std::cout << "[" << globals::error_count << "] intersection(line& l): intersection_points.size() == " << intersection_points.size() << "\n";
+            //std::cout << "intersection(line& l): intersection_points.size() == " << intersection_points.size() << "\n";
             if (intersection_points.size() != 2) {
-                globals::error_count++;
                 return std::nullopt;
             }
             line_segment output = line_segment(intersection_points[0], intersection_points[1]);
@@ -244,13 +256,13 @@ namespace collision {
             // Assumes that the two triangles are confirmed to be intersecting
             double normal_dot_product = get_normal().dot(t.get_normal());
             if (fabs(fabs(normal_dot_product) - 1) < std::numeric_limits<double>::epsilon()) {
-                std::cout << "intersection(triangle& t): triangles are coplanar\n";
+                //std::cout << "intersection(triangle& t): triangles are coplanar\n";
                 return std::nullopt;
             }
             plane p = t.to_plane();
             std::optional<line> plane_intersection_line = to_plane().line_of_intersection(p);
             if (!plane_intersection_line) {
-                std::cout << "intersection(triangle& t): plane_intersection_line returned no value\n";
+                //std::cout << "intersection(triangle& t): plane_intersection_line returned no value\n";
                 return std::nullopt;
             }
             std::optional<line_segment> t0_intersection = intersection(plane_intersection_line.value());
@@ -259,6 +271,7 @@ namespace collision {
                 //std::cout << "intersection(triangle& t): at least one intersection returned no value\n";
                 return std::nullopt;
             }
+            //std::cout << "intersection(triangle& t): happy path\n";
             return t0_intersection.value().intersection(t1_intersection.value());
         }
 	};

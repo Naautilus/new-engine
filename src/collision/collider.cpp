@@ -96,19 +96,34 @@ namespace collision {
                     minimum_time = time;
                 }
             }
-            if (!minimum_time_triangle) return std::nullopt;
+            if (!minimum_time_triangle) return vector::worldspace(0, 0, 1);//std::nullopt;
             return minimum_time_triangle.value()->get_normal();
         }
         std::vector<line_segment> _get_line_segments_of_intersection_model_to_model(collider& c) {
+            //std::cout << "_get_line_segments_of_intersection_model_to_model:\n";
             std::vector<line_segment> output;
+            //std::cout << "model_data length: " << model_data.size() << "\n";
+            //std::cout << "c.model_data length: " << c.model_data.size() << "\n";
             for (triangle& tri1 : model_data) {
                 for (triangle& tri2 : c.model_data) {
-                    if (!tri1.is_intersecting_triangle(tri2)) continue;
+                    //std::cout << "tri1: [" << tri1.points[0].str() << ", " << tri1.points[1].str() << ", " << tri1.points[2].str() << "]\n";
+                    //std::cout << "tri2: [" << tri2.points[0].str() << ", " << tri2.points[1].str() << ", " << tri2.points[2].str() << "]\n";
+                    if (!tri1.is_intersecting_triangle(tri2)) {
+                        //std::cout << "tri1 and tri2 are not intersecting\n";
+                        continue;
+                    }
+                    //std::cout << "tri1 and tri2 are intersecting\n";
                     std::optional<line_segment> ls_optional = tri1.intersection(tri2);
-                    if (!ls_optional) continue;
+                    if (!ls_optional) {
+                        //std::cout << "no line_segment found\n";
+                        continue;
+                    }
+                    //std::cout << "line_segment found\n";
+                    //std::cout << "pushing back line_segment\n";
                     output.push_back(ls_optional.value());
                 }
             }
+            //std::cout << "_get_line_segments_of_intersection_model_to_model done\n";
             return output;
         }
         std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections) {
@@ -120,7 +135,7 @@ namespace collision {
                 line_segment_length_sum += ls.length;
             }
             if (line_segment_length_sum == 0) {
-                std::cout << "get_point_of_collision_model_to_model(collider& c): line_segment_length_sum == 0\n";
+                //std::cout << "get_point_of_collision_model_to_model(collider& c): line_segment_length_sum == 0\n";
                 return std::nullopt;
             }
             if (
@@ -128,19 +143,29 @@ namespace collision {
                 std::isnan(line_segment_position_sum.y()) ||
                 std::isnan(line_segment_position_sum.z())
             ) {
-                std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
+                //std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
                 return std::nullopt;
             }
             return line_segment_position_sum / (2 * line_segment_length_sum);
         }
         std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
+            //std::cout << "get_collision_normal_model_to_model: ";
             std::vector<float> input_points;
             std::vector<float> pca_output;
-            if (intersections.size() < 3) return std::nullopt;
+            if (intersections.size() < 2) {
+                //std::cout << "intersections.size() = " << intersections.size() << " < 2, so a normal cannot be found\n";
+                return std::nullopt;
+            }
             for (line_segment& ls : intersections) {
                 input_points.push_back(ls.line_.origin.x());
                 input_points.push_back(ls.line_.origin.y());
                 input_points.push_back(ls.line_.origin.z());
+
+                input_points.push_back(ls.line_.origin.x() + ls.line_.point_along_line(ls.length).x());
+                input_points.push_back(ls.line_.origin.y() + ls.line_.point_along_line(ls.length).y());
+                input_points.push_back(ls.line_.origin.z() + ls.line_.point_along_line(ls.length).z());
+
+                //std::cout << "ls.line_.direction.norm(): " << ls.line_.direction.norm() << "\n";
             }
             size_t dimensions = 3;
             size_t pca_output_count = 3; // max allowed for 3d
@@ -157,9 +182,12 @@ namespace collision {
                 pca_output[5]
             );
             vector::worldspace collision_normal = collision_plane_a.cross(collision_plane_b);
-            if (collision_normal.squaredNorm() == 0) return std::nullopt;
+            if (collision_normal.squaredNorm() == 0) {
+                //std::cout << "collision_normal magnitude is 0, so a normal cannot be found\n";
+                return std::nullopt;
+            }
             collision_normal.normalize();
-            std::cout << "collision_normal: " << collision_normal.str() << "\n";
+            //std::cout << "collision_normal: " << collision_normal.str() << "\n";
             return collision_normal;
         }
 		void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {
@@ -253,7 +281,7 @@ namespace collision {
                     c.get_collision_normal_point_to_model(*this)
                 );
 		  	}
-		  	std::cout << "check_collision called on two point colliders\n";
+		  	//std::cout << "check_collision called on two point colliders\n";
 			std::abort();
 		}
 	};
