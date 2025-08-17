@@ -105,7 +105,7 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 	return model;
 }
 
-const int GROUND_LODS = 14;
+const int GROUND_LODS = 18;
 const double GROUND_INITIAL_TILE_SIZE = 0.1;//25.0;
 int GROUND_TILE_COUNT = 30;
 const int GROUND_DEADZONE_TILES = 2;
@@ -145,7 +145,21 @@ std::shared_ptr<physics_object::object> move_camera(camera_properties& camera_pr
 	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(camera_properties_.camera_target_name);
 	else o = get_physics_object_from_vector_reversed(camera_properties_.camera_target_name);
 	if (!o) return o;
-	camera_properties_.previous_camera_rotations.push_back(o->physics_state.rotation);
+
+	Eigen::Quaterniond vehicle_point_direction = o->physics_state.rotation;
+    vector::worldspace vehicle_point_vector = vehicle_point_direction.conjugate() * vector::worldspace::UnitX();
+    //Eigen::Quaterniond vehicle_travel_direction = Eigen::Quaterniond::FromTwoVectors(o->physics_state.velocity, vector::worldspace(1, 0, 0));
+    Eigen::Quaterniond vehicle_travel_direction = Eigen::Quaterniond::Identity();
+    vehicle_travel_direction = vehicle_travel_direction * Eigen::AngleAxisd(atan2(vehicle_point_vector.z(), sqrt(vehicle_point_vector.x()*vehicle_point_vector.x() + vehicle_point_vector.y()*vehicle_point_vector.y())), vector::worldspace::UnitY()); // pitch
+    vehicle_travel_direction = vehicle_travel_direction * Eigen::AngleAxisd(-atan2(vehicle_point_vector.y(), vehicle_point_vector.x()), vector::worldspace::UnitZ()); // yaw
+    /*
+    std::vector<Eigen::Quaterniond> average_;
+    average_.push_back(vehicle_point_direction);
+    average_.push_back(vehicle_travel_direction);
+    camera_properties_.previous_camera_rotations.push_back(average_approx(average_));
+    */
+    camera_properties_.previous_camera_rotations.push_back(vehicle_travel_direction);
+
 	if (camera_properties_.previous_camera_rotations.size() > 30) {
 		camera_properties_.previous_camera_rotations.erase(camera_properties_.previous_camera_rotations.begin());
 	}
@@ -237,7 +251,7 @@ int ground_models_start_point = -1;
 
 void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
 
-    globals::physics_objects_mutex.lock();
+    globals::physics_objects_mutex.lock();    
     auto physics_objects_ = globals::physics_objects;
     globals::physics_objects_mutex.unlock();
 
@@ -278,16 +292,18 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 		total_vertices += m.indices.size();
 	}
 	//std::cout << "total_vertices: " << total_vertices << "\n";
-
+    
 	std::shared_ptr<physics_object::object> camera_tracked_object = move_camera(camera_properties_);
-    if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->lock();
+
+    //if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->lock();
+    for (auto o : physics_objects_) if (o->mutex) o->mutex->lock();
 
 	std::vector<module::visual_model> original_models;
 	std::vector<vector::worldspace> original_positions;
 	std::vector<Eigen::Quaterniond> original_rotations;
 
 	for (auto o : physics_objects_) {
-        if (o->mutex && o != camera_tracked_object) std::lock_guard<std::mutex> lock(*o->mutex);
+        //if (o->mutex && o != camera_tracked_object) std::lock_guard<std::mutex> lock(*o->mutex);
 		for (std::shared_ptr<module::module>& module_ : o->properties.modules) {
             if (!module_) {
                 std::cout << "void renderer::create_models_from_physics_objects(...): std::shared_ptr<module::module> is a nullptr\n";
@@ -300,7 +316,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 				original_positions.push_back(o->physics_state.position);
 				original_rotations.push_back(o->physics_state.rotation);
 			}
-            ///*
+            /*
             if (module_->collider.type != collision::collider_type::model_collider) continue;
             mesh m = mesh(module_->collider, 0.8, 0, 0, 0.8);
             for (vertex& v : m.vertices) {
@@ -313,11 +329,12 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
             }
             apply_sunlight_to_model(m);
 		    models.push_back(m);
-            //*/
+            */
 		}
 	}
 
-    if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->unlock();
+    //if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->unlock();
+    for (auto o : physics_objects_) if (o->mutex) o->mutex->unlock();
     
 	for (int i = 0; i < original_models.size(); i++) {
 		module::visual_model& m = original_models[i];
@@ -356,4 +373,6 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 		apply_sunlight_to_model(model_rotated);
 		models.push_back(model_rotated);
 	}
+
+
 }

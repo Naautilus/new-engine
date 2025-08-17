@@ -52,6 +52,7 @@ namespace models {
 		debris_1kg = std::make_shared<mesh>(models::stl_to_mesh("debris_1kg", 0.2, 0.2, 0.2, 0.4)); // old rgb 0.275
 		debris_1kg_bright = std::make_shared<mesh>(models::stl_to_mesh("debris_1kg", 1, 0.8, 0.6, 0));
 		f16 = std::make_shared<mesh>(models::stl_to_mesh("f16", 0.2, 0.2, 0.2, 1));
+		f16_wrapped = std::make_shared<mesh>(models::stl_to_mesh("f16_wrapped", 0.2, 0.2, 0.2, 1));
 		sphere = std::make_shared<mesh>(models::stl_to_mesh("sphere", 1, 0.8, 0.6, 0));
         axes = std::make_shared<mesh>(models::stl_to_mesh("axes", 1, 0.2, 0.2, 0.5));
 

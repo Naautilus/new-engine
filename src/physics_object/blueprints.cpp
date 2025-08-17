@@ -173,7 +173,7 @@ namespace physics_object {
         object f16_simple_forces_model() {
             object o("");
             //o.add_physical_structure(module::physical_structure(collision::collider(collision::simple_jet_collider), models::f16));
-            o.add_physical_structure(module::physical_structure(collision::collider(*models::f16), models::f16));
+            o.add_physical_structure(module::physical_structure(collision::collider(*models::f16_wrapped), models::f16));
             o.physics_state.mass = 9300;
             o.physics_state.health = 9300;
             o.physics_state.rotational_inertia = vector::localspace(12874.84, 75673.58, 85554.4);

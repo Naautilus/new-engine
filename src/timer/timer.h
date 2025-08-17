@@ -12,14 +12,17 @@ namespace timer {
         }
     };
     struct timer {
+        public:
         enum time_unit {
             SECONDS,
             MILLISECONDS,
             MICROSECONDS
         };
+        private:
         std::vector<timepoint> timepoints;
         std::string name = "";
         time_unit time_unit_;
+        public:
         timer(std::string name_, time_unit time_unit__) {
             name = name_;
             time_unit_ = time_unit__;
@@ -27,6 +30,9 @@ namespace timer {
         }
         void record(std::string timepoint_name) {
             timepoints.push_back(timepoint(timepoint_name));
+        }
+        void reset() {
+            timepoints.clear();
         }
         void print() {
             std::string time_unit_text = "xx";

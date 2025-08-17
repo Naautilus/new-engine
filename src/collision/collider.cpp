@@ -117,10 +117,10 @@ namespace collision {
                 for (triangle& tri2 : c.model_data) {
                     //std::cout << "tri1: [" << tri1.points[0].str() << ", " << tri1.points[1].str() << ", " << tri1.points[2].str() << "]\n";
                     //std::cout << "tri2: [" << tri2.points[0].str() << ", " << tri2.points[1].str() << ", " << tri2.points[2].str() << "]\n";
-                    if (!tri1.is_intersecting_triangle(tri2)) {
-                        //std::cout << "tri1 and tri2 are not intersecting\n";
-                        continue;
-                    }
+                    if ((tri1.centroid - tri2.centroid).squaredNorm() > (tri1.radius + tri2.radius) * (tri1.radius + tri2.radius)) continue;
+                    if (!tri1.is_intersecting_triangle_bounding_box(tri2)) continue;
+                    if (!tri1.is_intersecting_triangle(tri2)) continue;
+                    
                     //std::cout << "tri1 and tri2 are intersecting\n";
                     std::optional<line_segment> ls_optional = tri1.intersection(tri2);
                     if (!ls_optional) {
@@ -133,6 +133,7 @@ namespace collision {
                 }
             }
             //std::cout << "_get_line_segments_of_intersection_model_to_model done\n";
+            globals::timer_.record("collision data line segments");
             return output;
         }
         std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections) {
@@ -155,6 +156,7 @@ namespace collision {
                 //std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
                 return std::nullopt;
             }
+            globals::timer_.record("collision data position");
             return line_segment_position_sum / (2 * line_segment_length_sum);
         }
         std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
@@ -197,6 +199,7 @@ namespace collision {
             }
             collision_normal.normalize();
             //std::cout << "collision_normal: " << collision_normal.str() << "\n";
+            globals::timer_.record("collision data normal");
             return collision_normal;
         }
 		void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {

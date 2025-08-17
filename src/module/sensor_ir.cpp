@@ -261,7 +261,7 @@ namespace module {
             if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
             //std::cout << "record target distance: " << record_target_distance << std::endl;
             vector::localspace guidance_pid_inputs = vector::localspace(0, 0, 0);
-            vector::localspace guidance_pid_inputs_direct = get_guidance_direct(current_detection_relative_worldspace, parent, 5.0);
+            vector::localspace guidance_pid_inputs_direct = get_guidance_direct(current_detection_relative_worldspace, parent, 1.0);
 
             double apn_gain = 5.0;
             apn_gain *= std::clamp((time_since_launch-0.1)*0.5, 0.0, 1.0);
@@ -269,11 +269,11 @@ namespace module {
             guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, apn_gain);
             //guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent);
             
-            /*
+            ///*
             if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 0.1) {
                 guidance_pid_inputs = guidance_pid_inputs_direct;
             }
-            */
+            //*/
             
             
             //std::cout << interp << std::endl;

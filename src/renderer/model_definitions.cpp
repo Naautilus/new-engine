@@ -15,6 +15,7 @@ namespace models {
 	std::shared_ptr<mesh> debris_1kg;
 	std::shared_ptr<mesh> debris_1kg_bright;
 	std::shared_ptr<mesh> f16;
+	std::shared_ptr<mesh> f16_wrapped;
 	std::shared_ptr<mesh> sphere;
     std::shared_ptr<mesh> axes;
 

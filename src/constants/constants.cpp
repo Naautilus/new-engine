@@ -35,7 +35,7 @@ namespace constants {
     constexpr std::string FORMAT_STRING_G_FORCE = "{:6.2f}";
     constexpr std::string FORMAT_STRING_AOA = "{:5.1f}";
     constexpr std::string FORMAT_STRING_ALTITUDE = "{:5.0f}";
-    const double DELTA_T = 0.003;
+    const double DELTA_T = 0.005;
     const double LOG_INTERVAL = 0.005;
     const double TIME_LIMIT = -1;
     const double DAMAGE_MULTIPLIER = 2e-4;

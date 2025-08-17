@@ -12,3 +12,8 @@ xx000100 = not
 xx000101 = xor
 xx000110 = shl
 xx000111 = shr
+
+
+
+vimvimvim
+
