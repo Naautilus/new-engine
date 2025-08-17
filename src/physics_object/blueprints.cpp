@@ -215,16 +215,42 @@ namespace physics_object {
             return o;
         }
         
-        object axes(vector::worldspace position_) {
+        object axes(vector::worldspace position_, double scale = 1) {
             object o("axes");
             o.properties.fixed = true;
             o.properties.functional = false;
-            o.add_physical_structure(module::physical_structure(collision::collider(), models::axes, vector::localspace(0,0,0), vector::localspace(1,1,1) * 0.001));
+            o.add_physical_structure(module::physical_structure(collision::collider(), models::axes, vector::localspace(0,0,0), vector::localspace(1,1,1) * 0.001 * scale));
             o.physics_state.position = position_;
             o.physics_state.mass = 1;
             o.physics_state.health = 1;
             o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
             o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
+            return o;
+        }
+
+        object sphere(vector::worldspace position_, double scale = 1) {
+            object o("sphere");
+            o.properties.fixed = true;
+            o.properties.functional = false;
+            o.add_physical_structure(module::physical_structure(collision::collider(), models::sphere, vector::localspace(0,0,0), vector::localspace(1,1,1) * scale));
+            o.physics_state.position = position_;
+            o.physics_state.mass = 1;
+            o.physics_state.health = 1;
+            o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
+            o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
+            return o;
+        }
+
+        object cube(vector::worldspace position_, double scale = 1) {
+            object o("cube");
+            o.properties.fixed = true;
+            o.properties.functional = false;
+            o.add_physical_structure(module::physical_structure(collision::collider(), models::cube, vector::localspace(0,0,0), vector::localspace(1,1,1) * scale));
+            o.physics_state.position = position_;
+            o.physics_state.mass = 1;
+            o.physics_state.health = 1;
+            o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
+            //o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
             return o;
         }
         

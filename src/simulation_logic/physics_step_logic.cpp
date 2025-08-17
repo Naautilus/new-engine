@@ -172,6 +172,10 @@ void wait_delta_t() {
 	}
 	log_counter++;
 	log_counter %= log_counter_interval;
+
+    globals::pause_mutex.lock();
+    globals::pause_mutex.unlock();
+    
 }
 
 std::shared_ptr<physics_object::object> get_physics_object_from_vector(std::string name_) {

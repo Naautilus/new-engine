@@ -48,7 +48,21 @@ struct renderer {
 		return result;
 	}
 
+    static void update_pause_state(GLFWwindow* window) {
+        if (!key_pressed(window, GLFW_KEY_P)) return;
+        while (key_pressed(window, GLFW_KEY_P)) glfwPollEvents();
+        globals::paused = !globals::paused;
+
+        if (globals::paused) globals::pause_mutex.lock();
+        else globals::pause_mutex.unlock();
+    }
+
+    /*
+    NOTE: it could be useful to track this in the physics part of the engine and apply responses there for better between-frame scaling
+    */
 	static void apply_key_responses(GLFWwindow* window, float renderer_dt) {
+        if (globals::paused) return;
+
         globals::physics_objects_mutex.lock();
         auto physics_objects_ = globals::physics_objects;
         globals::physics_objects_mutex.unlock();
@@ -86,6 +100,42 @@ struct renderer {
 			}
 		}
 	}
+
+    static void manual_camera_movement(GLFWwindow* window, float renderer_dt, camera_properties& camera_properties_) {
+        const double TRANSLATION_SPEED_WALK = 20;
+        const double TRANSLATION_SPEED_SPRINT = 100;
+        const double ROTATION_SPEED = 1;
+
+        double translation_speed = TRANSLATION_SPEED_WALK;
+        if (key_pressed(window, GLFW_KEY_LEFT_SHIFT)) translation_speed = TRANSLATION_SPEED_SPRINT;
+
+        vector::localspace translation(0, 0, 0);
+        if (key_pressed(window, GLFW_KEY_W)) translation.x()++;
+        if (key_pressed(window, GLFW_KEY_S)) translation.x()--;
+        if (key_pressed(window, GLFW_KEY_D)) translation.y()++;
+        if (key_pressed(window, GLFW_KEY_A)) translation.y()--;
+        if (key_pressed(window, GLFW_KEY_E)) translation.z()++;
+        if (key_pressed(window, GLFW_KEY_Q)) translation.z()--;
+        translation *= translation_speed * renderer_dt;
+        
+        vector::worldspace rotation_axis(0, 0, 0);
+        if (key_pressed(window, GLFW_KEY_O)) rotation_axis.x()++;
+        if (key_pressed(window, GLFW_KEY_U)) rotation_axis.x()--;
+        if (key_pressed(window, GLFW_KEY_I)) rotation_axis.y()++;
+        if (key_pressed(window, GLFW_KEY_K)) rotation_axis.y()--;
+        if (key_pressed(window, GLFW_KEY_J)) rotation_axis.z()++;
+        if (key_pressed(window, GLFW_KEY_L)) rotation_axis.z()--;
+        rotation_axis *= ROTATION_SPEED * renderer_dt;
+
+        Eigen::Quaterniond& rotation = camera_properties_.previous_camera_rotations.back();
+        rotation = Eigen::AngleAxisd(rotation_axis.norm(), rotation_axis.normalized()) * rotation;
+
+        vector::worldspace position = camera_properties_.last_camera_position;
+        position += translation.to_worldspace(rotation);
+        
+        camera_properties_.update(rotation, position, vector::worldspace(0, 0, 0), camera_properties::NOT_TRACKING);
+
+    }
 
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
@@ -239,7 +289,9 @@ struct renderer {
 			// camera + rotation
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-			apply_key_responses(window, renderer_dt);
+            update_pause_state(window);
+			if (!globals::paused) apply_key_responses(window, renderer_dt);
+            else manual_camera_movement(window, renderer_dt, camera_properties_);
 
 			glfwGetFramebufferSize(window, &width, &height);
 			ratio = width / (float) height;

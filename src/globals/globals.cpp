@@ -6,6 +6,10 @@
 
 namespace globals {
     auto last_time = std::chrono::high_resolution_clock::now();
+
+    bool paused;
+    std::mutex pause_mutex;
+
     std::vector<std::shared_ptr<physics_object::object>> physics_objects;
     std::mutex physics_objects_mutex;
     

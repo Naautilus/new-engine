@@ -5,6 +5,7 @@
 #include "../eigen_pca/eigen-pca.hpp"
 #include "../renderer/mesh.h"
 
+
 namespace collision {
 
 	struct collider {
@@ -299,7 +300,8 @@ namespace collision {
                 auto line_segments = _get_line_segments_of_intersection_model_to_model(c);
 				return collision_data::optional(
                     get_collision_position_model_to_model(c, line_segments),
-                    get_collision_normal_model_to_model(c, line_segments)
+                    get_collision_normal_model_to_model(c, line_segments),
+                    line_segments
                 );
 		  	}
 		  	if (type == point_collider && c.type == model_collider) {

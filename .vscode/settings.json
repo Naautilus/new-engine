@@ -118,7 +118,11 @@
     "valarray": "cpp",
     "iterativesolvers": "cpp",
     "cfloat": "cpp",
-    "climits": "cpp"
+    "climits": "cpp",
+    "executor": "cpp",
+    "io_context": "cpp",
+    "netfwd": "cpp",
+    "timer": "cpp"
 },
   "editor.tabSize": 4,
   "editor.detectIndentation": false,

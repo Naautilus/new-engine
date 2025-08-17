@@ -136,11 +136,13 @@ std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last
 }
 
 /*
-move_camera returns a pointer to the object being tracked because its
+camera_track_physics_object returns a pointer to the object being tracked because its
 mutex is locked to prevent it from being moved inbetween here and the
 model rendering and the mutex needs to be unlocked later
 */
-std::shared_ptr<physics_object::object> move_camera(camera_properties& camera_properties_) {
+std::shared_ptr<physics_object::object> camera_track_physics_object(camera_properties& camera_properties_) {
+    if (globals::paused) return nullptr;
+
 	std::shared_ptr<physics_object::object> o;
 	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(camera_properties_.camera_target_name);
 	else o = get_physics_object_from_vector_reversed(camera_properties_.camera_target_name);
@@ -165,20 +167,7 @@ std::shared_ptr<physics_object::object> move_camera(camera_properties& camera_pr
 	}
 	Eigen::Quaterniond averaged_camera_rotation = average_approx(camera_properties_.previous_camera_rotations);
 	//Eigen::Quaterniond averagedCameraRotation = o->physics_state.rotation;
-	vector::worldspace camera_position_ = camera_properties_.camera_target_offset.to_worldspace_positional(averaged_camera_rotation, o->physics_state.position);
-	camera_properties_.camera_position[0] =  camera_position_.y();
-	camera_properties_.camera_position[1] =  camera_position_.z();
-	camera_properties_.camera_position[2] = -camera_position_.x();
-	vector::worldspace camera_up_direction = vector::localspace(0, 0, 1).to_worldspace(averaged_camera_rotation);
-	camera_properties_.camera_y_direction[0] =  camera_up_direction.y();
-	camera_properties_.camera_y_direction[1] =  camera_up_direction.z();
-	camera_properties_.camera_y_direction[2] = -camera_up_direction.x();
-	vector::worldspace camera_forward_direction = vector::localspace(1, 0, 0).to_worldspace(averaged_camera_rotation);
-	camera_properties_.camera_z_direction[0] =  camera_forward_direction.y();
-	camera_properties_.camera_z_direction[1] =  camera_forward_direction.z();
-	camera_properties_.camera_z_direction[2] = -camera_forward_direction.x();
-	camera_properties_.last_camera_position = camera_position_;
-	camera_properties_.last_camera_target_velocity = o->physics_state.velocity;
+	camera_properties_.update(averaged_camera_rotation, o->physics_state.position, o->physics_state.velocity);
     return o;
 }
 
@@ -293,7 +282,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 	}
 	//std::cout << "total_vertices: " << total_vertices << "\n";
     
-	std::shared_ptr<physics_object::object> camera_tracked_object = move_camera(camera_properties_);
+	std::shared_ptr<physics_object::object> camera_tracked_object = camera_track_physics_object(camera_properties_);
 
     //if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->lock();
     for (auto o : physics_objects_) if (o->mutex) o->mutex->lock();
