@@ -26,6 +26,6 @@ namespace globals {
     int tick = 0;
     int error_count = 0;
 
-    timer::timer timer_("timer", timer::timer::MILLISECONDS);
+    timer::timer timer_("timer", timer::timer::NANOSECONDS);
 
 }

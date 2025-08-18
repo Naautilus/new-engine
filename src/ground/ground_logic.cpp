@@ -48,60 +48,24 @@ namespace ground {
     std::mutex ground_altitude_averaged_mutex;
     std::mutex ground_color_averaged_mutex;
 
+    // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
     double get_ground_altitude(double x, double y) {
-
-        ground_info ground_info_(x, y, 0, 0);
-
-        ///*
-        ground_altitude_mutex.lock();
-        if(ground_altitude.find(ground_info_) != ground_altitude.end()) {
-            double output = ground_altitude[ground_info_];
-            ground_altitude_mutex.unlock();
-            return output;
-        }
-        ground_altitude_mutex.unlock();
-        //*/
-
         double sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
             double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
             sum += noise * PERLIN_HEIGHT_EFFECT[i];
         }
         sum -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y);
-        
-        ///*
-        ground_altitude_mutex.lock();
-        ground_altitude[ground_info_] = sum;
-        ground_altitude_mutex.unlock();
-        //*/
-       
         return sum;
     }
     
+    // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
     double get_ground_color(double x, double y) {
-
-        ///*
-        ground_info ground_info_(x, y, 0, 0);
-        ground_color_mutex.lock();
-        if(ground_color.find(ground_info_) != ground_color.end()) {
-            double output = ground_color[ground_info_];
-            ground_color_mutex.unlock();
-            return output;
-        }
-        ground_color_mutex.unlock();
-        //*/
-
         double sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
             double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
             sum += noise * PERLIN_COLOR_EFFECT[i];
         }
-
-        ///*
-        ground_color_mutex.lock();
-        ground_color[ground_info_] = sum;
-        ground_color_mutex.unlock();
-        //*/
         return sum;
     }
     

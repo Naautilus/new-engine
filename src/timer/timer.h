@@ -16,12 +16,15 @@ namespace timer {
         enum time_unit {
             SECONDS,
             MILLISECONDS,
-            MICROSECONDS
+            MICROSECONDS,
+            NANOSECONDS
         };
         private:
         std::vector<timepoint> timepoints;
         std::string name = "";
         time_unit time_unit_;
+        bool active;
+        int inactive_counter;
         public:
         timer(std::string name_, time_unit time_unit__) {
             name = name_;
@@ -29,12 +32,22 @@ namespace timer {
             timepoints.push_back(timepoint("start"));
         }
         void record(std::string timepoint_name) {
+            if (!active) return;
             timepoints.push_back(timepoint(timepoint_name));
         }
-        void reset() {
+        void reset(int interval = 1) {
             timepoints.clear();
+            inactive_counter++;
+            if (inactive_counter < interval) {
+                active = false;
+            } else {
+                active = true;
+                inactive_counter = 0;
+            }
         }
         void print() {
+            if (!active) return;
+
             std::string time_unit_text = "xx";
             double time_unit_multiplier;
 
@@ -52,6 +65,11 @@ namespace timer {
                 case MICROSECONDS: {
                     time_unit_text = "us";
                     time_unit_multiplier = 1e6;
+                    break;
+                }
+                case NANOSECONDS: {
+                    time_unit_text = "ns";
+                    time_unit_multiplier = 1e9;
                     break;
                 }
             }
