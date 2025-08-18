@@ -5,13 +5,13 @@
       "name": "plane1",
       "position": {
         "relative_to_ground": true,
-        "x": -1030,
+        "x": -1800,
         "y": 495,
-        "z": 1000
+        "z": 5
       },
       "velocity": {
         "localspace": true,
-        "x": 500,
+        "x": 80,
         "y": 0,
         "z": 0
       },
