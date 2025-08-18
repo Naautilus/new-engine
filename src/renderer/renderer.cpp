@@ -111,6 +111,7 @@ struct renderer {
         const double TRANSLATION_SPEED_WALK = 20;
         const double TRANSLATION_SPEED_SPRINT = 100;
         const double ROTATION_SPEED = 1;
+        const double FOV_MULTIPLIER_SPEED = 0.5;
 
         double translation_speed = TRANSLATION_SPEED_WALK;
         if (key_pressed(window, GLFW_KEY_LEFT_SHIFT)) translation_speed = TRANSLATION_SPEED_SPRINT;
@@ -131,13 +132,21 @@ struct renderer {
         if (key_pressed(window, GLFW_KEY_K)) rotation_axis.y()--;
         if (key_pressed(window, GLFW_KEY_J)) rotation_axis.z()++;
         if (key_pressed(window, GLFW_KEY_L)) rotation_axis.z()--;
-        rotation_axis *= ROTATION_SPEED * renderer_dt;
+        rotation_axis *= ROTATION_SPEED * renderer_dt * (camera_properties_.fov / 90);
+        
+        double fov_multiplier = 0;
+        if (key_pressed(window, GLFW_KEY_RIGHT_BRACKET)) fov_multiplier++;
+        if (key_pressed(window, GLFW_KEY_LEFT_BRACKET)) fov_multiplier--;
+        fov_multiplier *= FOV_MULTIPLIER_SPEED * renderer_dt;
+        fov_multiplier += 1;
 
         Eigen::Quaterniond& rotation = camera_properties_.previous_camera_rotations.back();
         rotation = Eigen::AngleAxisd(rotation_axis.norm(), rotation_axis.normalized()) * rotation;
 
         vector::worldspace position = camera_properties_.last_camera_position;
         position += translation.to_worldspace(rotation);
+
+        camera_properties_.fov *= fov_multiplier;
         
         camera_properties_.update(rotation, position, vector::worldspace(0, 0, 0), camera_properties::NOT_TRACKING);
 
@@ -278,7 +287,7 @@ struct renderer {
 			vec3 center;
 			vec3_add(center, camera_properties_.camera_position, camera_properties_.camera_z_direction);
 			mat4x4_look_at(v,eye,center, camera_properties_.camera_y_direction);
-			mat4x4_perspective(p, 1.57, window_size_x/(double)window_size_y, 2, 1e10); //FOV of 90°
+			mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, 2, 1e10); //FOV of 90°
 			//mat4x4_ortho(p, -100.f, 100.f, -100.f, 100.f, -10000.f, 10000.f);
 			mat4x4_mul(vp, p, v);
 			glUseProgram(program);

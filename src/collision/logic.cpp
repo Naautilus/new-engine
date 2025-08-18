@@ -122,7 +122,7 @@ namespace collision {
     }
 	
 	void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-        const double COEFFICIENT_OF_FRICTION = 0.5;
+        const double COEFFICIENT_OF_FRICTION = 1.0;
         
         //globals::paused = true;
         //globals::pause_mutex.lock();
@@ -139,8 +139,11 @@ namespace collision {
         vector::worldspace collision_point = collision_data_optional.value().position;
         vector::worldspace collision_normal = collision_data_optional.value().normal;
         if (std::isnan(collision_point.squaredNorm())) return;
+        
+        /*
         std::cout << "point of collision: " << collision_point.str() << "\n";
         std::cout << "normal of collision: " <<  collision_normal.str() << "\n";
+        */
 
         //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
         vector::worldspace delta_velocity = b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point);
@@ -214,9 +217,10 @@ namespace collision {
             b.physics_state = original_physics_state_b;
         }
         
-        vector::worldspace result = impulse_response_per_axis.colPivHouseholderQr().solve(-1 * (delta_velocity_normal + fraction_tangential * delta_velocity_tangential));
+        vector::worldspace velocity_to_cancel = -1 * (delta_velocity_normal + fraction_tangential * delta_velocity_tangential);
+        vector::worldspace result = impulse_response_per_axis.colPivHouseholderQr().solve(velocity_to_cancel);
         
-        ///*
+        /*
         std::cout << "solving for Ax = b. A:\n";
         std::cout << impulse_response_per_axis << "\n";
         std::cout << "b:\n";
@@ -231,18 +235,18 @@ namespace collision {
         std::cout << "original delta_velocity: " << delta_velocity.transpose() << "\n";
         std::cout << "original delta_velocity_normal: " << delta_velocity_normal.transpose() << "\n";
         std::cout << "resulting impulse: " << result.transpose() << "\n";
-        //*/
+        */
 
         a.apply_impulse(collision_point,  result);
         b.apply_impulse(collision_point, -result);
 
         //globals::timer_.record("delta_velocity cancellation");
 
-        ///*
+        /*
         std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
         std::cout << "a.physics_state.velocity_at_point(collision_point): " << a.physics_state.velocity_at_point(collision_point).str() << "\n";
         std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
-        //*/
+        */
 
         // if colliding:
         double minimum_mass = fmin(a.physics_state.mass, b.physics_state.mass);
@@ -252,8 +256,8 @@ namespace collision {
         damage = fmin(damage, maximum_health);
         //damage *= 0.1;
 
-        //a.physics_state.health -= damage;
-        //b.physics_state.health -= damage;
+        a.physics_state.health -= damage;
+        b.physics_state.health -= damage;
 
         if (damage != 0) std::cout << "damage: " << damage << "\n";
 

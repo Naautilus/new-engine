@@ -2,6 +2,7 @@
 #include "linmath.h"
 
 struct camera_properties {
+    double fov = 90;
 	vec3 camera_position = {0, 1000, 0};
 	vec3 camera_y_direction = {0, 1, 0};
 	vec3 camera_z_direction = {0, 0, 1};
