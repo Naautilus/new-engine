@@ -251,7 +251,7 @@ namespace collision {
         // if colliding:
         double minimum_mass = fmin(a.physics_state.mass, b.physics_state.mass);
         double damage = constants::DAMAGE_MULTIPLIER * minimum_mass * 
-                        fmax(delta_velocity_normal.squaredNorm() - constants::SAFE_COLLISION_SPEED * constants::SAFE_COLLISION_SPEED, 0);
+                        fmax(velocity_to_cancel.squaredNorm() - constants::SAFE_COLLISION_SPEED * constants::SAFE_COLLISION_SPEED, 0);
         double maximum_health = fmax(a.physics_state.health, b.physics_state.health);
         damage = fmin(damage, maximum_health);
         //damage *= 0.1;

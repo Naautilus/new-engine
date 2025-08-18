@@ -124,14 +124,14 @@ std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last
 		}
 		tile_size *= 2;
 	}
-	///*
+	/* // this one is a big green layer that goes under the map to visibly fill any cracks in the ground model
 	for (int x_ = -1; x_ < 1; x_++) {
 		for (int y_ = -1; y_ < 1; y_++) {
 			mesh model = get_ground_model_sub(-1e6, 1, 1e6, 4, 0, false, x_, y_, last_camera_position_);
 			output.push_back(model);
 		}
 	}
-	//*/
+	*/
 	return output;
 }
 
@@ -238,12 +238,7 @@ void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vec
 
 int ground_models_start_point = -1;
 
-void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
-
-    globals::physics_objects_mutex.lock();    
-    auto physics_objects_ = globals::physics_objects;
-    globals::physics_objects_mutex.unlock();
-
+void renderer::create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
     if (ground_models_start_point == -1) {
 		models.clear();
 		auto models_ = get_ground_model(false, camera_properties_.last_camera_position + 1.5*camera_properties_.last_camera_target_velocity);
@@ -271,28 +266,36 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 	//std::cout << "models.size() before reduction: " << models.size() << "\t";
 
     // clear models, but keep around the part of the vector that the ground recalculation will use
-	while(models.size() > ground_models_start_point) {
+	while (models.size() > ground_models_start_point) {
 		models.pop_back();
 	}
 
-	//std::cout << "models.size() after reduction: " << models.size() << "\t";
+	/*std::cout << "models.size() after reduction: " << models.size() << "\t";
 	long total_vertices = 0;
 	for (mesh& m : models) {
 		total_vertices += m.indices.size();
 	}
-	//std::cout << "total_vertices: " << total_vertices << "\n";
+	std::cout << "total_vertices: " << total_vertices << "\n";
+    */
+}
+
+void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, bool& new_ground_ready) {
+
+    globals::physics_objects_mutex.lock();    
+    auto physics_objects_ = globals::physics_objects;
+    globals::physics_objects_mutex.unlock();
     
 	std::shared_ptr<physics_object::object> camera_tracked_object = camera_track_physics_object(camera_properties_);
 
     //if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->lock();
-    for (auto o : physics_objects_) if (o->mutex) o->mutex->lock();
+    //for (auto o : physics_objects_) if (o->mutex) o->mutex->lock();
 
 	std::vector<module::visual_model> original_models;
 	std::vector<vector::worldspace> original_positions;
 	std::vector<Eigen::Quaterniond> original_rotations;
 
 	for (auto o : physics_objects_) {
-        //if (o->mutex && o != camera_tracked_object) std::lock_guard<std::mutex> lock(*o->mutex);
+        if (o->mutex) o->mutex->lock();
 		for (std::shared_ptr<module::module>& module_ : o->properties.modules) {
             if (!module_) {
                 std::cout << "void renderer::create_models_from_physics_objects(...): std::shared_ptr<module::module> is a nullptr\n";
@@ -320,10 +323,11 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 		    models.push_back(m);
             */
 		}
+        if (o->mutex) o->mutex->unlock();
 	}
 
     //if (camera_tracked_object && camera_tracked_object->mutex) camera_tracked_object->mutex->unlock();
-    for (auto o : physics_objects_) if (o->mutex) o->mutex->unlock();
+    //for (auto o : physics_objects_) if (o->mutex) o->mutex->unlock();
     
 	for (int i = 0; i < original_models.size(); i++) {
 		module::visual_model& m = original_models[i];

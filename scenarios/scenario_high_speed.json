@@ -4,14 +4,14 @@
       "blueprint": "f16_simple_forces_model",
       "name": "plane1",
       "position": {
-        "relative_to_ground": true,
-        "x": -1030,
-        "y": 495,
-        "z": 200
+        "relative_to_ground": false,
+        "x": 0,
+        "y": 0,
+        "z": 10000
       },
       "velocity": {
         "localspace": true,
-        "x": 0,
+        "x": 15000,
         "y": 0,
         "z": 0
       },

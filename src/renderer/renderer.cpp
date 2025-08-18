@@ -182,7 +182,8 @@ struct renderer {
 		set_vertices(vertices, vertex_buffer);
 	}
 
-	static void create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);
+	static void create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);
+	static void create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, bool& new_ground_ready);
 
 	// window creation + looping
 	static void run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
@@ -273,7 +274,8 @@ struct renderer {
 		int frame_count = 0;
 		while (!glfwWindowShouldClose(window)) {
 
-			create_models_from_physics_objects(models, camera_properties_, ground, new_ground_ready);
+            create_ground_models(models, camera_properties_, ground, new_ground_ready);
+			create_models_from_physics_objects(models, camera_properties_, new_ground_ready);
 			set_vertices_by_models(vertex_buffer, models);
 
 			// initialize variables
