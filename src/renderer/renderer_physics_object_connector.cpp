@@ -61,7 +61,7 @@ Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats) {
 }
 
 mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_) {
-	//bool is_edge = abs(x_) == count_deadzone && abs(y_) == count_deadzone && !();
+	bool is_edge_tile = (abs(x_) <= count_deadzone && abs(y_) <= count_deadzone && count_deadzone != 0);
 	mesh model;
 	if (color_variation) {
 		model = *models::ground_color_varying;
@@ -88,12 +88,26 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 		int sample_points_squared = round(fmin(tile_size/original_tile_size, 3.0)); //std::round(sqrt(tile_size / original_tile_size));
 		v.z += ground::get_ground_altitude_averaged(v.x, v.y, tile_size, sample_points_squared);
 		v.g += ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
-		//v.z += get_ground_altitude(v.x, v.y);
-		//v.g += get_ground_color(v.x, v.y);
-		//v.r = (rand()+pow(2,31))/pow(2, 32);
-		//v.g = (rand()+pow(2,31))/pow(2, 32);
-		//v.b = (rand()+pow(2,31))/pow(2, 32);
 	}
+
+    double x_pos_minimum = x_pos;
+    double x_pos_maximum = x_pos + tile_size;
+    double y_pos_minimum = x_pos;
+    double y_pos_maximum = x_pos + tile_size;
+
+    // change x_pos and y_pos to the center of the tile to do edge vertex checking
+    x_pos += tile_size / 2;
+    y_pos += tile_size / 2;
+    if (is_edge_tile) {
+        for (vertex& v : model.vertices) {
+            v.r = 1;
+            if (fabs(v.x - last_camera_position_.x()) > fabs(x_)) continue;
+            if (fabs(v.y - last_camera_position_.y()) > fabs(y_)) continue;
+            v.z -= tile_size;
+        }
+    }
+
+    // convert to opengl coordinate system
 	for (vertex& v : model.vertices) {
 		double x_ = v.x;
 		double y_ = v.y;
@@ -105,9 +119,9 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 	return model;
 }
 
-const int GROUND_LODS = 18;
-const double GROUND_INITIAL_TILE_SIZE = 0.1;//25.0;
-int GROUND_TILE_COUNT = 30;
+const int GROUND_LODS = 16;
+const double GROUND_INITIAL_TILE_SIZE = 0.4;//25.0;
+int GROUND_TILE_COUNT = 32;
 const int GROUND_DEADZONE_TILES = 2;
 
 std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_) {
