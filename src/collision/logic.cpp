@@ -263,7 +263,7 @@ namespace collision {
 
         //globals::timer_.record("damage");
 
-        create_debris_for_objects(a, b, fmin(damage, 10000), collision_point);
+        create_debris_for_objects(a, b, damage, collision_point);
 
         //globals::timer_.record("debris");
         
@@ -336,7 +336,7 @@ namespace collision {
 	
         physics_object::object ground_object = physics_object::object();
         ground_object.physics_state.mass = 6e24; // Earth mass
-        ground_object.physics_state.health = 6e24;
+        ground_object.physics_state.health = o.physics_state.health;
         ground_object.physics_state.rotational_inertia = vector::worldspace(1,1,1) * 8.04e37; // Earth rotational inertia
         
         if (!o.properties.functional) {
