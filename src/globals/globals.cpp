@@ -7,6 +7,7 @@
 namespace globals {
     auto last_time = std::chrono::high_resolution_clock::now();
 
+    bool free_camera;
     bool paused;
     std::mutex pause_mutex;
 

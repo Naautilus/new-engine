@@ -86,7 +86,7 @@ namespace collision {
     separated before they are no longer colliding
     */
     void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-        const int ITERATIONS = 8;
+        const int ITERATIONS = 10;
 
         double total_mass = a.physics_state.mass + b.physics_state.mass;
 
@@ -122,15 +122,16 @@ namespace collision {
     }
 	
 	void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-
-        globals::paused = true;
-        globals::pause_mutex.lock();
+        const double COEFFICIENT_OF_FRICTION = 0.5;
         
-        globals::timer_.reset();
-        globals::timer_.record("start");
+        //globals::paused = true;
+        //globals::pause_mutex.lock();
+        
+        //globals::timer_.reset();
+        //globals::timer_.record("start");
         //std::cout << "process_colliding_physics_objects called\n";
         std::optional<collision_data> collision_data_optional = a_collider.get_collision_data(b_collider);
-        globals::timer_.record("collision data done");
+        //globals::timer_.record("collision data done");
         if (!collision_data_optional) {
             //std::cout << "process_colliding_physics_objects(...): optional collision data not present\n";
             return;
@@ -138,18 +139,42 @@ namespace collision {
         vector::worldspace collision_point = collision_data_optional.value().position;
         vector::worldspace collision_normal = collision_data_optional.value().normal;
         if (std::isnan(collision_point.squaredNorm())) return;
-        //std::cout << "point of collision: " << collision_point.str() << "\n";
-        //std::cout << "normal of collision: " <<  collision_normal.str() << "\n";
+        std::cout << "point of collision: " << collision_point.str() << "\n";
+        std::cout << "normal of collision: " <<  collision_normal.str() << "\n";
+
+        //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
         vector::worldspace delta_velocity = b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point);
+
+        // vector projection formula: delta_velocity_normal is the part of delta_velocity that is exclusively parallel to collision_normal
+        vector::worldspace delta_velocity_normal = collision_normal * (delta_velocity.dot(collision_normal) / collision_normal.squaredNorm());
+        vector::worldspace delta_velocity_tangential = delta_velocity - delta_velocity_normal;
+
+        // fraction of the tangential velocity to cancel out, based on the coefficient of friction
+        double fraction_tangential = fmin(1.0, COEFFICIENT_OF_FRICTION * (delta_velocity_normal.norm() / delta_velocity_tangential.norm()));
+        /*
+        std::cout << "delta_velocity_normal.norm(): " <<  delta_velocity_normal.norm() << "\n";
+        std::cout << "delta_velocity_tangential.norm(): " <<  delta_velocity_tangential.norm() << "\n";
+        std::cout << "fraction_tangential: " <<  fraction_tangential << "\n";
+        */
+
         if (collision_normal.dot(delta_velocity) < 0) collision_normal *= -1;
         
-        ///*
+        /*
+        std::cout << "a.physics_state.velocity_at_point(collision_point): " << a.physics_state.velocity_at_point(collision_point).str() << "\n";
+        std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
+        */
+        
+        /*
         globals::physics_objects_mutex.lock();
         for (double line_position = 2; line_position <= 5; line_position += 0.05) {
             auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1));
             collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
             globals::physics_objects.push_back(collision_visual);
         }
+        globals::physics_objects_mutex.unlock();
+        */
+        /*
+        globals::physics_objects_mutex.lock();
         for (line_segment ls : collision_data_optional.value().debug_line_segments) {
             vector::worldspace start = ls.line_.origin;
             vector::worldspace end = ls.line_.point_along_line(ls.length);
@@ -161,21 +186,18 @@ namespace collision {
             }
         }
         globals::physics_objects_mutex.unlock();
-        //*/
-        globals::pause_mutex.lock();
-        globals::pause_mutex.unlock();
+        */
+        //globals::pause_mutex.lock();
+        //globals::pause_mutex.unlock();
        
         physics_state original_physics_state_a = a.physics_state;
         physics_state original_physics_state_b = b.physics_state;
        
-        //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
 
-        // vector projection formula: the part of delta_velocity that is exclusively parallel to collision_normal
-        vector::worldspace delta_velocity_normal = collision_normal * (delta_velocity.dot(collision_normal) / collision_normal.squaredNorm());
 
         //std::cout << "delta_velocity: " << delta_velocity.str() << "\n";
         
-        globals::timer_.record("post collision data");
+        //globals::timer_.record("post collision data");
         
         Eigen::Matrix3d impulse_response_per_axis;
         vector::worldspace axes[3] = {
@@ -192,9 +214,9 @@ namespace collision {
             b.physics_state = original_physics_state_b;
         }
         
-        vector::worldspace result = impulse_response_per_axis.colPivHouseholderQr().solve(-1 * delta_velocity);
+        vector::worldspace result = impulse_response_per_axis.colPivHouseholderQr().solve(-1 * (delta_velocity_normal + fraction_tangential * delta_velocity_tangential));
         
-        /*
+        ///*
         std::cout << "solving for Ax = b. A:\n";
         std::cout << impulse_response_per_axis << "\n";
         std::cout << "b:\n";
@@ -207,15 +229,20 @@ namespace collision {
         std::cout << "impulse response y: " << impulse_response_per_axis.row(1) << "\n";
         std::cout << "impulse response z: " << impulse_response_per_axis.row(2) << "\n";
         std::cout << "original delta_velocity: " << delta_velocity.transpose() << "\n";
+        std::cout << "original delta_velocity_normal: " << delta_velocity_normal.transpose() << "\n";
         std::cout << "resulting impulse: " << result.transpose() << "\n";
-        */
+        //*/
 
         a.apply_impulse(collision_point,  result);
         b.apply_impulse(collision_point, -result);
 
-        globals::timer_.record("delta_velocity cancellation");
+        //globals::timer_.record("delta_velocity cancellation");
 
-        //std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
+        ///*
+        std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
+        std::cout << "a.physics_state.velocity_at_point(collision_point): " << a.physics_state.velocity_at_point(collision_point).str() << "\n";
+        std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
+        //*/
 
         // if colliding:
         double minimum_mass = fmin(a.physics_state.mass, b.physics_state.mass);
@@ -225,16 +252,16 @@ namespace collision {
         damage = fmin(damage, maximum_health);
         //damage *= 0.1;
 
-        a.physics_state.health -= damage;
-        b.physics_state.health -= damage;
+        //a.physics_state.health -= damage;
+        //b.physics_state.health -= damage;
 
         if (damage != 0) std::cout << "damage: " << damage << "\n";
 
-        globals::timer_.record("damage");
+        //globals::timer_.record("damage");
 
-        create_debris_for_objects(a, b, damage, collision_point);
+        create_debris_for_objects(a, b, fmin(damage, 10000), collision_point);
 
-        globals::timer_.record("debris");
+        //globals::timer_.record("debris");
         
         if (a_collider.type != model_collider || b_collider.type != model_collider) return;
         ///*
@@ -250,8 +277,8 @@ namespace collision {
         name += " push iterations)";
         */
 
-        globals::timer_.record("push back");
-        //globals::timer_.print();
+        //globals::timer_.record("push back");
+        ////globals::timer_.print();
 
     }
         
@@ -304,8 +331,9 @@ namespace collision {
 	void process_ground_collision(physics_object::object& o) {
 	
         physics_object::object ground_object = physics_object::object();
-        ground_object.physics_state.mass = 6e24;
+        ground_object.physics_state.mass = 6e24; // Earth mass
         ground_object.physics_state.health = 6e24;
+        ground_object.physics_state.rotational_inertia = vector::worldspace(1,1,1) * 8.04e37; // Earth rotational inertia
         
         if (!o.properties.functional) {
             double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());

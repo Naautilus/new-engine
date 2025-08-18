@@ -48,6 +48,12 @@ struct renderer {
 		return result;
 	}
 
+    static void update_free_camera_state(GLFWwindow* window) {
+        if (!key_pressed(window, GLFW_KEY_0)) return;
+        while (key_pressed(window, GLFW_KEY_0)) glfwPollEvents();
+        globals::free_camera = !globals::free_camera;
+    }
+
     static void update_pause_state(GLFWwindow* window) {
         if (!key_pressed(window, GLFW_KEY_P)) return;
         while (key_pressed(window, GLFW_KEY_P)) glfwPollEvents();
@@ -290,7 +296,8 @@ struct renderer {
 			glfwSwapBuffers(window);
 			glfwPollEvents();
             update_pause_state(window);
-			if (!globals::paused) apply_key_responses(window, renderer_dt);
+            update_free_camera_state(window);
+			if (!globals::free_camera) apply_key_responses(window, renderer_dt);
             else manual_camera_movement(window, renderer_dt, camera_properties_);
 
 			glfwGetFramebufferSize(window, &width, &height);

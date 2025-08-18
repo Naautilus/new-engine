@@ -141,7 +141,7 @@ mutex is locked to prevent it from being moved inbetween here and the
 model rendering and the mutex needs to be unlocked later
 */
 std::shared_ptr<physics_object::object> camera_track_physics_object(camera_properties& camera_properties_) {
-    if (globals::paused) return nullptr;
+    if (globals::free_camera) return nullptr;
 
 	std::shared_ptr<physics_object::object> o;
 	if (camera_properties_.camera_target_search_direction) o = get_physics_object_from_vector(camera_properties_.camera_target_name);

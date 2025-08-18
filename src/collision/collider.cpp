@@ -134,7 +134,7 @@ namespace collision {
                 }
             }
             //std::cout << "_get_line_segments_of_intersection_model_to_model done\n";
-            globals::timer_.record("collision data line segments");
+            //globals::timer_.record("collision data line segments");
             return output;
         }
         std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections) {
@@ -157,7 +157,7 @@ namespace collision {
                 //std::cout << "get_point_of_collision_model_to_model(collider& c): nan in line_segment_position_sum\n";
                 return std::nullopt;
             }
-            globals::timer_.record("collision data position");
+            //globals::timer_.record("collision data position");
             return line_segment_position_sum / (2 * line_segment_length_sum);
         }
         std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
@@ -200,7 +200,7 @@ namespace collision {
             }
             collision_normal.normalize();
             //std::cout << "collision_normal: " << collision_normal.str() << "\n";
-            globals::timer_.record("collision data normal");
+            //globals::timer_.record("collision data normal");
             return collision_normal;
         }
 		void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {

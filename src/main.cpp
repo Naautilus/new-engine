@@ -90,6 +90,9 @@ int main(int argc, char* argv[]) {
 	models::mesh_to_stl("f16Vertices", mesh(models::f16Vertices));
 	std::unique_ptr<simulation_state> s(new simulation_state());
     */
+
+    globals::paused = true;
+    globals::pause_mutex.lock();
 	
 	globals::current_simulation_state = std::make_unique<simulation_state>(simulation_state());
 	globals::physics_objects.reserve(100000);
