@@ -6,7 +6,7 @@ Run it with the argument:
 ```./main.exe -scenario ground```
 to load /scenarios/scenario_ground.json. You can change `ground` to whichever scenario you want to see.
 
-- Controls -
+Controls:
 
 P - Pause/unpause. IT STARTS PAUSED! so you will need to press P to start the simulation.
 0 - Free camera. WASDQE for translation, IJKLUO for rotation, Left Shift to speed up.
