@@ -1,8 +1,0 @@
-memcpy 25% of rendering (run_window)
-free 20% of rendering
-malloc 14% of rendering
-memory management = 59% of total cpu time
-
-in O3, 23% is run_window itself no subfunction
-40% inclusive is create_models_from_physics_objects
-5% is destroying meshes
