@@ -1,9 +1,12 @@
-Welcome to new-engine!
+Welcome to new-engine: a physics simulation with aircraft, missiles, debris and collision physics.
+
+<img width="2755" height="811" alt="new-engine" src="https://github.com/user-attachments/assets/cbe4eecc-ebf4-4a9e-acee-2179f0b5ab42" />
 
 An executable (/bin/main.exe) is available for Windows x86-64. You will need OpenGL and GLFW installed. I run it with MSYS2 MinGW64.
 Run it with the argument:
 
 ```./main.exe -scenario ground```
+
 to load /scenarios/scenario_ground.json. You can change `ground` to whichever scenario you want to see.
 
 Controls:
