@@ -1,4 +1,3 @@
-#pragma once
 #include "mesh.hpp"
 
 mesh::mesh() {

@@ -1,4 +1,3 @@
-#pragma once
 #include "model_file_interface.hpp"
 
 

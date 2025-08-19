@@ -1,4 +1,3 @@
-#pragma once
 #include "autocannon.hpp"
 
 namespace module {

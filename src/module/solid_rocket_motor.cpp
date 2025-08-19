@@ -1,4 +1,3 @@
-#pragma once
 #include "solid_rocket_motor.hpp"
 
 namespace module {

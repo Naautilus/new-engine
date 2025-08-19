@@ -1,4 +1,3 @@
-#pragma once
 #include "vertex.hpp"
 
 bool vertex::operator==(const vertex& v) const {

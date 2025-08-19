@@ -1,4 +1,3 @@
-#pragma once
 #include "vector_spaces.hpp"
 #warning "vector_spaces.cpp called :)"
 

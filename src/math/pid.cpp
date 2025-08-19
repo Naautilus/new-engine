@@ -1,4 +1,3 @@
-#pragma once
 #include "pid.hpp"
 
 pid::last_input = 0;

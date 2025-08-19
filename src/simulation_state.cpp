@@ -1,4 +1,3 @@
-#pragma once
 #include "simulation_state.hpp"
 
 simulation_state::simulation_state() {

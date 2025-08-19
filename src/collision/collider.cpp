@@ -1,4 +1,3 @@
-#pragma once
 #include "collider.hpp"
 
 namespace collision {

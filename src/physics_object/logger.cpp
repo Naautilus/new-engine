@@ -1,4 +1,3 @@
-#pragma once
 #include "logger.hpp"
 
 namespace physics_object {

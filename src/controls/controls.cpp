@@ -1,4 +1,3 @@
-#pragma once
 #include "controls.hpp"
 
 namespace controls {

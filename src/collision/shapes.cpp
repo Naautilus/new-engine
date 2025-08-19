@@ -1,4 +1,3 @@
-#pragma once
 #include "shapes.hpp"
 
 namespace collision {

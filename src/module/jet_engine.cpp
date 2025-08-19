@@ -1,4 +1,3 @@
-#pragma once
 #include "jet_engine.hpp"
 
 namespace module {

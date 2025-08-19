@@ -1,4 +1,3 @@
-#pragma once
 #include "sensor_ir.hpp"
 
 // x = forward distance, y and z = perspectivified

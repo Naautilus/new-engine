@@ -1,4 +1,3 @@
-#pragma once
 #include "models.hpp"
 
 Eigen::Quaterniond random_quaternion_biased(double angle) {

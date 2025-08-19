@@ -1,4 +1,3 @@
-#pragma once
 #include "initialize_physics_objects.hpp"
 using json = nlohmann::json;
 

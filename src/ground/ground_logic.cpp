@@ -1,4 +1,3 @@
-#pragma once
 #include "ground_logic.hpp"
 
 namespace ground {
