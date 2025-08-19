@@ -4,83 +4,64 @@
 
 namespace vector {
 
-    struct worldspace : public Eigen::Vector3d {
-        using Eigen::Vector3d::Vector3d;
-        localspace to_localspace(Eigen::Quaterniond q);
-        localspace to_localspace_positional(Eigen::Quaterniond q, worldspace position);
-        std::string str() {
-            std::string output = "{";
-            output += std::format(constants::FORMAT_STRING_POSITION, x()) + ", ";
-            output += std::format(constants::FORMAT_STRING_POSITION, y()) + ", ";
-            output += std::format(constants::FORMAT_STRING_POSITION, z()) + "}";
-            return output;
-        }
-        worldspace add_angular_velocity(worldspace relative_position, worldspace angular_velocity) {
-            return *this - angular_velocity.cross(relative_position);
-        }
-    };
+    std::string worldspace::str() {
+        std::string output = "{";
+        output += std::format(constants::FORMAT_STRING_POSITION, x()) + ", ";
+        output += std::format(constants::FORMAT_STRING_POSITION, y()) + ", ";
+        output += std::format(constants::FORMAT_STRING_POSITION, z()) + "}";
+        return output;
+    }
+    worldspace worldspace::add_angular_velocity(worldspace relative_position, worldspace angular_velocity) {
+        return *this - angular_velocity.cross(relative_position);
+    }
 
-    struct localspace : public Eigen::Vector3d {
-        using Eigen::Vector3d::Vector3d;
-        worldspace to_worldspace(Eigen::Quaterniond q);
-        worldspace to_worldspace_positional(Eigen::Quaterniond q, worldspace position);
-        void clamp() {
-            this->x() = std::clamp(this->x(), -1.0, 1.0);
-            this->y() = std::clamp(this->y(), -1.0, 1.0);
-            this->z() = std::clamp(this->z(), -1.0, 1.0);
-        }
-        void clamp(double num) {
-            this->x() = std::clamp(this->x(), -num, num);
-            this->y() = std::clamp(this->y(), -num, num);
-            this->z() = std::clamp(this->z(), -num, num);
-        }
-        std::string str() {
-            std::string output = "{";
-            output += std::format(constants::FORMAT_STRING_POSITION, x()) + ", ";
-            output += std::format(constants::FORMAT_STRING_POSITION, y()) + ", ";
-            output += std::format(constants::FORMAT_STRING_POSITION, z()) + "}";
-            return output;
-        }
-    };
+    void localspace::clamp() {
+        this->x() = std::clamp(this->x(), -1.0, 1.0);
+        this->y() = std::clamp(this->y(), -1.0, 1.0);
+        this->z() = std::clamp(this->z(), -1.0, 1.0);
+    }
+    void localspace::clamp(double num) {
+        this->x() = std::clamp(this->x(), -num, num);
+        this->y() = std::clamp(this->y(), -num, num);
+        this->z() = std::clamp(this->z(), -num, num);
+    }
+    std::string localspace::str() {
+        std::string output = "{";
+        output += std::format(constants::FORMAT_STRING_POSITION, x()) + ", ";
+        output += std::format(constants::FORMAT_STRING_POSITION, y()) + ", ";
+        output += std::format(constants::FORMAT_STRING_POSITION, z()) + "}";
+        return output;
+    }
 
-    struct scopespace {
+    double& scopespace::distance() { return v[0]; }
+    const double& scopespace::distance() const { return v[0]; }
 
-        private:
+    double& scopespace::scope_x() { return v[1]; }
+    const double& scopespace::scope_x() const { return v[1]; }
 
-        localspace v;
+    double& scopespace::scope_y() { return v[2]; }
+    const double& scopespace::scope_y() const { return v[2]; }
 
-        public:
+    scopespace& scopespace::operator+=(const scopespace& s) {
+        v += s.v;
+        return *this;
+    }
+    scopespace& scopespace::operator/=(double num) {
+        v /= num;
+        return *this;
+    }
 
-        double& distance() { return v[0]; }
-        const double& distance() const { return v[0]; }
+    scopespace::scopespace() {
+        v = localspace(0, 0, 0);
+    }
 
-        double& scope_x() { return v[1]; }
-        const double& scope_x() const { return v[1]; }
-
-        double& scope_y() { return v[2]; }
-        const double& scope_y() const { return v[2]; }
-
-        scopespace& operator+=(const scopespace& s) {
-            v += s.v;
-            return *this;
-        }
-        scopespace& operator/=(double num) {
-            v /= num;
-            return *this;
-        }
-
-        scopespace() {
-            v = localspace(0, 0, 0);
-        }
-
-        std::string str() {
-            std::string output = "{";
-            output += std::format(constants::FORMAT_STRING_POSITION, distance()) + ", (";
-            output += std::format(constants::FORMAT_STRING_UNIT, scope_x()) + ", ";
-            output += std::format(constants::FORMAT_STRING_UNIT, scope_y()) + ")}";
-            return output;
-        }
-    };
+    std::string scopespace::str() {
+        std::string output = "{";
+        output += std::format(constants::FORMAT_STRING_POSITION, distance()) + ", (";
+        output += std::format(constants::FORMAT_STRING_UNIT, scope_x()) + ", ";
+        output += std::format(constants::FORMAT_STRING_UNIT, scope_y()) + ")}";
+        return output;
+    }
 
     localspace worldspace::to_localspace(Eigen::Quaterniond q) {
         return q * (*this);

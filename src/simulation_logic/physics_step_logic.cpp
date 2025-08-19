@@ -153,9 +153,6 @@ void log_physics_objects() {
 	
 }
 
-int log_counter = 0;
-int log_counter_interval = 100;
-
 void wait_delta_t() {
 	globals::last_time += std::chrono::nanoseconds(static_cast<long>(constants::DELTA_T * 1e9 / globals::current_simulation_state->timescale));
 	auto now = std::chrono::high_resolution_clock::now();

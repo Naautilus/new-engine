@@ -24,45 +24,22 @@ children should:
 */
 
 namespace module {
-    struct visual_model {
-        std::shared_ptr<mesh> mesh_data;
-        vector::localspace position;
-        vector::localspace scaling;
-        Eigen::Quaterniond rotation;
-        visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_, Eigen::Quaterniond rotation_) {
-            mesh_data = mesh_data_;
-            position = position_;
-            scaling = scaling_;
-            rotation = rotation_;
-        }
-        visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_) {
-            mesh_data = mesh_data_;
-            position = position_;
-            scaling = scaling_;
-            rotation = Eigen::Quaterniond(1,0,0,0);
-        }
-        visual_model(std::shared_ptr<mesh> mesh_data_) {
-            mesh_data = mesh_data_;
-            position = vector::localspace(0,0,0);
-            scaling = vector::localspace(1,1,1);
-            rotation = Eigen::Quaterniond(1,0,0,0);
-        }
-    };
-
-    struct module {
-        double health;
-        vector::localspace position;
-        Eigen::Quaterniond rotation;
-        collision::collider collider;
-        std::vector<visual_model> models;
-        virtual ~module() = default;
-        virtual void update(physics_object::object* parent) = 0;
-    };
-
-    struct aerodynamic_surface;
-    struct autocannon;
-    struct jet_engine;
-    struct physical_structure;
-    struct sensor_ir;
-    struct solid_rocket_motor;
+    module::visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_, Eigen::Quaterniond rotation_) {
+        mesh_data = mesh_data_;
+        position = position_;
+        scaling = scaling_;
+        rotation = rotation_;
+    }
+    module::visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_) {
+        mesh_data = mesh_data_;
+        position = position_;
+        scaling = scaling_;
+        rotation = Eigen::Quaterniond(1,0,0,0);
+    }
+    module::visual_model(std::shared_ptr<mesh> mesh_data_) {
+        mesh_data = mesh_data_;
+        position = vector::localspace(0,0,0);
+        scaling = vector::localspace(1,1,1);
+        rotation = Eigen::Quaterniond(1,0,0,0);
+    }
 }

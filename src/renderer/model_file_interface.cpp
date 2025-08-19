@@ -4,7 +4,6 @@
 #include "vertex.h"
 #include "mesh.cpp"
 
-const std::string MODELS_FILEPATH = "../models/";
 
 /*
 Vertices is a list of all the unique vertices that make up a mesh and indices

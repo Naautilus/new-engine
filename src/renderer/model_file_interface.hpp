@@ -4,7 +4,7 @@
 #include "vertex.h"
 #include "mesh.cpp"
 
-const std::string MODELS_FILEPATH;
+const std::string MODELS_FILEPATH = "../models/";
 
 namespace models {
 	template <typename T>
