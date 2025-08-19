@@ -99,13 +99,6 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     return l;
 }
 
-enum line_segment::line_segment_normalization {
-    NORMALIZED,
-    UNNORMALIZED
-};
-line_segment::line_ = line();
-line_segment::length = 0;
-line_segment::line_segment() {}
 line_segment::line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED) {
     end -= origin;
     if (normalization == NORMALIZED) {

@@ -44,9 +44,4 @@ struct scopespace {
     std::string str();
 };
 
-localspace worldspace::to_localspace(Eigen::Quaterniond q);
-localspace worldspace::to_localspace_positional(Eigen::Quaterniond q, worldspace position);
-worldspace localspace::to_worldspace(Eigen::Quaterniond q);
-worldspace localspace::to_worldspace_positional(Eigen::Quaterniond q, worldspace position);
-
 }

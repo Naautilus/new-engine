@@ -14,5 +14,3 @@ struct jet_engine : module {
 };
 
 }
-
-void physics_object::object::add_jet_engine(module::jet_engine j);

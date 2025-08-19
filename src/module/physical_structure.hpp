@@ -10,5 +10,3 @@ void update(physics_object::object* parent) override;
 };
 
 }
-
-void physics_object::object::add_physical_structure(module::physical_structure s);

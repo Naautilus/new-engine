@@ -1,5 +1,5 @@
 #pragma once
-#include "model_definitions.hpp"
+#include "mesh.hpp"
 
 std::shared_ptr<mesh> pyramid;
 std::shared_ptr<mesh> ground_color_varying;

@@ -1,12 +1,12 @@
 #pragma once
 #include "../constants/constants.hpp"
 #include "../vector/vector_spaces.hpp"
-#include "../timer/timer.h"
+#include "../timer/timer.hpp"
 #include <mutex>
 
 namespace globals {
 
-auto last_time;
+auto last_time = std::chrono::high_resolution_clock::now();
 
 bool free_camera;
 bool paused;
@@ -23,10 +23,10 @@ std::mutex functional_physics_objects_mutex;
 
 std::default_random_engine rng;
 std::unique_ptr<simulation_state> current_simulation_state;
-vector::worldspace SUN_DIRECTION;
-int tick;
-int error_count;
+vector::worldspace SUN_DIRECTION = vector::worldspace(-1, -1, -1) / vector::worldspace(-1, -1, -1).norm();
+int tick = 0;
+int error_count = 0;
 
-timer::timer timer_;
+auto timer_ = timer::timer("timer", timer::timer::NANOSECONDS);
 
 }

@@ -10,6 +10,12 @@ struct timepoint {
     timepoint(std::string name_);
 };
 struct timer {
+    enum time_unit {
+        SECONDS,
+        MILLISECONDS,
+        MICROSECONDS,
+        NANOSECONDS
+    };
     private:
     std::vector<timepoint> timepoints;
     std::string name = "";
@@ -17,12 +23,6 @@ struct timer {
     bool active;
     int inactive_counter;
     public:
-    enum time_unit {
-        SECONDS,
-        MILLISECONDS,
-        MICROSECONDS,
-        NANOSECONDS
-    };
     timer(std::string name_, time_unit time_unit__);
     void record(std::string timepoint_name);
     void reset(int interval);

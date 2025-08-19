@@ -15,5 +15,3 @@ struct autocannon : module {
 };
 
 }
-
-void physics_object::object::add_autocannon(module::autocannon a);

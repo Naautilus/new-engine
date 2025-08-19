@@ -22,7 +22,10 @@ struct plane {
     std::optional<line> line_of_intersection(plane& p);
 };
 struct line_segment {
-    enum line_segment_normalization;
+    enum line_segment_normalization {
+        NORMALIZED,
+        UNNORMALIZED
+    };
     line line_ = line();
     double length = 0;
     line_segment() {}

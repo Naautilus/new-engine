@@ -84,5 +84,3 @@ struct sensor_ir : module {
 };
 
 }
-
-void physics_object::object::add_sensor_ir(module::sensor_ir s);

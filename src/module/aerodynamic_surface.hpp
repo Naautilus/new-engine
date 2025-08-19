@@ -19,5 +19,3 @@ struct aerodynamic_surface : module {
 };
 
 }
-
-void physics_object::object::add_aerodynamic_surface(module::aerodynamic_surface a);

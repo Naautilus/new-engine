@@ -12,5 +12,3 @@ struct solid_rocket_motor : module {
 };
 
 }
-
-void physics_object::object::add_solid_rocket_motor(module::solid_rocket_motor s);

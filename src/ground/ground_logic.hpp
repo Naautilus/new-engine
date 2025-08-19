@@ -2,7 +2,7 @@
 #include "PerlinNoise.hpp"
 #include "../constants/constants.hpp"
 #include "../globals/globals.hpp"
-#include "../renderer/color.h"
+#include "../renderer/color.hpp"
 #include <mutex>
 
 namespace ground {

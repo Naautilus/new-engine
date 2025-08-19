@@ -1,7 +1,7 @@
 #pragma once
 #include "../constants/constants.hpp"
 #include "../controls/controls.hpp"
-#include "vertex.h"
+#include "vertex.hpp"
 #include "mesh.hpp"
 
 const std::string MODELS_FILEPATH = "../models/";

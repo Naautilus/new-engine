@@ -4,7 +4,7 @@
 #include "../physics_object/object.hpp"
 #include "../physics_object/blueprints.hpp"
 #include "../math/random.hpp"
-#include "../timer/timer.h"
+#include "../timer/timer.hpp"
 #include "collider.hpp"
 #include "collision_data.hpp"
 #include <chrono>
