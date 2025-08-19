@@ -1,6 +1,6 @@
 #pragma once
+#include "../collision/collider.cpp"
 #include "vertex.h"
-#include "../collision/collider.h"
 
 struct mesh {
 	std::vector<vertex> vertices;
