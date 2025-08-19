@@ -1,7 +1,7 @@
-#include "renderer/renderer_thread.cpp"
-#include "simulation_state.cpp"
-#include "simulation_logic/initialize_physics_objects.cpp"
-#include "renderer/renderer_physics_object_connector.cpp"
+#include "renderer/renderer_thread.hpp"
+#include "simulation_state.hpp"
+#include "simulation_logic/initialize_physics_objects.hpp"
+#include "renderer/renderer_physics_object_connector.hpp"
 
 // x forward, y right, z up
 

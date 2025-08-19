@@ -1,5 +1,5 @@
 #pragma once
-#include "../simulation_state.cpp"
+#include "../simulation_state.hpp"
 
 namespace physics_object {
     

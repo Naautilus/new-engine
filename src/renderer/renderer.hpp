@@ -8,8 +8,8 @@
 #include <thread>
 #include "vector"
 #include <string>
-#include "../simulation_logic/initialize_physics_objects.cpp"
-#include "camera_properties.cpp"
+#include "../simulation_logic/initialize_physics_objects.hpp"
+#include "camera_properties.hpp"
 
 static std::string vertex_shader_text;
 static std::string fragment_shader_text;

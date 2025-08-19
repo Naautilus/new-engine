@@ -1,5 +1,5 @@
 #pragma once
-#include "../physics_object/blueprints.cpp"
+#include "../physics_object/blueprints.hpp"
 #include <nlohmann/json.hpp>
 #include <fstream>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "PerlinNoise.hpp"
-#include "../constants/constants.cpp"
-#include "../globals/globals.cpp"
+#include "../constants/constants.hpp"
+#include "../globals/globals.hpp"
 #include "../renderer/color.h"
 #include <mutex>
 

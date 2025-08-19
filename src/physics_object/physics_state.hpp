@@ -1,5 +1,5 @@
 #pragma once
-#include "control_bindings.cpp"
+#include "control_bindings.hpp"
 
 struct physics_state {
     double mass = 1.0;

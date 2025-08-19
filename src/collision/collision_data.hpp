@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../vector/vector_spaces.cpp"
+#include "../vector/vector_spaces.hpp"
 
 namespace collision {
     

@@ -1,4 +1,4 @@
-#include "renderer.cpp"
+#include "renderer.hpp"
 
 Eigen::Quaterniond randomQuaternionBiased(double angle) {
     double angle2 = random(0.0, 2.0*M_PI);

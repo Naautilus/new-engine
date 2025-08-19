@@ -1,6 +1,6 @@
 #pragma once
-#include "module.cpp"
-#include "../ground/ground_logic.cpp"
+#include "module.hpp"
+#include "../ground/ground_logic.hpp"
 
 // x = forward distance, y and z = perspectivified
 //struct vector::scopespace : vector::localspace {};

@@ -1,5 +1,5 @@
 #pragma once
-#include "module.cpp"
+#include "module.hpp"
 
 namespace module {
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "shapes.cpp"
+#include "shapes.hpp"
 
 /*
 Colliders must be fully closed bodies for collision normals and

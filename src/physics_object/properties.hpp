@@ -1,6 +1,6 @@
 #pragma once
-#include "physics_state.cpp"
-#include "../module/module.cpp"
+#include "physics_state.hpp"
+#include "../module/module.hpp"
 
 struct properties {
 	std::string name;

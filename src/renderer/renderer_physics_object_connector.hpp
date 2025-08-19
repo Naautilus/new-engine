@@ -1,10 +1,10 @@
 #pragma once
-#include "../simulation_logic/physics_step_logic.cpp"
-#include "camera_properties.cpp"
-#include "models.cpp"
+#include "../simulation_logic/physics_step_logic.hpp"
+#include "camera_properties.hpp"
+#include "models.hpp"
 #include "../collision/collider_type.h"
-#include "../collision/collider.cpp"
-#include "renderer.cpp"
+#include "../collision/collider.hpp"
+#include "renderer.hpp"
 
 
 vector::localspace camera_offset;

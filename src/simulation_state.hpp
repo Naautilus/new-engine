@@ -1,6 +1,6 @@
 #pragma once
-#include "../constants/constants.cpp"
-#include "../ground/ground_logic.cpp"
+#include "../constants/constants.hpp"
+#include "../ground/ground_logic.hpp"
 
 struct simulation_state {
 	std::vector<physics_object::object> physics_objects;

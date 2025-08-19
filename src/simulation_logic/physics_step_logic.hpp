@@ -1,7 +1,7 @@
 #pragma once
-#include "../collision/logic.cpp"
-#include "../simulation_state.cpp"
-#include "../physics_object/logger.cpp"
+#include "../collision/logic.hpp"
+#include "../simulation_state.hpp"
+#include "../physics_object/logger.hpp"
 
 void set_functional_physics_objects_list();
 void step_physics_object_controls();

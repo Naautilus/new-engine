@@ -1,12 +1,12 @@
 #pragma once
-#include "../vector/vector_spaces.cpp"
-#include "../constants/constants.cpp"
-#include "../physics_object/object.cpp"
-#include "../physics_object/blueprints.cpp"
-#include "../math/random.cpp"
+#include "../vector/vector_spaces.hpp"
+#include "../constants/constants.hpp"
+#include "../physics_object/object.hpp"
+#include "../physics_object/blueprints.hpp"
+#include "../math/random.hpp"
 #include "../timer/timer.h"
-#include "collider.cpp"
-#include "collision_data.cpp"
+#include "collider.hpp"
+#include "collision_data.hpp"
 #include <chrono>
 
 namespace collision {

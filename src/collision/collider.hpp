@@ -1,7 +1,7 @@
 #pragma once
-#include "shapes.cpp"
+#include "shapes.hpp"
 #include "collider_type.h"
-#include "collision_data.cpp"
+#include "collision_data.hpp"
 #include "../eigen_pca/eigen-pca.hpp"
 #include "../renderer/mesh.h"
 

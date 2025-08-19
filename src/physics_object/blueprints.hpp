@@ -1,14 +1,14 @@
 #pragma once
-#include "../module/module.cpp"
-#include "../module/aerodynamic_surface.cpp"
-#include "../module/autocannon.cpp"
-#include "../module/jet_engine.cpp"
-#include "../module/physical_structure.cpp"
-#include "../module/sensor_ir.cpp"
-#include "../module/solid_rocket_motor.cpp"
+#include "../module/module.hpp"
+#include "../module/aerodynamic_surface.hpp"
+#include "../module/autocannon.hpp"
+#include "../module/jet_engine.hpp"
+#include "../module/physical_structure.hpp"
+#include "../module/sensor_ir.hpp"
+#include "../module/solid_rocket_motor.hpp"
 #include "../renderer/glad.h"
-#include "../math/random.cpp"
-#include "../collision/meshes.cpp"
+#include "../math/random.hpp"
+#include "../collision/meshes.hpp"
 #include <GLFW/glfw3.h>
 
 /*

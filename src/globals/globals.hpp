@@ -1,6 +1,6 @@
 #pragma once
-#include "../constants/constants.cpp"
-#include "../vector/vector_spaces.cpp"
+#include "../constants/constants.hpp"
+#include "../vector/vector_spaces.hpp"
 #include "../timer/timer.h"
 #include <mutex>
 
