@@ -9,21 +9,21 @@ namespace globals {
 
 extern std::chrono::time_point<std::chrono::high_resolution_clock> last_time;
 
-bool free_camera;
-bool paused;
-std::mutex pause_mutex;
+extern bool free_camera;
+extern bool paused;
+extern std::mutex pause_mutex;
 
-std::vector<std::shared_ptr<physics_object::object>> physics_objects;
-std::mutex physics_objects_mutex;
+extern std::vector<std::shared_ptr<physics_object::object>> physics_objects;
+extern std::mutex physics_objects_mutex;
 
 /* a subset of physics_objects with only functional physics objects
 to avoid recalculating this for things that only affect functional
 physics objects */
-std::vector<std::shared_ptr<physics_object::object>> functional_physics_objects;
-std::mutex functional_physics_objects_mutex;
+extern std::vector<std::shared_ptr<physics_object::object>> functional_physics_objects;
+extern std::mutex functional_physics_objects_mutex;
 
-std::default_random_engine rng;
-std::unique_ptr<simulation_state> current_simulation_state;
+extern std::default_random_engine rng;
+extern std::unique_ptr<simulation_state> current_simulation_state;
 extern vector::worldspace SUN_DIRECTION;
 extern int tick;
 extern int error_count;

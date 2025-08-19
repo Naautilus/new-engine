@@ -30,8 +30,8 @@ struct named_blueprint {
 };
 
 // named_blueprints can only hold blueprint creators without inputs, so only inputless creators will be added to these lists
-std::vector<named_blueprint<object>> named_objects;
-std::vector<named_blueprint<control_bindings>> named_control_bindings;
+extern std::vector<named_blueprint<object>> named_objects;
+extern std::vector<named_blueprint<control_bindings>> named_control_bindings;
 
 object aim9x();
 object bullet(double diameter);
