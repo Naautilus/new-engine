@@ -1,6 +1,6 @@
 #pragma once
 #include "../collision/collider.cpp"
-#include "vertex.cpp"
+#include "vertex.h"
 
 mesh::mesh() {
     //std::cout << "New mesh created";
