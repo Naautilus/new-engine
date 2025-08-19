@@ -12,6 +12,8 @@
 #include <fstream>
 #include <functional>
 #include <numbers>
+#include <memory>
+#include <optional>
 
 namespace vector {
     
