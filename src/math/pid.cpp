@@ -1,8 +1,5 @@
 #include "pid.hpp"
 
-pid::last_input = 0;
-pid::output = 0;
-pid::int previous_input_buffer_position = 0;
 pid::pid(double p, double i, double d, double authority_limit_) {
     gain_p = p;
     gain_i = i;

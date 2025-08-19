@@ -1,4 +1,5 @@
 #include "autocannon.hpp"
+#include "../physics_object/object.hpp"
 
 namespace module {
     
@@ -12,7 +13,7 @@ autocannon::autocannon(physics_object::object (*physics_object_creator_)(), doub
     collider = collision::collider(model);
     health = health_;
 }
-void autocannon::update(physics_object::object* parent) override {
+void autocannon::update(physics_object::object* parent) {
 
     ticks_since_last_fired++;
     if (health <= 0) return;

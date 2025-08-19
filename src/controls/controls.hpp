@@ -23,11 +23,8 @@ struct key {
 struct input {
     axis axis_;
     response_type response_type_;
-    double minimum;
-    double maximum;
-    double inherent_multiplier;
-    double response_unmultiplied;
-    double response_multiplied;
+    double minimum, maximum, response_unmultiplied, response_multiplied, inherent_multiplier;
+    std::vector<key> key_inputs;
     input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_);
     void add_key(int key_number, double axis_response);
     double get_control_multiplier_for_health_fraction(double health_fraction);

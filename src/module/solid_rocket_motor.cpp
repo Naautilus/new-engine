@@ -1,4 +1,7 @@
 #include "solid_rocket_motor.hpp"
+#include "../physics_object/object.hpp"
+#include "../math/random.hpp"
+#include "../renderer/models.hpp"
 
 namespace module {
     
@@ -11,7 +14,7 @@ solid_rocket_motor::solid_rocket_motor(double thrust_, double burntime_seconds_r
     collider = collision::collider(model);
     health = health_;
 }
-void solid_rocket_motor::update(physics_object::object* parent) override {
+void solid_rocket_motor::update(physics_object::object* parent) {
     //if (health <= 0) return;
     if (burntime_seconds_remaining <= 0) thrust = 0;
     parent->queue_force(position, thrust * thrust_direction);

@@ -32,15 +32,15 @@ struct simulation_state;
 
 namespace constants {
 
-const std::string FORMAT_STRING_POSITION = "{:10.1f}";
-const std::string FORMAT_STRING_VELOCITY = "{:10.1f}";
-const std::string FORMAT_STRING_ROTATION = "{:4.0f}";
-const std::string FORMAT_STRING_UNIT = "{:5.2f}";
-const std::string FORMAT_STRING_ANGULAR_VELOCITY = "{:6.1f}";
-const std::string FORMAT_STRING_SPEED = "{:4.0f}";
-const std::string FORMAT_STRING_G_FORCE = "{:6.2f}";
-const std::string FORMAT_STRING_AOA = "{:5.1f}";
-const std::string FORMAT_STRING_ALTITUDE = "{:5.0f}";
+constexpr std::string FORMAT_STRING_POSITION = "{:10.1f}";
+constexpr std::string FORMAT_STRING_VELOCITY = "{:10.1f}";
+constexpr std::string FORMAT_STRING_ROTATION = "{:4.0f}";
+constexpr std::string FORMAT_STRING_UNIT = "{:5.2f}";
+constexpr std::string FORMAT_STRING_ANGULAR_VELOCITY = "{:6.1f}";
+constexpr std::string FORMAT_STRING_SPEED = "{:4.0f}";
+constexpr std::string FORMAT_STRING_G_FORCE = "{:6.2f}";
+constexpr std::string FORMAT_STRING_AOA = "{:5.1f}";
+constexpr std::string FORMAT_STRING_ALTITUDE = "{:5.0f}";
 const double DELTA_T = 0.005;
 const double LOG_INTERVAL = 0.005;
 const double TIME_LIMIT = -1;

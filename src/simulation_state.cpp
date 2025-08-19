@@ -1,4 +1,5 @@
 #include "simulation_state.hpp"
+#include "../ground/ground_logic.hpp"
 
 simulation_state::simulation_state() {
     ground_function = ground::get_ground_altitude;

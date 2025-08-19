@@ -1,5 +1,12 @@
 #pragma once
 #include "mesh.hpp"
+#include "../constants/constants.hpp"
+
+Eigen::Quaterniond random_quaternion_biased(double angle);
+
+std::vector<vertex> random_isoceles_triangle(double offset_xy_, double offset_z_);
+
+namespace models {
 
 std::shared_ptr<mesh> pyramid;
 std::shared_ptr<mesh> ground_color_varying;
@@ -17,12 +24,6 @@ std::shared_ptr<mesh> f16_wrapped;
 std::shared_ptr<mesh> sphere;
 std::shared_ptr<mesh> axes;
 
-Eigen::Quaterniond random_quaternion_biased(double angle);
-
-std::vector<vertex> random_isoceles_triangle(double offset_xy_, double offset_z_);
-
-namespace models {
-
-static void initialize_models();
+void initialize_models();
 
 }

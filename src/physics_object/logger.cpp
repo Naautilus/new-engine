@@ -1,4 +1,6 @@
 #include "logger.hpp"
+#include "../constants/constants.hpp"
+#include "object.hpp"
 
 namespace physics_object {
     

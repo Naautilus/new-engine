@@ -1,4 +1,6 @@
 #include "models.hpp"
+#include "../math/random.hpp"
+#include "model_file_interface.hpp"
 
 Eigen::Quaterniond random_quaternion_biased(double angle) {
 	double angle2 = random(0.0, 2.0*std::numbers::pi);
@@ -37,7 +39,9 @@ std::vector<vertex> random_isoceles_triangle(double offset_xy_, double offset_z_
 
 namespace models {
 
-static void initialize_models() {
+void initialize_models() {
+
+    #warning "got here..."
 
     pyramid = std::make_shared<mesh>(models::stl_to_mesh("pyramid", 1, 1, 1, 1));
     ground_color_varying = std::make_shared<mesh>(models::stl_to_mesh("ground_color_varying", 0, 0.25, 0, 1));

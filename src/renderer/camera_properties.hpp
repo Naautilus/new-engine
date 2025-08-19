@@ -1,5 +1,7 @@
 #pragma once
 #include "linmath.h"
+#include "../constants/constants.hpp"
+#include "../vector/vector_spaces.hpp"
 
 struct camera_properties {
     double fov = 90;
@@ -17,5 +19,5 @@ struct camera_properties {
         TRACKING,
         NOT_TRACKING
     };
-    void update(Eigen::Quaterniond rotation, vector::worldspace position, vector::worldspace velocity, track_mode track_mode_);
+    void update(Eigen::Quaterniond rotation, vector::worldspace position, vector::worldspace velocity, track_mode track_mode_ = TRACKING);
 };

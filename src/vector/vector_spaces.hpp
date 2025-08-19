@@ -1,7 +1,5 @@
 #pragma once
 #include "../constants/constants.hpp"
-#warning "vector_spaces.hpp called :)"
-
 
 namespace vector {
 

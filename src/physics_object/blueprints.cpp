@@ -1,4 +1,6 @@
 #include "blueprints.hpp"
+#include "object.hpp"
+#include "../renderer/models.hpp"
 
 /*
 physics_object_blueprints.cpp stores some commonly used physics objects so they don't

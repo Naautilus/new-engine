@@ -1,4 +1,6 @@
 #include "renderer.hpp"
+#include "../physics_object/object.hpp"
+#include "mesh.hpp"
 
 renderer::renderer(){
     std::cout << "renderer constructor called\n";
@@ -23,22 +25,22 @@ renderer::renderer(){
 
 // callbacks
 
-static void renderer::error_callback(int error, const char* description) {
+void renderer::error_callback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
 }
 
-static bool renderer::key_pressed(GLFWwindow* window, int key) {
+bool renderer::key_pressed(GLFWwindow* window, int key) {
     bool result = glfwGetKey(window, key) == GLFW_PRESS;
     return result;
 }
 
-static void renderer::update_free_camera_state(GLFWwindow* window) {
+void renderer::update_free_camera_state(GLFWwindow* window) {
     if (!key_pressed(window, GLFW_KEY_0)) return;
     while (key_pressed(window, GLFW_KEY_0)) glfwPollEvents();
     globals::free_camera = !globals::free_camera;
 }
 
-static void update_pause_state(GLFWwindow* window) {
+void renderer::update_pause_state(GLFWwindow* window) {
     if (!key_pressed(window, GLFW_KEY_P)) return;
     while (key_pressed(window, GLFW_KEY_P)) glfwPollEvents();
     globals::paused = !globals::paused;
@@ -50,7 +52,7 @@ static void update_pause_state(GLFWwindow* window) {
 /*
 NOTE: it could be useful to track this in the physics part of the engine and apply responses there for better between-frame scaling
 */
-static void renderer::apply_key_responses(GLFWwindow* window, float renderer_dt) {
+void renderer::apply_key_responses(GLFWwindow* window, float renderer_dt) {
     if (globals::paused) return;
 
     globals::physics_objects_mutex.lock();
@@ -91,7 +93,7 @@ static void renderer::apply_key_responses(GLFWwindow* window, float renderer_dt)
     }
 }
 
-static void renderer::manual_camera_movement(GLFWwindow* window, float renderer_dt, camera_properties& camera_properties_) {
+void renderer::manual_camera_movement(GLFWwindow* window, float renderer_dt, camera_properties& camera_properties_) {
     const double TRANSLATION_SPEED_WALK = 20;
     const double TRANSLATION_SPEED_SPRINT = 100;
     const double ROTATION_SPEED = 1;
@@ -136,13 +138,13 @@ static void renderer::manual_camera_movement(GLFWwindow* window, float renderer_
 
 }
 
-static void renderer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void renderer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
-static void renderer::set_vertices(std::vector<vertex>& new_vertices, GLuint& vertex_buffer) {
+void renderer::set_vertices(std::vector<vertex>& new_vertices, GLuint& vertex_buffer) {
     vertex* vertices = new vertex[new_vertices.size()];
     copy(new_vertices.begin(), new_vertices.end(), vertices);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
@@ -154,7 +156,7 @@ static void renderer::set_vertices(std::vector<vertex>& new_vertices, GLuint& ve
     delete[] vertices;
 }
 
-static void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& models) {
+void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& models) {
     std::vector<vertex> vertices;
     for (int i = 0; i < models.size(); i++) {
         //vertices.insert(vertices.end(), models[i].vertices.begin(), models[i].vertices.end());
@@ -167,7 +169,7 @@ static void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<
 }
 
 // window creation + looping
-static void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
+void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
     // initialize
     GLFWwindow* window;
     GLuint vertex_shader, fragment_shader, program;

@@ -1,10 +1,12 @@
 #pragma once
-#include "../renderer/models.hpp"
-#include "../simulation_state.hpp"
-#include "../physics_object/object.hpp"
-#include "../math/random.hpp"
 #include "../collision/meshes.hpp"
 #include "../collision/collider.hpp"
+
+namespace physics_object {
+
+struct object;
+
+}
 
 /*
 module is a general-purpose struct whose children

@@ -1,4 +1,5 @@
 #include "aerodynamic_surface.hpp"
+#include "../physics_object/object.hpp"
 
 namespace module {
 
@@ -18,7 +19,7 @@ aerodynamic_surface::aerodynamic_surface(double s, vector::localspace d, vector:
     rotation_axis = rotation_axis_;
     angle_range = a;
 }
-void aerodynamic_surface::update(physics_object::object* parent) override {
+void aerodynamic_surface::update(physics_object::object* parent) {
     if (angle_range == 0) update_static_surface(parent);
     else update_dynamic_surface(parent);
 }

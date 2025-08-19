@@ -1,5 +1,7 @@
 #pragma once
 #include "control_bindings.hpp"
+#include "../vector/vector_spaces.hpp"
+#include "../constants/constants.hpp"
 
 struct physics_state {
     double mass = 1.0;

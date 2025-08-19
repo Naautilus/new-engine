@@ -9,6 +9,7 @@
 #include "../renderer/glad.h"
 #include "../math/random.hpp"
 #include "../collision/meshes.hpp"
+#include "control_bindings.hpp"
 #include <GLFW/glfw3.h>
 
 /*

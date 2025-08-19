@@ -1,6 +1,7 @@
 #pragma once
 #include "module.hpp"
 #include "../ground/ground_logic.hpp"
+#include "../math/pid.hpp"
 
 // x = forward distance, y and z = perspectivified
 //struct vector::scopespace : vector::localspace {};
@@ -36,14 +37,7 @@ struct sensor_cell_grid {
     public:
     std::vector<std::vector<signal_point>> points;
     sensor_cell_grid(int size_, double view_cone_halfarc);
-    void increase_signals_in_circle(double center_x, double center_y, double radius, double distance, double signal) {
-        std::vector<sensor_point> indices = get_points_in_circle(center_x, center_y, radius);
-        for (sensor_point p : indices) {
-            points[p.x()][p.y()].signal_strength += signal;
-            points[p.x()][p.y()].position_scopespace.distance() += distance * signal;
-            points[p.x()][p.y()].distance_weight += signal;
-        }
-    }
+    void increase_signals_in_circle(double center_x, double center_y, double radius, double distance, double signal);
     std::vector<sensor_point> remove_invalid_indices(std::vector<sensor_point> indices);
     void calculate_indices_in_circle(double radius);
     std::vector<sensor_point> get_points_in_circle(double center_x, double center_y, double radius);

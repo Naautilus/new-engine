@@ -1,4 +1,5 @@
 #include "physical_structure.hpp"
+#include "../physics_object/object.hpp"
 
 namespace module {
 
@@ -10,7 +11,7 @@ physical_structure::physical_structure(collision::collider collider_, std::share
     collider = collider_;
     models.push_back(visual_model(model_, model_position_, model_scaling_));
 }
-void physical_structure::update(physics_object::object* parent) override {}
+void physical_structure::update(physics_object::object* parent) {}
 
 }
 

@@ -1,4 +1,5 @@
 #include "sensor_ir.hpp"
+#include "../physics_object/object.hpp"
 
 // x = forward distance, y and z = perspectivified
 //struct vector::scopespace : vector::localspace {};
@@ -211,7 +212,7 @@ vector::worldspace sensor_ir::get_worldspace_position(physics_object::object* pa
     return position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position);
 }
 
-void sensor_ir::update(physics_object::object* parent) override {
+void sensor_ir::update(physics_object::object* parent) {
     //std::cout << "\n-----------------\n\n";
     //if (health <= 0) return;
     time_since_launch += constants::DELTA_T;

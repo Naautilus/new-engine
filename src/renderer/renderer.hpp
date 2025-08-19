@@ -10,6 +10,7 @@
 #include <string>
 #include "../simulation_logic/initialize_physics_objects.hpp"
 #include "camera_properties.hpp"
+#include "vertex.hpp"
 
 static std::string vertex_shader_text;
 static std::string fragment_shader_text;

@@ -1,4 +1,7 @@
 #include "jet_engine.hpp"
+#include "../physics_object/object.hpp"
+#include "../math/random.hpp"
+#include "../renderer/models.hpp"
 
 namespace module {
     
@@ -13,7 +16,7 @@ jet_engine::jet_engine(double max_thrust_, double minimum_throttle_, double maxi
     collider = collision::collider(model);
     health = health_;
 }
-void jet_engine::update(physics_object::object* parent) override {
+void jet_engine::update(physics_object::object* parent) {
     if (health <= 0) return;
     controls::input* throttle = parent->control_bindings.get_input(controls::engine1);
     double response = 0;

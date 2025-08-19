@@ -1,3 +1,0 @@
-struct model_interface {
-	
-}
