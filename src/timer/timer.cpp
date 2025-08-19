@@ -1,3 +1,4 @@
+// top of cpp marker
 #include "timer.hpp"
 
 namespace timer {

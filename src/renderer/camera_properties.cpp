@@ -1,3 +1,4 @@
+// top of cpp marker
 #include "camera_properties.hpp"
 
 camera_properties::camera_properties(std::string camera_target_name_, bool camera_target_search_direction_, vector::localspace camera_target_offset_) {
