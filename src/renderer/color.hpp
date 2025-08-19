@@ -1,9 +1,9 @@
 #pragma once
 
 struct color{
-	extern float r;
-    extern float g;
-    extern float b;
+	float r = 0;
+    float g = 0;
+    float b = 0;
 	bool operator==(const color& c) const;
 	bool operator<(const color& c) const;
     color& operator+=(const color& c);

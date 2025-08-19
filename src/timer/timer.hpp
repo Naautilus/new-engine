@@ -6,7 +6,7 @@ namespace timer {
     
 struct timepoint {
     std::chrono::time_point<std::chrono::high_resolution_clock> time;
-    extern std::string name;
+    std::string name = "";
     timepoint(std::string name_);
 };
 struct timer {
@@ -18,7 +18,7 @@ struct timer {
     };
     private:
     std::vector<timepoint> timepoints;
-    extern std::string name;
+    std::string name = "";
     time_unit time_unit_;
     bool active;
     int inactive_counter;

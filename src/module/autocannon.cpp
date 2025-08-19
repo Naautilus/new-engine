@@ -3,8 +3,6 @@
 
 namespace module {
 
-const double autocannon::fire_ahead_distance = 30;
-const int autocannon::ticks_since_last_fired = 0;
 autocannon::autocannon(physics_object::object (*physics_object_creator_)(), double projectile_velocity_, double rounds_per_second_, vector::localspace firing_direction_, vector::localspace position_, double length, double width, double health_) {
     physics_object_creator = physics_object_creator_;
     projectile_velocity = projectile_velocity_;

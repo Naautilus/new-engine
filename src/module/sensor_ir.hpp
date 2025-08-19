@@ -11,7 +11,7 @@ namespace module {
 struct signal_point {
     vector::scopespace position_scopespace;
     double signal_strength;
-    extern double distance_weight;
+    double distance_weight = 0;
     signal_point();
     signal_point(vector::worldspace target_position, vector::worldspace sensor_position, Eigen::Quaterniond rotation, double base_signal_strength);
     signal_point(double distance_, double scope_x_, double scope_y_, double signal_strength_);
@@ -56,11 +56,11 @@ struct sensor_ir : module {
     vector::worldspace last_detection_worldspace;
     vector::scopespace last_detection_scopespace;
     double last_detection_signal_strength;
-    extern double record_target_distance;
-    extern pid pid_pitch;
-    extern pid pid_yaw;
-    extern pid pid_roll;
-    extern double time_since_launch;
+    double record_target_distance = 1e10;
+    pid pid_pitch = pid(    1,    0,  0.1,  0.5);
+    pid pid_yaw   = pid(    1,    0,  0.1,  0.5);
+    pid pid_roll  = pid(    1,    0,  0.1,  1.0); // fed angular velocity, so P is D really
+    double time_since_launch = 0;
     sensor_ir(double gimbal_cone_halfarc_, double view_cone_halfarc_, double target_recognition_cone_halfarc_, Eigen::Quaterniond rotation_, vector::localspace position_, double length, double width, double health_);
     vector::worldspace get_worldspace_position(physics_object::object* parent);
     void update(physics_object::object* parent) override;

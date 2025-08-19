@@ -2,8 +2,6 @@
 
 namespace collision {
 
-vector::worldspace line::origin = vector::worldspace(0, 0, 0);
-vector::worldspace line::direction = vector::worldspace(1, 0, 0);
 line::line() {}
 line::line(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
@@ -34,8 +32,6 @@ vector::worldspace line::point_along_line(double t) {
     return origin + t * direction;
 }
 
-vector::worldspace plane::origin = vector::worldspace(0, 0, 0);
-vector::worldspace plane::direction = vector::worldspace(1, 0, 0);
 plane::plane() {}
 plane::plane(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
@@ -98,8 +94,6 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     return l;
 }
 
-line_segment::line line_ = line();
-line_segment::double length = 0;
 line_segment::line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization) {
     end -= origin;
     if (normalization == NORMALIZED) {

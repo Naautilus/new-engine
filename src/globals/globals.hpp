@@ -7,7 +7,7 @@
 
 namespace globals {
 
-extern auto last_time;
+extern std::chrono::time_point<std::chrono::high_resolution_clock> last_time;
 
 bool free_camera;
 bool paused;
@@ -28,6 +28,6 @@ extern vector::worldspace SUN_DIRECTION;
 extern int tick;
 extern int error_count;
 
-extern auto timer_;
+extern timer::timer timer_;
 
 }

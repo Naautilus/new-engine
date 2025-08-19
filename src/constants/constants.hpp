@@ -32,15 +32,15 @@ struct simulation_state;
 
 namespace constants {
 
-extern constexpr std::string FORMAT_STRING_POSITION;
-extern constexpr std::string FORMAT_STRING_VELOCITY;
-extern constexpr std::string FORMAT_STRING_ROTATION;
-extern constexpr std::string FORMAT_STRING_UNIT;
-extern constexpr std::string FORMAT_STRING_ANGULAR_VELOCITY;
-extern constexpr std::string FORMAT_STRING_SPEED;
-extern constexpr std::string FORMAT_STRING_G_FORCE;
-extern constexpr std::string FORMAT_STRING_AOA;
-extern constexpr std::string FORMAT_STRING_ALTITUDE;
+constexpr std::string FORMAT_STRING_POSITION = "{:10.1f}";
+constexpr std::string FORMAT_STRING_VELOCITY = "{:10.1f}";
+constexpr std::string FORMAT_STRING_ROTATION = "{:4.0f}";
+constexpr std::string FORMAT_STRING_UNIT = "{:5.2f}";
+constexpr std::string FORMAT_STRING_ANGULAR_VELOCITY = "{:6.1f}";
+constexpr std::string FORMAT_STRING_SPEED = "{:4.0f}";
+constexpr std::string FORMAT_STRING_G_FORCE = "{:6.2f}";
+constexpr std::string FORMAT_STRING_AOA = "{:5.1f}";
+constexpr std::string FORMAT_STRING_ALTITUDE = "{:5.0f}";
 extern const double DELTA_T;
 extern const double LOG_INTERVAL;
 extern const double TIME_LIMIT;

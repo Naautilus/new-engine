@@ -5,8 +5,8 @@
 namespace collision {
 
 struct line {
-    extern vector::worldspace origin;
-    extern vector::worldspace direction;
+    vector::worldspace origin = vector::worldspace(0, 0, 0);
+    vector::worldspace direction = vector::worldspace(1, 0, 0);
     line();
     line(vector::worldspace origin_, vector::worldspace direction_);
     vector::worldspace point_along_line(double t);
@@ -15,8 +15,8 @@ struct line {
 };
 struct ray : line {};
 struct plane {
-    extern vector::worldspace origin;
-    extern vector::worldspace direction;
+    vector::worldspace origin = vector::worldspace(0, 0, 0);
+    vector::worldspace direction = vector::worldspace(1, 0, 0);
     plane();
     plane(vector::worldspace origin_, vector::worldspace direction_);
     double distance_along_normal(vector::worldspace input_point);
@@ -27,8 +27,8 @@ struct line_segment {
         NORMALIZED,
         UNNORMALIZED
     };
-    extern line line_;
-    extern double length;
+    line line_ = line();
+    double length = 0;
     line_segment() {}
     line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED);
     line_segment intersection(line_segment& l);
