@@ -7,7 +7,7 @@
 
 namespace globals {
 
-auto last_time = std::chrono::high_resolution_clock::now();
+extern auto last_time;
 
 bool free_camera;
 bool paused;
@@ -24,10 +24,10 @@ std::mutex functional_physics_objects_mutex;
 
 std::default_random_engine rng;
 std::unique_ptr<simulation_state> current_simulation_state;
-vector::worldspace SUN_DIRECTION = vector::worldspace(-1, -1, -1) / vector::worldspace(-1, -1, -1).norm();
-int tick = 0;
-int error_count = 0;
+extern vector::worldspace SUN_DIRECTION;
+extern int tick;
+extern int error_count;
 
-auto timer_ = timer::timer("timer", timer::timer::NANOSECONDS);
+extern auto timer_;
 
 }

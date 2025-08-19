@@ -12,8 +12,8 @@ void step_physics_object_deletion();
 void step_physics_object_movement_and_modules();
 void step_physics_objects();
 
-int log_counter = 0;
-int log_counter_interval = 100;
+extern int log_counter;
+extern int log_counter_interval;
 void log_physics_objects();
 
 void wait_delta_t();

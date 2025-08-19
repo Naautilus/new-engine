@@ -4,7 +4,7 @@
 #include "vertex.hpp"
 #include "mesh.hpp"
 
-const std::string MODELS_FILEPATH = "../models/";
+extern const std::string MODELS_FILEPATH;
 
 namespace models {
 	

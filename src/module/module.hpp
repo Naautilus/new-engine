@@ -44,8 +44,8 @@ struct module {
     Eigen::Quaterniond rotation;
     collision::collider collider;
     std::vector<visual_model> models;
-    virtual ~module() = default;
-    virtual void update(physics_object::object* parent) = 0;
+    extern virtual ~module();
+    extern virtual void update(physics_object::object* parent);
 };
 
 struct aerodynamic_surface;

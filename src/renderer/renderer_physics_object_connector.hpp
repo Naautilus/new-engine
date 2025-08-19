@@ -16,10 +16,10 @@ Eigen::Quaterniond adjust_quaternion_angle(Eigen::Quaterniond q, double angle_mu
 Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats);
 mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_);
 
-const int GROUND_LODS = 16;
-const double GROUND_INITIAL_TILE_SIZE = 0.4;//25.0;
-int GROUND_TILE_COUNT = 32;
-const int GROUND_DEADZONE_TILES = 2;
+extern const int GROUND_LODS;
+extern const double GROUND_INITIAL_TILE_SIZE;
+extern int GROUND_TILE_COUNT;
+extern const int GROUND_DEADZONE_TILES;
 
 std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_);
 
@@ -37,4 +37,4 @@ float smoothstep(double edge0, double edge1, double x);
 void set_vertex_colors_by_brightness(vertex& v, double brightness_unfiltered);
 void apply_sunlight_to_model(mesh& model);
 void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vector::worldspace last_camera_position, vector::worldspace last_camera_target_velocity);
-int ground_models_start_point = -1;
+extern int ground_models_start_point;

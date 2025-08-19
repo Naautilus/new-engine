@@ -23,6 +23,7 @@ void aerodynamic_surface::update(physics_object::object* parent) {
     if (angle_range == 0) update_static_surface(parent);
     else update_dynamic_surface(parent);
 }
+const double aerodynamic_surface::SPEED_EPSILON = 1e-5;
 void aerodynamic_surface::update_static_surface(physics_object::object* parent) {
     vector::worldspace surface_velocity = parent->physics_state.velocity - parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
     if (surface_velocity.squaredNorm() < SPEED_EPSILON) return;

@@ -6,10 +6,10 @@ struct pid {
 	double gain_i;
 	double gain_d;
 	double authority_limit;
-	double last_input = 0;
-	double output = 0;
+	extern double last_input;
+	extern double output;
 	std::vector<double> previous_input_buffer;
-	int previous_input_buffer_position = 0;
+	extern int previous_input_buffer_position;
 	pid(double p, double i, double d, double authority_limit_);
 	void update(double input);
 };

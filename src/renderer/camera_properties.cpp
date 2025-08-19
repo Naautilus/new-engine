@@ -1,5 +1,10 @@
 #include "camera_properties.hpp"
 
+double fov = 90;
+vec3 camera_position = {0, 1000, 0};
+vec3 camera_y_direction = {0, 1, 0};
+vec3 camera_z_direction = {0, 0, 1};
+
 camera_properties::camera_properties(std::string camera_target_name_, bool camera_target_search_direction_, vector::localspace camera_target_offset_) {
     camera_target_name = camera_target_name_;
     camera_target_search_direction = camera_target_search_direction_;

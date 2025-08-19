@@ -136,6 +136,9 @@ void step_physics_objects() {
     globals::tick++;
 }
 
+int log_counter = 0;
+int log_counter_interval = 100;
+
 void log_physics_objects() {
     globals::physics_objects_mutex.lock();
     auto physics_objects_ = globals::physics_objects;

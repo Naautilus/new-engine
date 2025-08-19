@@ -2,10 +2,13 @@
 
 namespace timer {
 
+std::string timepoint::name = "";
 timepoint::timepoint(std::string name_) {
     time = std::chrono::high_resolution_clock::now();
     name = name_;
 }
+
+std::string timer::name = "";
 timer::timer(std::string name_, time_unit time_unit__) {
     name = name_;
     time_unit_ = time_unit__;

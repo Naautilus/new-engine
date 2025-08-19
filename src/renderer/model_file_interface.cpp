@@ -7,6 +7,8 @@ is a list of all the vertex indices that the triangles in the mesh use, i.e.
 the number of triangles is indices.size() / 3.
 */
 
+const std::string MODELS_FILEPATH = "../models/";
+
 namespace models {
 	
 template <typename T>

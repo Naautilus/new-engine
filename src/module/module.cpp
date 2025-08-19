@@ -42,4 +42,8 @@ visual_model::visual_model(std::shared_ptr<mesh> mesh_data_) {
     rotation = Eigen::Quaterniond(1,0,0,0);
 }
 
+virtual module::~module() = default;
+virtual void module::update(physics_object::object* parent) = 0;
+
+
 }

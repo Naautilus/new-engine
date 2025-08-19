@@ -17,11 +17,11 @@ struct ground_info_hash {
     std::size_t operator()(const ground_info& g) const;
 };
 
-const siv::PerlinNoise::seed_type seed = 123456u;
+extern const siv::PerlinNoise::seed_type seed;
 const siv::PerlinNoise perlin{ seed };
-std::vector<double> PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
-std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};;
-std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
+extern std::vector<double> PERLIN_WIDTH;
+extern std::vector<double> PERLIN_HEIGHT_EFFECT;
+extern std::vector<double> PERLIN_COLOR_EFFECT;
 std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
 std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 std::mutex ground_altitude_averaged_mutex;

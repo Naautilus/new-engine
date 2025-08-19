@@ -1,5 +1,8 @@
 #include "color.hpp"
 
+float color::r = 0;
+float color::g = 0;
+float color::b = 0;
 bool color::operator==(const color& c) const {
     if (r != c.r) return false;
     if (g != c.g) return false;

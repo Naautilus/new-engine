@@ -6,6 +6,7 @@
 
 namespace module {
 
+double signal_point::distance_weight = 0;
 signal_point::signal_point() {
     position_scopespace.distance() = 0;
     position_scopespace.scope_x() = 0;
@@ -196,6 +197,12 @@ void sensor_cell_grid::print(vector::scopespace target, vector::scopespace cente
     }
     std::cout << "\n";
 }
+
+double sensor_ir::record_target_distance = 1e10;
+pid sensor_ir::pid_pitch = pid(    1,    0,  0.1,  0.5);
+pid sensor_ir::pid_yaw   = pid(    1,    0,  0.1,  0.5);
+pid sensor_ir::pid_roll  = pid(    1,    0,  0.1,  1.0); // fed angular velocity, so P is D really
+double sensor_ir::time_since_launch = 0;
 
 sensor_ir::sensor_ir(double gimbal_cone_halfarc_, double view_cone_halfarc_, double target_recognition_cone_halfarc_, Eigen::Quaterniond rotation_, vector::localspace position_, double length, double width, double health_) {
     gimbal_cone_halfarc = gimbal_cone_halfarc_;

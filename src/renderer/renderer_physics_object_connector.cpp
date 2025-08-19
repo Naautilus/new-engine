@@ -123,6 +123,11 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 	return model;
 }
 
+const int GROUND_LODS = 16;
+const double GROUND_INITIAL_TILE_SIZE = 0.4;
+int GROUND_TILE_COUNT = 32;
+const int GROUND_DEADZONE_TILES = 2;
+
 std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_) {
 	std::vector<mesh> output;
 	double tile_size = GROUND_INITIAL_TILE_SIZE;
@@ -248,6 +253,8 @@ void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vec
 	}
 	new_ground_ready_ = true;
 }
+
+int ground_models_start_point = -1;
 
 void renderer::create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
     if (ground_models_start_point == -1) {
