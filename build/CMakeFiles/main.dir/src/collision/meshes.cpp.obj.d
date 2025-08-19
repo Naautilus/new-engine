@@ -1,6 +1,6 @@
-CMakeFiles/main.dir/src/collision/collider.cpp.obj: \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider.cpp \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider.hpp \
+CMakeFiles/main.dir/src/collision/meshes.cpp.obj: \
+ C:\Users\user\Documents\code_windows\new-engine\src\collision\meshes.cpp \
+ C:\Users\user\Documents\code_windows\new-engine\src\collision\meshes.hpp \
  C:\Users\user\Documents\code_windows\new-engine\src\collision\shapes.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/constants/constants.hpp \
@@ -616,14 +616,4 @@ CMakeFiles/main.dir/src/collision/collider.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
- C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider_type.hpp \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collision_data.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
- C:/msys64/mingw64/include/c++/15.2.0/utility \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
- C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Core \
- C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Eigenvalues \
- C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/SVD \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp
+ C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h

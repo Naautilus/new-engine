@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../vector/vector_spaces.hpp"
+#include "shapes.hpp"
 
 namespace collision {
     

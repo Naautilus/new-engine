@@ -2,6 +2,7 @@
 #include "../constants/constants.hpp"
 #include "../vector/vector_spaces.hpp"
 #include "../timer/timer.hpp"
+#include "../simulation_state.hpp"
 #include <mutex>
 
 namespace globals {

@@ -1,4 +1,5 @@
 #include "mesh.hpp"
+#include "../collision/collider.hpp"
 
 mesh::mesh() {
     //std::cout << "New mesh created";

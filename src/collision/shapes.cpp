@@ -2,8 +2,6 @@
 
 namespace collision {
 
-line::origin = vector::worldspace(0, 0, 0);
-line::direction = vector::worldspace(1, 0, 0);
 line::line() {}
 line::line(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
@@ -34,8 +32,6 @@ vector::worldspace line::point_along_line(double t) {
     return origin + t * direction;
 }
 
-plane::origin = vector::worldspace(0, 0, 0);
-plane::direction = vector::worldspace(1, 0, 0);
 plane::plane() {}
 plane::plane(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
@@ -98,7 +94,7 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     return l;
 }
 
-line_segment::line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED) {
+line_segment::line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization) {
     end -= origin;
     if (normalization == NORMALIZED) {
         length = end.norm();
@@ -316,8 +312,6 @@ optimize it
 bool is_intersecting(std::vector<triangle> v0, std::vector<triangle> v1) {}
 */
 
-std::vector<triangle> triangular_prism::faces; // base, end, (p0-p1)(base-end) quad tri-pair, (p1-p2)(base-end) quad tri-pair, (p2-p0)(base-end) quad tri-pair
-vector::worldspace triangular_prism::central_point;
 triangular_prism::triangular_prism() {}
 triangular_prism::triangular_prism(triangle& base, vector::worldspace& extrude_direction) {
     faces.push_back(base);

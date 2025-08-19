@@ -1,7 +1,6 @@
-CMakeFiles/main.dir/src/collision/collider.cpp.obj: \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider.cpp \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider.hpp \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\shapes.hpp \
+CMakeFiles/main.dir/src/collision/logic.cpp.obj: \
+ C:\Users\user\Documents\code_windows\new-engine\src\collision\logic.cpp \
+ C:\Users\user\Documents\code_windows\new-engine\src\collision\logic.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/constants/constants.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Dense \
@@ -612,18 +611,45 @@ CMakeFiles/main.dir/src/collision/collider.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_uninitialized.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/out_ptr.h \
  C:/msys64/mingw64/include/c++/15.2.0/pstl/glue_memory_defs.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/physics_object/control_bindings.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/controls/controls.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/models.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/math/random.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/meshes.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/shapes.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
  C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collider_type.hpp \
- C:\Users\user\Documents\code_windows\new-engine\src\collision\collision_data.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collider.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collider_type.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collision_data.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/utility \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
  C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Core \
  C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Eigenvalues \
  C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/SVD \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp
+ C:/Users/user/Documents/code_windows/new-engine/src/physics_object/blueprints.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/aerodynamic_surface.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/autocannon.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/jet_engine.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
+ C:/msys64/mingw64/include/c++/15.2.0/iterator \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/solid_rocket_motor.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/glad.h \
+ C:/msys64/mingw64/include/KHR/khrplatform.h \
+ C:/msys64/mingw64/include/GLFW/glfw3.h

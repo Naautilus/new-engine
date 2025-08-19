@@ -4,6 +4,7 @@
 #include "../physics_object/object.hpp"
 #include "../math/random.hpp"
 #include "../collision/meshes.hpp"
+#include "../collision/collider.hpp"
 
 /*
 module is a general-purpose struct whose children

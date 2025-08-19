@@ -5,17 +5,18 @@
 namespace collision {
 
 struct line {
-    vector::worldspace origin;
-    vector::worldspace direction;
+    vector::worldspace origin = vector::worldspace(0, 0, 0);
+    vector::worldspace direction = vector::worldspace(1, 0, 0);
     line();
     line(vector::worldspace origin_, vector::worldspace direction_);
+    vector::worldspace point_along_line(double t);
     double distance_along_line(vector::worldspace input_point);
     std::optional<double> distance_to_intersection(line& l);
 };
 struct ray : line {};
 struct plane {
-    vector::worldspace origin;
-    vector::worldspace direction;
+    vector::worldspace origin = vector::worldspace(0, 0, 0);
+    vector::worldspace direction = vector::worldspace(1, 0, 0);
     plane();
     plane(vector::worldspace origin_, vector::worldspace direction_);
     double distance_along_normal(vector::worldspace input_point);
@@ -29,7 +30,7 @@ struct line_segment {
     line line_ = line();
     double length = 0;
     line_segment() {}
-    line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization);
+    line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED);
     line_segment intersection(line_segment& l);
 };
 struct triangle {

@@ -1,6 +1,11 @@
 #pragma once
-#include "../collision/collider.hpp"
 #include "vertex.hpp"
+
+namespace collision{
+
+struct collider;
+
+}
 
 struct mesh {
 	std::vector<vertex> vertices;

@@ -15,7 +15,22 @@ enum response_type {
     trim_resetting,
     trim_not_resetting
 };
-struct key;
-struct input;
+struct key {
+    int key_number;
+    double axis_response;
+    key(int key_number_, double axis_response_);
+};
+struct input {
+    axis axis_;
+    response_type response_type_;
+    double minimum;
+    double maximum;
+    double inherent_multiplier;
+    double response_unmultiplied;
+    double response_multiplied;
+    input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_);
+    void add_key(int key_number, double axis_response);
+    double get_control_multiplier_for_health_fraction(double health_fraction);
+};
 
 }
