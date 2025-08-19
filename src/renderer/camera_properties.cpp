@@ -1,5 +1,5 @@
 #pragma once
-#include "linmath.h"
+#include "camera_properties.hpp"
 
 camera_properties::camera_properties(std::string camera_target_name_, bool camera_target_search_direction_, vector::localspace camera_target_offset_) {
     camera_target_name = camera_target_name_;

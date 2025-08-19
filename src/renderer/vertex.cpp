@@ -1,4 +1,5 @@
 #pragma once
+#include "vertex.hpp"
 
 bool vertex::operator==(const vertex& v) const {
     if (x != v.x) return false;

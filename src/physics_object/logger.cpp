@@ -1,5 +1,5 @@
 #pragma once
-#include "../simulation_state.cpp"
+#include "logger.hpp"
 
 namespace physics_object {
     // below is for ui/readout purposes

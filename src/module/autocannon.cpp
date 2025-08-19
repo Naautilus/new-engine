@@ -1,5 +1,5 @@
 #pragma once
-#include "module.cpp"
+#include "autocannon.hpp"
 
 namespace module {
     autocannon::autocannon(physics_object::object (*physics_object_creator_)(), double projectile_velocity_, double rounds_per_second_, vector::localspace firing_direction_, vector::localspace position_, double length, double width, double health_) {

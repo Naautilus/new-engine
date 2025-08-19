@@ -1,5 +1,5 @@
 #pragma once
-#include "module.cpp"
+#include "physical_structure.hpp"
 
 namespace module {
     physical_structure::physical_structure(collision::collider collider_, std::shared_ptr<mesh> model_) {

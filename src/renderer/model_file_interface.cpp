@@ -1,8 +1,5 @@
 #pragma once
-#include "../constants/constants.cpp"
-#include "../controls/controls.cpp"
-#include "vertex.h"
-#include "mesh.cpp"
+#include "model_file_interface.hpp"
 
 
 /*

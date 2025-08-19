@@ -1,5 +1,5 @@
 #pragma once
-#include "module.cpp"
+#include "solid_rocket_motor.hpp"
 
 namespace module {
     solid_rocket_motor::solid_rocket_motor(double thrust_, double burntime_seconds_remaining_, vector::localspace thrust_direction_, vector::localspace position_, double length, double width, double health_) {

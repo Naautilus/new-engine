@@ -1,7 +1,5 @@
 #pragma once
-#include "../physics_object/blueprints.cpp"
-#include <nlohmann/json.hpp>
-#include <fstream>
+#include "initialize_physics_objects.hpp"
 using json = nlohmann::json;
 
 // SOURCES

@@ -1,6 +1,5 @@
 #pragma once
-#include "../vector/vector_spaces.cpp"
-#include "../globals/globals.cpp"
+#include "shapes.hpp"
 
 namespace collision {
 
@@ -324,7 +323,7 @@ namespace collision {
     
     bool is_intersecting(std::vector<triangle> v0, std::vector<triangle> v1) {}
     */
-   
+
     std::vector<triangle> triangular_prism::faces; // base, end, (p0-p1)(base-end) quad tri-pair, (p1-p2)(base-end) quad tri-pair, (p2-p0)(base-end) quad tri-pair
     vector::worldspace triangular_prism::central_point;
     triangular_prism::triangular_prism() {}

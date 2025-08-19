@@ -1,9 +1,5 @@
 #pragma once
-#include "PerlinNoise.hpp"
-#include "../constants/constants.cpp"
-#include "../globals/globals.cpp"
-#include "../renderer/color.h"
-#include <mutex>
+#include "ground_logic.hpp"
 
 namespace ground {
 

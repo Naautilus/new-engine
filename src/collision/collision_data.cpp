@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../vector/vector_spaces.cpp"
+#include "collision_data.hpp"
 
 namespace collision {
     collision_data::collision_data(vector::worldspace position_, vector::worldspace normal_) {

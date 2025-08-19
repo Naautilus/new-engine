@@ -1,9 +1,5 @@
 #pragma once
-#include "../renderer/model_definitions.cpp"
-#include "../simulation_state.cpp"
-#include "../physics_object/object.cpp"
-#include "../math/random.cpp"
-#include "../collision/meshes.cpp"
+#include "module.hpp"
 
 /*
 module is a general-purpose struct whose children

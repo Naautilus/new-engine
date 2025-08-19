@@ -1,10 +1,5 @@
 #pragma once
-#include "../simulation_logic/physics_step_logic.cpp"
-#include "camera_properties.cpp"
-#include "models.cpp"
-#include "../collision/collider_type.h"
-#include "../collision/collider.cpp"
-#include "renderer.cpp"
+#include "renderer_physics_object_connector.hpp"
 
 // chatGPT code below
 Eigen::Quaterniond adjust_quaternion_angle(Eigen::Quaterniond q, double angle_multiplier) {

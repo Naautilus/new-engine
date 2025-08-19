@@ -1,15 +1,5 @@
 #pragma once
-#define GLFW_DLL
-#include <iostream>
-#include "linmath.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <chrono>
-#include <thread>
-#include "vector"
-#include <string>
-#include "../simulation_logic/initialize_physics_objects.cpp"
-#include "camera_properties.cpp"
+#include "renderer.hpp"
 
 renderer::renderer(){
     std::cout << "renderer constructor called\n";

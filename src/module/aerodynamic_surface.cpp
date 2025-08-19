@@ -1,5 +1,5 @@
 #pragma once
-#include "module.cpp"
+#include "aerodynamic_surface.hpp"
 
 namespace module {
     aerodynamic_surface::aerodynamic_surface(double s, vector::localspace d, vector::localspace p) {

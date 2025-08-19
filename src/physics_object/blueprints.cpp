@@ -1,15 +1,5 @@
 #pragma once
-#include "../module/module.cpp"
-#include "../module/aerodynamic_surface.cpp"
-#include "../module/autocannon.cpp"
-#include "../module/jet_engine.cpp"
-#include "../module/physical_structure.cpp"
-#include "../module/sensor_ir.cpp"
-#include "../module/solid_rocket_motor.cpp"
-#include "../renderer/glad.h"
-#include "../math/random.cpp"
-#include "../collision/meshes.cpp"
-#include <GLFW/glfw3.h>
+#include "blueprints.hpp"
 
 /*
 physics_object_blueprints.cpp stores some commonly used physics objects so they don't

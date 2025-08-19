@@ -1,6 +1,5 @@
 #pragma once
-#include "properties.cpp"
-#include <mutex>
+#include "object.hpp"
 
 namespace physics_object {
 

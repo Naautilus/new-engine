@@ -1,5 +1,5 @@
 #pragma once
-#include "../renderer/renderer_physics_object_connector.cpp"
+#include "renderer_thread.hpp"
 
 void renderer_function_sleep() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));

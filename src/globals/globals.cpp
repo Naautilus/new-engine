@@ -1,8 +1,5 @@
 #pragma once
-#include "../constants/constants.cpp"
-#include "../vector/vector_spaces.cpp"
-#include "../timer/timer.h"
-#include <mutex>
+#include "globals.hpp"
 
 namespace globals {
     

@@ -1,7 +1,5 @@
 #pragma once
-#include "../collision/logic.cpp"
-#include "../simulation_state.cpp"
-#include "../physics_object/logger.cpp"
+#include "physics_step_logic.hpp"
 
 void set_functional_physics_objects_list() {
     globals::physics_objects_mutex.lock();

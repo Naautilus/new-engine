@@ -1,6 +1,5 @@
 #pragma once
-#include "module.cpp"
-#include "../ground/ground_logic.cpp"
+#include "sensor_ir.hpp"
 
 // x = forward distance, y and z = perspectivified
 //struct vector::scopespace : vector::localspace {};

@@ -1,5 +1,5 @@
 #pragma once
-#include "../constants/constants.cpp"
+#include "controls.hpp"
 
 namespace controls {
     key::key(int key_number_, double axis_response_) {

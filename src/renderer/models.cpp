@@ -1,5 +1,5 @@
 #pragma once
-#include "model_definitions.cpp"
+#include "models.hpp"
 
 Eigen::Quaterniond random_quaternion_biased(double angle) {
 	double angle2 = random(0.0, 2.0*std::numbers::pi);

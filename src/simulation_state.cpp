@@ -1,6 +1,5 @@
 #pragma once
-#include "../constants/constants.cpp"
-#include "../ground/ground_logic.cpp"
+#include "simulation_state.hpp"
 
 simulation_state::simulation_state() {
     ground_function = ground::get_ground_altitude;

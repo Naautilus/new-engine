@@ -1,10 +1,5 @@
 #pragma once
-#include "shapes.cpp"
-#include "collider_type.h"
-#include "collision_data.cpp"
-#include "../eigen_pca/eigen-pca.hpp"
-#include "../renderer/mesh.h"
-
+#include "collider.hpp"
 
 namespace collision {
 

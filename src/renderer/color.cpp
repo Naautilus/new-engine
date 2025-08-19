@@ -1,4 +1,5 @@
 #pragma once
+#include "color.hpp"
 
 bool color::operator==(const color& c) const {
     if (r != c.r) return false;
