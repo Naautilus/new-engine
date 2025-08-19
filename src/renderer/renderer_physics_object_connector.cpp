@@ -61,13 +61,41 @@ Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats) {
 }
 
 mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_) {
-	bool is_edge_tile = (abs(x_) <= count_deadzone && abs(y_) <= count_deadzone && count_deadzone != 0);
-	mesh model;
+    mesh model;
+
 	if (color_variation) {
-		model = *models::ground_color_varying;
+        model = *models::ground_color_varying;
 	} else {
-		model = *models::ground_color_uniform;
+        model = *models::ground_color_uniform;
 	}
+    
+    bool is_edge_tile = (abs(x_) <= count_deadzone && abs(y_) <= count_deadzone && count_deadzone != 0);
+
+    bool is_x_edge_tile = (abs(x_) == count_deadzone);
+    bool is_y_edge_tile = (abs(y_) == count_deadzone);
+
+    bool is_x_positive_edge_tile = (is_x_edge_tile && x_ > 0);
+    bool is_x_negative_edge_tile = (is_x_edge_tile && x_ < 0);
+    bool is_y_positive_edge_tile = (is_y_edge_tile && y_ > 0);
+    bool is_y_negative_edge_tile = (is_y_edge_tile && y_ < 0);
+
+    if (is_edge_tile) {
+        for (vertex& v : model.vertices) {     
+
+            bool is_x_positive_edge_vertex = (v.x != 0);
+            bool is_x_negative_edge_vertex = (v.x == 0);
+            bool is_y_positive_edge_vertex = (v.y != 0);
+            bool is_y_negative_edge_vertex = (v.y == 0);
+
+            if (is_x_positive_edge_tile && is_x_positive_edge_vertex) continue;
+            if (is_x_negative_edge_tile && is_x_negative_edge_vertex) continue;
+            if (is_y_positive_edge_tile && is_y_positive_edge_vertex) continue;
+            if (is_y_negative_edge_tile && is_y_negative_edge_vertex) continue;
+
+            v.z -= 0.1 * tile_size;
+        }
+    }
+
 	//double x_center = last_camera_position.x() + last_camera_forward_direction.x() * tile_size * count * 0;
 	//double y_center = last_camera_position.y() + last_camera_forward_direction.y() * tile_size * count * 0;
 	//double x_pos = (x_ + round(x_center/tile_size)) * tile_size;
@@ -87,25 +115,11 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 	for (vertex& v : model.vertices) {
 		int sample_points_squared = round(fmin(tile_size/original_tile_size, 3.0)); //std::round(sqrt(tile_size / original_tile_size));
 		v.z += ground::get_ground_altitude_averaged(v.x, v.y, tile_size, sample_points_squared);
-		v.g += ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
+		color color_ = ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
+        v.r += color_.r;
+        v.g += color_.g;
+        v.b += color_.b;
 	}
-
-    double x_pos_minimum = x_pos;
-    double x_pos_maximum = x_pos + tile_size;
-    double y_pos_minimum = x_pos;
-    double y_pos_maximum = x_pos + tile_size;
-
-    // change x_pos and y_pos to the center of the tile to do edge vertex checking
-    x_pos += tile_size / 2;
-    y_pos += tile_size / 2;
-    if (is_edge_tile) {
-        for (vertex& v : model.vertices) {
-            v.r = 1;
-            if (fabs(v.x - last_camera_position_.x()) > fabs(x_)) continue;
-            if (fabs(v.y - last_camera_position_.y()) > fabs(y_)) continue;
-            v.z -= tile_size;
-        }
-    }
 
     // convert to opengl coordinate system
 	for (vertex& v : model.vertices) {

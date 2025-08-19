@@ -2,6 +2,7 @@
 #include "PerlinNoise.hpp"
 #include "../constants/constants.cpp"
 #include "../globals/globals.cpp"
+#include "../renderer/color.h"
 #include <mutex>
 
 namespace ground {
@@ -39,12 +40,8 @@ namespace ground {
     std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};
     //std::vector<double> PERLIN_HEIGHT_EFFECT =  {     0,      0,     0,     0};
     std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
-    std::unordered_map<ground_info, double, ground_info_hash> ground_altitude;
-    std::unordered_map<ground_info, double, ground_info_hash> ground_color;
     std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
-    std::unordered_map<ground_info, double, ground_info_hash> ground_color_averaged;
-    std::mutex ground_altitude_mutex;
-    std::mutex ground_color_mutex;
+    std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
     std::mutex ground_altitude_averaged_mutex;
     std::mutex ground_color_averaged_mutex;
 
@@ -60,13 +57,13 @@ namespace ground {
     }
     
     // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
-    double get_ground_color(double x, double y) {
-        double sum = 0;
+    color get_ground_color(double x, double y) {
+        float sum = 0;
         for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
-            double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
+            float noise = (float)perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
             sum += noise * PERLIN_COLOR_EFFECT[i];
         }
-        return sum;
+        return color{0, sum, 0};
     }
     
     double get_ground_altitude_averaged(double x, double y, double width, int count) {
@@ -98,20 +95,20 @@ namespace ground {
         return sum;
     }
     
-    double get_ground_color_averaged(double x, double y, double width, int count) {
+    color get_ground_color_averaged(double x, double y, double width, int count) {
 
         ///*
         ground_info ground_info_(x, y, width, count);
         ground_color_averaged_mutex.lock();
         if(ground_color_averaged.find(ground_info_) != ground_color_averaged.end()) {
-            double output = ground_color_averaged[ground_info_];
+            color output = ground_color_averaged[ground_info_];
             ground_color_averaged_mutex.unlock();
             return output;
         }
         ground_color_averaged_mutex.unlock();
         //*/
 
-        double sum = 0;
+        color sum;
         for (int x_ = 0; x_ < count; x_++) {
             for (int y_ = 0; y_ < count; y_++) {
                 sum += get_ground_color(x + x_*width/count, y + y_*width/count);

@@ -1,5 +1,5 @@
 #pragma once
-#include "vertex.cpp"
+#include "vertex.h"
 #include "../collision/collider.h"
 
 struct mesh {
