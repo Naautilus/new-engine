@@ -41,8 +41,6 @@ namespace models {
 
 void initialize_models() {
 
-    #warning "got here..."
-
     pyramid = std::make_shared<mesh>(models::stl_to_mesh("pyramid", 1, 1, 1, 1));
     ground_color_varying = std::make_shared<mesh>(models::stl_to_mesh("ground_color_varying", 0, 0.25, 0, 1));
     ground_color_uniform = std::make_shared<mesh>(models::stl_to_mesh("ground_color_uniform", 0, 0.1, 0, 1));
