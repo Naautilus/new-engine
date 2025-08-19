@@ -14,7 +14,8 @@ Controls:
 
 P - Pause/unpause. IT STARTS PAUSED! so you will need to press P to start the simulation.
 
-0 - Free camera. WASDQE for translation, IJKLUO for rotation, Left Shift to speed up.
+0 - Free camera. WASDQE for translation, IJKLUO for rotation, Left Shift to speed up, [ and \] for FOV control.
+
 When outside of free camera:
 
 For your jet:
