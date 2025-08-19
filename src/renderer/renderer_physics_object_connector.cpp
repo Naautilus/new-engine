@@ -1,6 +1,8 @@
 // top of cpp marker
 #include "renderer_physics_object_connector.hpp"
 
+vector::localspace camera_offset;
+
 // chatGPT code below
 Eigen::Quaterniond adjust_quaternion_angle(Eigen::Quaterniond q, double angle_multiplier) {
 		double theta = 2 * acos(q.w());  // Original angle in radians

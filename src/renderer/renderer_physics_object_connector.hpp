@@ -7,7 +7,8 @@
 #include "renderer.hpp"
 
 
-vector::localspace camera_offset;
+extern vector::localspace camera_offset;
+
 struct renderer;
 
 // chatGPT code below
