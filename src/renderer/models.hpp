@@ -23,5 +23,6 @@ std::vector<vertex> random_isoceles_triangle(double offset_xy_, double offset_z_
 
 namespace models {
 
-	static void initialize_models();
+static void initialize_models();
+
 }

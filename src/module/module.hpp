@@ -24,30 +24,32 @@ children should:
 */
 
 namespace module {
-    struct visual_model {
-        std::shared_ptr<mesh> mesh_data;
-        vector::localspace position;
-        vector::localspace scaling;
-        Eigen::Quaterniond rotation;
-        visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_, Eigen::Quaterniond rotation_);
-        visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_);
-        visual_model(std::shared_ptr<mesh> mesh_data_);
-    };
+    
+struct visual_model {
+    std::shared_ptr<mesh> mesh_data;
+    vector::localspace position;
+    vector::localspace scaling;
+    Eigen::Quaterniond rotation;
+    visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_, Eigen::Quaterniond rotation_);
+    visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_);
+    visual_model(std::shared_ptr<mesh> mesh_data_);
+};
 
-    struct module {
-        double health;
-        vector::localspace position;
-        Eigen::Quaterniond rotation;
-        collision::collider collider;
-        std::vector<visual_model> models;
-        virtual ~module() = default;
-        virtual void update(physics_object::object* parent) = 0;
-    };
+struct module {
+    double health;
+    vector::localspace position;
+    Eigen::Quaterniond rotation;
+    collision::collider collider;
+    std::vector<visual_model> models;
+    virtual ~module() = default;
+    virtual void update(physics_object::object* parent) = 0;
+};
 
-    struct aerodynamic_surface;
-    struct autocannon;
-    struct jet_engine;
-    struct physical_structure;
-    struct sensor_ir;
-    struct solid_rocket_motor;
+struct aerodynamic_surface;
+struct autocannon;
+struct jet_engine;
+struct physical_structure;
+struct sensor_ir;
+struct solid_rocket_motor;
+
 }

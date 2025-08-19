@@ -19,32 +19,35 @@ initialized at origin with 0 velocity, no name, and no control_bindings.
 */
 
 namespace physics_object {
-    namespace blueprints {
+    
+namespace blueprints {
 
-        template <typename T>
-        struct named_blueprint {
-            T (*blueprint_creator)();
-            std::string name;
-        };
+template <typename T>
+struct named_blueprint {
+    T (*blueprint_creator)();
+    std::string name;
+};
 
-        // named_blueprints can only hold blueprint creators without inputs, so only inputless creators will be added to these lists
-        std::vector<named_blueprint<object>> named_objects;
-        std::vector<named_blueprint<control_bindings>> named_control_bindings;
+// named_blueprints can only hold blueprint creators without inputs, so only inputless creators will be added to these lists
+std::vector<named_blueprint<object>> named_objects;
+std::vector<named_blueprint<control_bindings>> named_control_bindings;
 
-        object aim9x();
-        object bullet(double diameter);
-        object bullet_20mm();
-        Eigen::Quaterniond random_quaternion();
-        object debris(double mass);
-        object debris_1kg();
-        control_bindings plane_control_bindings_wasd();
-        control_bindings plane_control_bindings_ijkl();
-        object f16_simple_forces_model();
-        object sun();
-        object axes(vector::worldspace position_, double scale);
-        object sphere(vector::worldspace position_, double scale);
-        object cube(vector::worldspace position_, double scale);
-        object collider_visual(vector::worldspace position_, collision::collider collider_);
-        void initialize_blueprints();
-    }
+object aim9x();
+object bullet(double diameter);
+object bullet_20mm();
+Eigen::Quaterniond random_quaternion();
+object debris(double mass);
+object debris_1kg();
+control_bindings plane_control_bindings_wasd();
+control_bindings plane_control_bindings_ijkl();
+object f16_simple_forces_model();
+object sun();
+object axes(vector::worldspace position_, double scale);
+object sphere(vector::worldspace position_, double scale);
+object cube(vector::worldspace position_, double scale);
+object collider_visual(vector::worldspace position_, collision::collider collider_);
+void initialize_blueprints();
+    
+}
+
 }
