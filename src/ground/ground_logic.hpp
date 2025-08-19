@@ -17,8 +17,8 @@ namespace ground {
         std::size_t operator()(const ground_info& g) const;
     };
 
-    const siv::PerlinNoise::seed_type seed;
-    const siv::PerlinNoise perlin;
+    const siv::PerlinNoise::seed_type seed = 123456u;
+    const siv::PerlinNoise perlin{ seed };
     std::vector<double> PERLIN_WIDTH;
     std::vector<double> PERLIN_HEIGHT_EFFECT;
     std::vector<double> PERLIN_COLOR_EFFECT;
@@ -35,6 +35,6 @@ namespace ground {
 
     vector::worldspace get_surface_normal(double x, double y, double epsilon);
     vector::worldspace get_surface_normal(double x, double y);
-    
+
     bool line_of_sight(vector::worldspace a, vector::worldspace& b);
 }

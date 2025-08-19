@@ -21,16 +21,6 @@ initialized at origin with 0 velocity, no name, and no control_bindings.
 namespace physics_object {
     namespace blueprints {
 
-        template <typename T>
-        struct named_blueprint {
-            T (*blueprint_creator)();
-            std::string name;
-        };
-
-        // named_blueprints can only hold blueprint creators without inputs, so only inputless creators will be added to these lists
-        std::vector<named_blueprint<object>> named_objects;
-        std::vector<named_blueprint<control_bindings>> named_control_bindings;
-
         object aim9x() {
             object o("aim9x");
             o.add_physical_structure(module::physical_structure(collision::collider(), models::aim9x));

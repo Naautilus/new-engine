@@ -7,43 +7,30 @@
 
 namespace ground {
 
-    struct ground_info {
-        double x, y, width;
-        int count;
-        bool operator==(const ground_info& g) const {
-            return
-                (x == g.x) &&
-                (y == g.y) &&
-                (width == g.width) &&
-                (count == g.count);
-        }
-    };
+    bool ground_info::operator==(const ground_info& g) const {
+        return
+            (x == g.x) &&
+            (y == g.y) &&
+            (width == g.width) &&
+            (count == g.count);
+    }
 
-    struct ground_info_hash {
-        std::size_t operator()(const ground_info& g) const {
-            std::hash<double> hash_fn;
-            std::size_t h1 = hash_fn(g.x);
-            std::size_t h2 = hash_fn(g.y);
-            std::size_t h3 = hash_fn(g.width);
-            std::size_t h4 = hash_fn(g.count);
-            std::size_t output = h1;
-            output ^= h2 + 0x9e3779b9 + (output<<6) + (output>>2);
-            output ^= h3 + 0x9e3779b9 + (output<<6) + (output>>2);
-            output ^= h4 + 0x9e3779b9 + (output<<6) + (output>>2);
-            return output;
-        }
-    };
+    std::size_t ground_info_hash::operator()(const ground_info& g) const {
+        std::hash<double> hash_fn;
+        std::size_t h1 = hash_fn(g.x);
+        std::size_t h2 = hash_fn(g.y);
+        std::size_t h3 = hash_fn(g.width);
+        std::size_t h4 = hash_fn(g.count);
+        std::size_t output = h1;
+        output ^= h2 + 0x9e3779b9 + (output<<6) + (output>>2);
+        output ^= h3 + 0x9e3779b9 + (output<<6) + (output>>2);
+        output ^= h4 + 0x9e3779b9 + (output<<6) + (output>>2);
+        return output;
+    }
 
-    const siv::PerlinNoise::seed_type seed = 123456u;
-    const siv::PerlinNoise perlin{ seed };
-    std::vector<double> PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
-    std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};
-    //std::vector<double> PERLIN_HEIGHT_EFFECT =  {     0,      0,     0,     0};
-    std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
-    std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
-    std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
-    std::mutex ground_altitude_averaged_mutex;
-    std::mutex ground_color_averaged_mutex;
+    PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
+    PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};
+    PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
 
     // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
     double get_ground_altitude(double x, double y) {

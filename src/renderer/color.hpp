@@ -1,7 +1,9 @@
 #pragma once
 
 struct color{
-	float r, g, b;
+	float r = 0;
+    float g = 0;
+    float b = 0;
 	bool operator==(const color& c) const;
 	bool operator<(const color& c) const;
     color& operator+=(const color& c);

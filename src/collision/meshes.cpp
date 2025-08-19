@@ -10,15 +10,15 @@ triangle normals are facing inwards or outwards.
 namespace collision {
 
     
-    vector::worldspace base0(-4.3,  -5,   0);
-    vector::worldspace base1(-4.3,   5,   0);
-    vector::worldspace base2( 8.5,   0,   0);
-    vector::worldspace base3( 2.1,   0,  -1);
+    base0 = vector::worldspace(-4.3,  -5,   0);
+    base1 = vector::worldspace(-4.3,   5,   0);
+    base2 = vector::worldspace( 8.5,   0,   0);
+    base3 = vector::worldspace( 2.1,   0,  -1);
     
-    vector::worldspace tail0(-1.3,   0,   0);
-    vector::worldspace tail1(-4.3,   0,  -1);
-    vector::worldspace tail2(-4.3,   0,   3);
-    vector::worldspace tail3( 2.8,   1,   0);
+    tail0 = vector::worldspace(-1.3,   0,   0);
+    tail1 = vector::worldspace(-4.3,   0,  -1);
+    tail2 = vector::worldspace(-4.3,   0,   3);
+    tail3 = vector::worldspace( 2.8,   1,   0);
     
     std::vector<triangle> simple_jet_collider = {
         triangle(base0, base1, base2),
