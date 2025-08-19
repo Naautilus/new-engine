@@ -2,6 +2,7 @@
 #include "simulation_state.hpp"
 #include "simulation_logic/initialize_physics_objects.hpp"
 #include "renderer/renderer_physics_object_connector.hpp"
+#include "globals/globals.hpp"
 
 // x forward, y right, z up
 
