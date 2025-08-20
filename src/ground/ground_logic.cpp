@@ -32,6 +32,7 @@ std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averag
 std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 std::mutex ground_altitude_averaged_mutex;
 std::mutex ground_color_averaged_mutex;
+double WATER_LEVEL = 5000;
 
 // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
 double get_ground_altitude(double x, double y) {
@@ -40,6 +41,7 @@ double get_ground_altitude(double x, double y) {
         double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_HEIGHT_EFFECT[i];
     }
+    if (sum < WATER_LEVEL) sum = WATER_LEVEL;
     sum -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y);
     return sum;
 }
@@ -51,6 +53,7 @@ color get_ground_color(double x, double y) {
         float noise = (float)perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_COLOR_EFFECT[i];
     }
+    if (get_ground_altitude(x, y) + constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y) < WATER_LEVEL + 1) return color{0, 0, 0.3};
     return color{0, sum, 0};
 }
 
