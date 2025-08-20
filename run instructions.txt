@@ -1,9 +1,23 @@
 [Note: These instructions are just notes for me, this is not meant to be a README, though you can use the commands below to compile source using MSYS2 MinGW64.]
 
-to compile, open MSYS2 MinGW64 in new-engine/build and enter:
-when files are added/removed: cmake -G "MinGW Makefiles" ..
-when files are changed: cmake --build .
+to compile, open MSYS2 MinGW64 in new-engine and enter the commands below.
 
+when at most files are changed:
+[run from /new_engine]
+cmake --build build_release
+cmake --build build_debug
+[or run from directory directly]
+cmake --build .
+
+when (re)creating the /build_[...]/ directory or changing CMakeLists.txt:
+[run from /new_engine]
+cmake -G "MinGW Makefiles" -B build_release -DCMAKE_BUILD_TYPE=Release ..
+cmake -G "MinGW Makefiles" -B build_debug -DCMAKE_BUILD_TYPE=Debug ..
+
+
+
+
+[run from /new_engine/build_[...]] for all the rest
 
 to use address sanitizer use drmemory.exe -- ./main.exe
 (replace the -g with -gdwarf-2 to have the right debugging format for line numbers to show)

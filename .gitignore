@@ -1,2 +1,4 @@
-build/*
-!build/main.exe
+build_release/*
+!build_release/main.exe
+build_debug/*
+!build_debug/main.exe
