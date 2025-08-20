@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable aggressive optimizations (match your g++ flags)
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -march=native -flto=12 -ffast-math -fomit-frame-pointer -fdiagnostics-color=always")
-set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -Og -march=native -flto=12 -ffast-math -fomit-frame-pointer -fdiagnostics-color=always -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -march=native -flto=12 -fomit-frame-pointer -fdiagnostics-color=always")
+set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -Og -march=native -flto=12 -fomit-frame-pointer -fdiagnostics-color=always -g")
 
 # add_compile_options(-Ofast -march=native -flto=12 -ffast-math -fomit-frame-pointer -fdiagnostics-color=always)
 

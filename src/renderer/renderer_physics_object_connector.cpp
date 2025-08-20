@@ -329,7 +329,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 				original_positions.push_back(o->physics_state.position);
 				original_rotations.push_back(o->physics_state.rotation);
 			}
-            /*
+            ///*
             if (module_->collider.type != collision::collider_type::model_collider) continue;
             mesh m = mesh(module_->collider, 0.8, 0, 0, 0.8);
             for (vertex& v : m.vertices) {
@@ -342,7 +342,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
             }
             apply_sunlight_to_model(m);
 		    models.push_back(m);
-            */
+            //*/
 		}
         if (o->mutex) o->mutex->unlock();
 	}

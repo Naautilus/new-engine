@@ -78,7 +78,7 @@ do a binary search to find how far two colliding objects must be
 separated before they are no longer colliding
 */
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-    const int ITERATIONS = 10;
+    const int ITERATIONS = 14;
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
 
@@ -159,7 +159,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
     */
     
-    /*
+    ///*
     globals::physics_objects_mutex.lock();
     for (double line_position = 2; line_position <= 5; line_position += 0.05) {
         auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1));
@@ -167,21 +167,25 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         globals::physics_objects.push_back(collision_visual);
     }
     globals::physics_objects_mutex.unlock();
-    */
-    /*
+    //*/
+    ///*
+    double OVERLAP_VISUAL_SCALE = 100;
     globals::physics_objects_mutex.lock();
     for (line_segment ls : collision_data_optional.value().debug_line_segments) {
         vector::worldspace start = ls.line_.origin;
         vector::worldspace end = ls.line_.point_along_line(ls.length);
         for (double fraction = 0; fraction <= 1; fraction += 0.025) {
             vector::worldspace line_position = (1-fraction) * start + (fraction) * end;
-            auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(line_position, 0.025));
+            auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(line_position, 0.0125 * OVERLAP_VISUAL_SCALE));
+            collision_visual->physics_state.position -= collision_point;
+            collision_visual->physics_state.position *= OVERLAP_VISUAL_SCALE;
+            collision_visual->physics_state.position += collision_point;
             collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
             globals::physics_objects.push_back(collision_visual);
         }
     }
     globals::physics_objects_mutex.unlock();
-    */
+    //*/
     //globals::pause_mutex.lock();
     //globals::pause_mutex.unlock();
     

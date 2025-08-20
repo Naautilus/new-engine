@@ -161,15 +161,22 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
         input_points.push_back(ls.line_.origin.y());
         input_points.push_back(ls.line_.origin.z());
 
-        input_points.push_back(ls.line_.origin.x() + ls.line_.point_along_line(ls.length).x());
-        input_points.push_back(ls.line_.origin.y() + ls.line_.point_along_line(ls.length).y());
-        input_points.push_back(ls.line_.origin.z() + ls.line_.point_along_line(ls.length).z());
+        input_points.push_back(ls.line_.point_along_line(ls.length).x());
+        input_points.push_back(ls.line_.point_along_line(ls.length).y());
+        input_points.push_back(ls.line_.point_along_line(ls.length).z());
 
         //std::cout << "ls.line_.direction.norm(): " << ls.line_.direction.norm() << "\n";
     }
     size_t dimensions = 3;
     size_t pca_output_count = 3; // max allowed for 3d
     math::pca(input_points, dimensions, pca_output, pca_output_count);
+
+    /*
+    for (int i = 0; i < pca_output.size(); i++) {
+        std::cout << "pca_output[" << i << "]: " << pca_output[i] << "\n";
+        if (i % 3 == 2) std::cout << "\n";
+    }
+    */
     
     vector::worldspace collision_plane_a = vector::worldspace( // the 1st vector of pca_output
         pca_output[0],

@@ -42,7 +42,7 @@ std::vector<triangle> generate_circle(double width) {
         ));
     }
     return output;
-} 
+}
 
 std::vector<triangle> generate_cylinder(double length, double width) {
     std::vector<triangle> output;
@@ -72,5 +72,34 @@ std::vector<triangle> generate_cylinder(double length, double width) {
     }
     return output;
 }
+
+std::vector<triangle> generate_rectangle(double size_x, double size_y, double grid_size) {
+    int grid_count_x = round(size_x / grid_size);
+    int grid_count_y = round(size_y / grid_size);
+    double grid_size_x = size_x / grid_count_x;
+    double grid_size_y = size_y / grid_count_y;
+
+    std::vector<triangle> output;
+    for (int x = 0; x < grid_count_x; x++) {
+        for (int y = 0; y < grid_count_y; y++) {
+            output.push_back(triangle(
+                vector::worldspace(x*grid_size_x, y*grid_size_y, 0),
+                vector::worldspace((x+1)*grid_size_x, y*grid_size_y, 0),
+                vector::worldspace(x*grid_size_x, (y+1)*grid_size_y, 0)
+            ));
+            output.push_back(triangle(
+                vector::worldspace((x+1)*grid_size_x, (y+1)*grid_size_y, 0),
+                vector::worldspace((x+1)*grid_size_x, y*grid_size_y, 0),
+                vector::worldspace(x*grid_size_x, (y+1)*grid_size_y, 0)
+            ));
+        }
+    }
+    for (triangle& t : output) {
+        for (vector::worldspace& point : t.points) {
+            point -= vector::worldspace(size_x / 2, size_y / 2, 0);
+        }
+    }
+    return output;
+} 
 
 }

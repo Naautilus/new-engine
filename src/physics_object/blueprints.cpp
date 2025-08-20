@@ -2,6 +2,7 @@
 #include "blueprints.hpp"
 #include "object.hpp"
 #include "../renderer/models.hpp"
+#include "../collision/meshes.hpp"
 
 /*
 physics_object_blueprints.cpp stores some commonly used physics objects so they don't
@@ -236,7 +237,7 @@ object cube(vector::worldspace position_, double scale = 1) {
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    //o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
+    o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
     return o;
 }
 
@@ -270,14 +271,14 @@ object runway(vector::worldspace position_, double heading, double length, doubl
     for (vertex& v : runway_surface_->vertices) {
         v.x *= length;
         v.y *= width;
-        v.z *= 10;
+        v.z *= 1;
     }
-    runway_surface_->subdivide(8);
 
     object o("runway");
     o.properties.fixed = true;
-    o.add_physical_structure(module::physical_structure(collision::collider(*runway_base_), runway_base_, vector::localspace(0,0,0), vector::localspace(1, 1, 1)));
-    o.add_physical_structure(module::physical_structure(collision::collider(*runway_surface_), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(), runway_base_, vector::localspace(0,0,-1), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::generate_rectangle(length, width, 20), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
+    o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;
     o.physics_state.rotation = Eigen::AngleAxisd(-heading * std::numbers::pi / 180, vector::worldspace::UnitZ());
     o.physics_state.mass = 1e100;

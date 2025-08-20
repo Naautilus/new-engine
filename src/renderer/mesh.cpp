@@ -58,7 +58,6 @@ namespace {
 }
 
 mesh mesh::subdivide(int count) {
-
     std::cout << "count: " << count << "\n";
     int halving_iterations = 0;
     count /= 2;
@@ -67,22 +66,24 @@ mesh mesh::subdivide(int count) {
         count /= 2;
         halving_iterations++;
     }
-    std::vector<std::vector<vertex>> subdivided_triangles;
+
     for (int half_iteration = 0; half_iteration < halving_iterations; half_iteration++) {
+        std::vector<std::vector<vertex>> subdivided_triangles;
         for (int i = 0; i < indices.size(); i += 3) {
             auto subdivided_triangles_ = _subdivide_triangle_in_half({vertices[i], vertices[i+1], vertices[i+2]});
             for (auto& triangle : subdivided_triangles_) subdivided_triangles.push_back(triangle);
         }
-    }
-    std::vector<vertex> vertices;
-    for (auto& triangle : subdivided_triangles) {
-        for (vertex& v : triangle) {
-            v.r = rand() / RAND_MAX;
-            v.g = rand() / RAND_MAX;
-            v.b = rand() / RAND_MAX;
-            vertices.push_back(v);
+        indices.clear();
+        vertices.clear();
+        int index = 0;
+        for (auto& triangle : subdivided_triangles) {
+            for (vertex& v : triangle) {
+                indices.push_back(index);
+                vertices.push_back(v);
+                index++;
+            }
         }
     }
-
+    
     return mesh(vertices);
 }
