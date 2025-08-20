@@ -255,6 +255,37 @@ object collider_visual(vector::worldspace position_, collision::collider collide
     return o;
 }
 
+object runway(vector::worldspace position_, double heading, double length, double width) {
+    auto runway_base_ = std::make_shared<mesh>(*models::runway_base);
+    for (vertex& v : runway_base_->vertices) {
+        int sign = (v.x > 0 ? 1 : -1);
+        v.x += 0.5 * (length - width) / width * sign;
+
+        v.x *= width;
+        v.y *= width;
+        v.z *= width;
+    }
+
+    auto runway_surface_ = std::make_shared<mesh>(*models::runway_surface);
+    for (vertex& v : runway_surface_->vertices) {
+        v.x *= length;
+        v.y *= width;
+        v.z *= 10;
+    }
+    runway_surface_->subdivide(8);
+
+    object o("runway");
+    o.properties.fixed = true;
+    o.add_physical_structure(module::physical_structure(collision::collider(*runway_base_), runway_base_, vector::localspace(0,0,0), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(*runway_surface_), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 1)));
+    o.physics_state.position = position_;
+    o.physics_state.rotation = Eigen::AngleAxisd(-heading * std::numbers::pi / 180, vector::worldspace::UnitZ());
+    o.physics_state.mass = 1e100;
+    o.physics_state.health = 1e100;
+    o.physics_state.rotational_inertia = vector::localspace(1, 1, 1) * 1e100;
+    return o;
+}
+
 void initialize_blueprints() {
     named_objects.push_back(named_blueprint<object>{aim9x, "aim9x"});
     named_objects.push_back(named_blueprint<object>{bullet_20mm, "bullet_20mm"});

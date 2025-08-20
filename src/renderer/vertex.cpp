@@ -14,3 +14,47 @@ bool vertex::operator==(const vertex& v) const {
 bool vertex::operator<(const vertex& v) const {
     return x < v.x;
 }
+vertex vertex::operator+(const vertex& v) const {
+    return vertex{
+        x + v.x,
+        y + v.y,
+        z + v.z,
+        r + v.r,
+        g + v.g,
+        b + v.b,
+        sun_factor + v.sun_factor
+    };
+}
+vertex vertex::operator-(const vertex& v) const {
+    return vertex{
+        x - v.x,
+        y - v.y,
+        z - v.z,
+        r - v.r,
+        g - v.g,
+        b - v.b,
+        sun_factor - v.sun_factor
+    };
+}
+vertex vertex::operator*(const double& d) const {
+    return vertex{
+        x * d,
+        y * d,
+        z * d,
+        r * d,
+        g * d,
+        b * d,
+        sun_factor * d
+    };
+}
+vertex vertex::operator/(const double& d) const {
+    return vertex{
+        x / d,
+        y / d,
+        z / d,
+        r / d,
+        g / d,
+        b / d,
+        sun_factor / d
+    };
+}

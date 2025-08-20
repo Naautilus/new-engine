@@ -23,6 +23,8 @@ extern std::shared_ptr<mesh> f16;
 extern std::shared_ptr<mesh> f16_wrapped;
 extern std::shared_ptr<mesh> sphere;
 extern std::shared_ptr<mesh> axes;
+extern std::shared_ptr<mesh> runway_base;
+extern std::shared_ptr<mesh> runway_surface;
 
 void initialize_models();
 

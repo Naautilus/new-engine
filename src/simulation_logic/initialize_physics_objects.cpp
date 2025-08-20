@@ -8,6 +8,8 @@ using json = nlohmann::json;
 
 void initialize_physics_objects(std::vector<std::string> args) {
 
+    globals::physics_objects.push_back(std::make_shared<physics_object::object>(physics_object::blueprints::runway(vector::worldspace(9500, -1000, 5300), 0, 100, 100)));
+
     auto scenario_index = std::find(args.begin(), args.end(), "-scenario");
     if (scenario_index == args.end()) {
         std::cerr << "error in void initialize_physics_objects(args): argument -scenario not found";

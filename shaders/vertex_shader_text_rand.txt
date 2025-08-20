@@ -10,7 +10,7 @@ void main()
 
     //color = vPos;
 
-    float color_ = 653*color.x + 1765*color.y + 34795*color.z;
+    float color_ = 653*color.x + 1765*color.y + 34795*color.z + 5*vPos.x + 4*vPos.y + 3*vPos.z;
 
     color_ += 1.14809425;
     color_ *= 34533;

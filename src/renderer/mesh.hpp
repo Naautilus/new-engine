@@ -14,4 +14,5 @@ struct mesh {
     mesh();
     mesh(std::vector<vertex>& vertices_);
     mesh(collision::collider& c, float r, float g, float b, float sun);
+    mesh subdivide(int count);
 };

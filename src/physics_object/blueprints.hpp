@@ -47,6 +47,7 @@ object axes(vector::worldspace position_, double scale);
 object sphere(vector::worldspace position_, double scale);
 object cube(vector::worldspace position_, double scale);
 object collider_visual(vector::worldspace position_, collision::collider collider_);
+object runway(vector::worldspace position_, double heading, double length, double width);
 void initialize_blueprints();
     
 }
