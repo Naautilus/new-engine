@@ -22,8 +22,8 @@ double _get_response_for_resetting_trim(float renderer_dt, controls::input& c, d
 
 double _get_response_for_response_type(float renderer_dt, controls::input& c, double response_) {
     if (c.response_type_ == controls::instant) return response_;
-    if (c.response_type_ == controls::trim_not_resetting) return response_ * renderer_dt;
-    if (c.response_type_ == controls::trim_resetting && response_ != 0) return response_ * renderer_dt;
+    if (c.response_type_ == controls::trim_not_resetting) return c.response_unmultiplied + response_ * renderer_dt;
+    if (c.response_type_ == controls::trim_resetting && response_ != 0) return c.response_unmultiplied + response_ * renderer_dt;
     return _get_response_for_resetting_trim(renderer_dt, c, response_);
 }
 
