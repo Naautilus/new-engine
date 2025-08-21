@@ -49,7 +49,7 @@ void step_physics_object_collisions() {
         for (int j_ = 0; j_ < i_; j_++) {
             auto i = functional_physics_objects_[i_];
             auto j = functional_physics_objects_[j_];
-            if ((i->physics_state.position - j->physics_state.position).squaredNorm() > 100*100) continue;
+            //if ((i->physics_state.position - j->physics_state.position).squaredNorm() > 100*100) continue;
             for (std::shared_ptr<module::module>& i_module : i->properties.modules) {
                 for (std::shared_ptr<module::module>& j_module : j->properties.modules) {
                     if (i_module->collider.check_collision(j_module->collider)) {

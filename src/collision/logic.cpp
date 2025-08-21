@@ -78,16 +78,18 @@ do a binary search to find how far two colliding objects must be
 separated before they are no longer colliding
 */
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-    const int ITERATIONS = 14;
+    const int ITERATIONS = 8;
+    const double EXPONENT = 2; // to get more precision near less movement
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
 
     vector::worldspace original_position_a = a.physics_state.position;
     vector::worldspace original_position_b = b.physics_state.position;
     double max_size = sqrt(fmax(a_collider.bounding_box_width_squared, b_collider.bounding_box_width_squared));
-    vector::worldspace max_displacement = max_size * (original_position_a - original_position_b).normalized();
-    //if (direction.dot(original_position_a - original_position_b) < 0) direction *= -1;
-    //vector::worldspace max_displacement = max_size * (direction).normalized();
+    vector::worldspace max_displacement;
+    if (direction.dot(original_position_a - original_position_b) < 0) direction *= -1;
+    max_displacement = max_size * (direction).normalized();
+    //std::cout << "max_displacement: " << max_displacement.str() << "\n";
 
     double fraction = 0.5;
     double fraction_change = 0.25;
@@ -95,8 +97,8 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
 
     for (int i = 0; i < ITERATIONS; i++) {
         move_colliding_physics_objects(
-            original_position_a + fraction *  max_displacement * (b.physics_state.mass / total_mass),
-            original_position_b + fraction * -max_displacement * (a.physics_state.mass / total_mass),
+            original_position_a + pow(fraction, EXPONENT) *  max_displacement * (b.physics_state.mass / total_mass),
+            original_position_b + pow(fraction, EXPONENT) * -max_displacement * (a.physics_state.mass / total_mass),
             a_collider, b_collider, a, b
         );
         bool colliding = a_collider.check_collision(b_collider);
@@ -107,10 +109,12 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
     }
 
     move_colliding_physics_objects(
-        original_position_a + fraction *  max_displacement * (b.physics_state.mass / total_mass),
-        original_position_b + fraction * -max_displacement * (a.physics_state.mass / total_mass),
+        original_position_a + pow(fraction, EXPONENT) *  max_displacement * (b.physics_state.mass / total_mass),
+        original_position_b + pow(fraction, EXPONENT) * -max_displacement * (a.physics_state.mass / total_mass),
         a_collider, b_collider, a, b
     );
+
+    //std::cout << "fraction: " << fraction << "\n";
 }
 
 void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
@@ -168,8 +172,8 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     }
     globals::physics_objects_mutex.unlock();
     //*/
-    ///*
-    double OVERLAP_VISUAL_SCALE = 100;
+    /*
+    double OVERLAP_VISUAL_SCALE = 10;
     globals::physics_objects_mutex.lock();
     for (line_segment ls : collision_data_optional.value().debug_line_segments) {
         vector::worldspace start = ls.line_.origin;
@@ -185,7 +189,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         }
     }
     globals::physics_objects_mutex.unlock();
-    //*/
+    */
     //globals::pause_mutex.lock();
     //globals::pause_mutex.unlock();
     
@@ -252,8 +256,8 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     damage = fmin(damage, maximum_health);
     //damage *= 0.1;
 
-    a.physics_state.health -= damage;
-    b.physics_state.health -= damage;
+    //a.physics_state.health -= damage;
+    //b.physics_state.health -= damage;
 
     if (damage != 0) std::cout << "damage: " << damage << "\n";
 
@@ -345,12 +349,12 @@ void process_ground_collision(physics_object::object& o) {
         if (!m->collider.type == model_collider) continue;
         collider ground_collider = collider_representing_ground(m->collider);
 
-        /*
+        ///*
         globals::physics_objects_mutex.lock();
         auto collider_visual = std::make_shared<physics_object::object>(physics_object::blueprints::collider_visual(ground_object.physics_state.position, ground_collider));
         globals::physics_objects.push_back(collider_visual);
         globals::physics_objects_mutex.unlock();
-        */
+        //*/
 
         if (!m->collider.check_collision(ground_collider)) continue;
         //std::cout << "ground collision\n";

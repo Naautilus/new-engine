@@ -237,7 +237,7 @@ object cube(vector::worldspace position_, double scale = 1) {
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
+    o.properties.ticks_lifetime_remaining = round(10.0 / constants::DELTA_T); //2;
     return o;
 }
 
@@ -257,14 +257,16 @@ object collider_visual(vector::worldspace position_, collision::collider collide
 }
 
 object runway(vector::worldspace position_, double heading, double length, double width) {
+    double SURFACE_SEPARATION_FROM_BASE = 0.1;
+    double BASE_WIDTH_BUFFER = 1.0;
     auto runway_base_ = std::make_shared<mesh>(*models::runway_base);
     for (vertex& v : runway_base_->vertices) {
         int sign = (v.x > 0 ? 1 : -1);
-        v.x += 0.5 * (length - width) / width * sign;
+        v.x += 0.5 * (length - (width - BASE_WIDTH_BUFFER)) / (width - BASE_WIDTH_BUFFER) * sign;
 
-        v.x *= width;
-        v.y *= width;
-        v.z *= width;
+        v.x *= (width - BASE_WIDTH_BUFFER);
+        v.y *= (width - BASE_WIDTH_BUFFER);
+        v.z *= (width - BASE_WIDTH_BUFFER);
     }
 
     auto runway_surface_ = std::make_shared<mesh>(*models::runway_surface);
@@ -276,8 +278,8 @@ object runway(vector::worldspace position_, double heading, double length, doubl
 
     object o("runway");
     o.properties.fixed = true;
-    o.add_physical_structure(module::physical_structure(collision::collider(), runway_base_, vector::localspace(0,0,-1), vector::localspace(1, 1, 1)));
-    o.add_physical_structure(module::physical_structure(collision::generate_rectangle(length, width, 20), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(), runway_base_, vector::localspace(0,0,-SURFACE_SEPARATION_FROM_BASE), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(collision::generate_rectangle(length, width, 20)), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
     o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;
     o.physics_state.rotation = Eigen::AngleAxisd(-heading * std::numbers::pi / 180, vector::worldspace::UnitZ());

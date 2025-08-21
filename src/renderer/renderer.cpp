@@ -230,7 +230,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         vec3 center;
         vec3_add(center, camera_properties_.camera_position, camera_properties_.camera_z_direction);
         mat4x4_look_at(v,eye,center, camera_properties_.camera_y_direction);
-        mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, 2, 1e10); //FOV of 90°
+        mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, 2, 1e9); //FOV of 90°
         //mat4x4_ortho(p, -100.f, 100.f, -100.f, 100.f, -10000.f, 10000.f);
         mat4x4_mul(vp, p, v);
         glUseProgram(program);

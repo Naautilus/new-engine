@@ -149,6 +149,8 @@ std::optional<vector::worldspace> collider::get_collision_position_model_to_mode
     return line_segment_position_sum / (2 * line_segment_length_sum);
 }
 std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
+    double MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS = 1.0;
+
     //std::cout << "get_collision_normal_model_to_model: ";
     std::vector<float> input_points;
     std::vector<float> pca_output;
@@ -188,13 +190,23 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
         pca_output[4],
         pca_output[5]
     );
+    //std::cout << "fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())): " << fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) << "\n";
+    //std::cout << "cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS): " << cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS * std::numbers::pi / 180) << "\n";
+    if (fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) > cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS * std::numbers::pi / 180)) {
+        //std::cout << "fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) > cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS)\n";
+        return std::nullopt;
+    }
     vector::worldspace collision_normal = collision_plane_a.cross(collision_plane_b);
     if (collision_normal.squaredNorm() == 0) {
         //std::cout << "collision_normal magnitude is 0, so a normal cannot be found\n";
         return std::nullopt;
     }
     collision_normal.normalize();
-    //std::cout << "collision_normal: " << collision_normal.str() << "\n";
+    /*
+    std::cout << "pca_1: " << collision_plane_a.str() << "\n";
+    std::cout << "pca_2: " << collision_plane_b.str() << "\n";
+    std::cout << "pca_1 x pca_2 (collision_normal): " << collision_normal.str() << "\n";
+    */
     //globals::timer_.record("collision data normal");
     return collision_normal;
 }
