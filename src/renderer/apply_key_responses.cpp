@@ -3,7 +3,7 @@
 
 namespace {
 
-double _get_response_for_resetting_trim(float renderer_dt, controls::input& c, double response_) {
+double _get_response_for_resetting_trim(double renderer_dt, controls::input& c, double response_) {
     int search_direction = c.response_unmultiplied > 0 ? 1 : -1;
 
     double best_key_candidate_response_speed = 0;
@@ -20,14 +20,14 @@ double _get_response_for_resetting_trim(float renderer_dt, controls::input& c, d
     return output;
 }
 
-double _get_response_for_response_type(float renderer_dt, controls::input& c, double response_) {
+double _get_response_for_response_type(double renderer_dt, controls::input& c, double response_) {
     if (c.response_type_ == controls::instant) return response_;
     if (c.response_type_ == controls::trim_not_resetting) return c.response_unmultiplied + response_ * renderer_dt;
     if (c.response_type_ == controls::trim_resetting && response_ != 0) return c.response_unmultiplied + response_ * renderer_dt;
     return _get_response_for_resetting_trim(renderer_dt, c, response_);
 }
 
-void _process_control_input(GLFWwindow* window, float renderer_dt, controls::input& c, physics_object::object& o) {
+void _process_control_input(GLFWwindow* window, double renderer_dt, controls::input& c, physics_object::object& o) {
     if (c.key_inputs.size() == 0) return;
 
     double response_ = 0;
@@ -47,7 +47,7 @@ void _process_control_input(GLFWwindow* window, float renderer_dt, controls::inp
 /*
 NOTE: it could be useful to track this in the physics part of the engine and apply responses there for better between-frame scaling
 */
-void renderer::apply_key_responses(GLFWwindow* window, float renderer_dt) {
+void renderer::apply_key_responses(GLFWwindow* window, double renderer_dt) {
     if (globals::paused) return;
 
     globals::physics_objects_mutex.lock();

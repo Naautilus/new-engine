@@ -55,7 +55,7 @@ namespace math {
         return { mat.data(), mat.data() + mat.size() };
     }
 
-    inline Eigen::MatrixXf convertStdVectorToEigenMatrix(const std::vector<float>& data_in, const size_t num_dims)
+    inline Eigen::MatrixXd convertStdVectorToEigenMatrix(const std::vector<double>& data_in, const size_t num_dims)
     {
         const int64_t num_row = data_in.size() / num_dims;
         const int64_t num_col = num_dims;
@@ -63,9 +63,9 @@ namespace math {
         if (num_row > std::numeric_limits<int64_t>::max())
             std::cerr << "PCA::convertStdVectorToEigenMatrix can only handle data with up to std::numeric_limits<int64_t>::max() points" << std::endl;
 
-        // convert std vector to Eigen MatrixXf
-        // each row in MatrixXf corresponds to one data point
-        Eigen::MatrixXf data(num_row, num_col);     	// num_rows (data points), num_cols (attributes)
+        // convert std vector to Eigen MatrixXd
+        // each row in MatrixXd corresponds to one data point
+        Eigen::MatrixXd data(num_row, num_col);     	// num_rows (data points), num_cols (attributes)
 
         // copy data from vector to matrix
 #ifndef NDEBUG
@@ -81,7 +81,7 @@ namespace math {
 
         // this would be more concise but only works if data_in is not const
         // Also, I didn't test this
-        //Eigen::MatrixXf data = Eigen::Map<Eigen::MatrixXf>(&data_in[0], num_row, num_col);
+        //Eigen::MatrixXd data = Eigen::Map<Eigen::MatrixXd>(&data_in[0], num_row, num_col);
 
         return data;
     }
@@ -104,30 +104,30 @@ namespace math {
         return idx;
     }
 
-    inline Eigen::MatrixXf colwiseZeroMean(const Eigen::MatrixXf& mat) {
+    inline Eigen::MatrixXd colwiseZeroMean(const Eigen::MatrixXd& mat) {
         return mat.rowwise() - mat.colwise().mean();
     }
 
     // Sign correction to ensure deterministic output:
     // flip each dimension such that the max abs value is positive
     // Is similar to svd_flip from scikit-learn, https://github.com/scikit-learn/scikit-learn
-    inline Eigen::MatrixXf standardOrientation(const Eigen::MatrixXf& mat)
+    inline Eigen::MatrixXd standardOrientation(const Eigen::MatrixXd& mat)
     {
         // columnswise: which row has the max abs value
         // then get the sign of the max abs value
-        Eigen::VectorXf signs(mat.cols());
-        Eigen::VectorXf::Index rowID;
+        Eigen::VectorXd signs(mat.cols());
+        Eigen::VectorXd::Index rowID;
         for (uint32_t colID = 0; colID < mat.cols(); colID++)
         {
             mat.col(colID).cwiseAbs().maxCoeff(&rowID);
-            signs[colID] = (mat(rowID, colID) >= 0) ? 1.0f : -1.0f;
+            signs[colID] = (mat(rowID, colID) >= 0) ? 1.0 : -1.0;
         }
 
         // flip columns
         return mat.array().rowwise() * signs.transpose().array();
     }
 
-    inline void _normToCol(const Eigen::VectorXf& normFacs, Eigen::MatrixXf& mat)
+    inline void _normToCol(const Eigen::VectorXd& normFacs, Eigen::MatrixXd& mat)
     {
         const int32_t num_row = static_cast<int32_t>(mat.rows());
         const int32_t num_col = static_cast<int32_t>(mat.cols());
@@ -139,7 +139,7 @@ namespace math {
         // there is probably a more elegant way of doing this
         for (int32_t col = 0; col < num_col; col++)
         {
-            if (normFacs[col] < 0.0001f) continue;
+            if (normFacs[col] < 0.0001) continue;
 
 #ifndef NDEBUG
 #pragma omp parallel for
@@ -153,13 +153,13 @@ namespace math {
     }
 
     // https://en.wikipedia.org/wiki/Feature_scaling#Mean_normalization
-    inline Eigen::MatrixXf meanNormalization(const Eigen::MatrixXf& mat)
+    inline Eigen::MatrixXd meanNormalization(const Eigen::MatrixXd& mat)
     {
         // center around mean per attribute
-        Eigen::MatrixXf mat_norm = colwiseZeroMean(mat);
+        Eigen::MatrixXd mat_norm = colwiseZeroMean(mat);
 
         // compute with (max - min) factors
-        Eigen::VectorXf normFacs = mat.colwise().maxCoeff() - mat.colwise().minCoeff();
+        Eigen::VectorXd normFacs = mat.colwise().maxCoeff() - mat.colwise().minCoeff();
 
         // norm with (max - min) factors:
         _normToCol(normFacs, mat_norm);
@@ -169,14 +169,14 @@ namespace math {
 
     // map each column to [0,1]
     // https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)
-    inline Eigen::MatrixXf minMaxNormalization(const Eigen::MatrixXf& mat)
+    inline Eigen::MatrixXd minMaxNormalization(const Eigen::MatrixXd& mat)
     {
         // compute norm factors
-        Eigen::VectorXf minVals = mat.colwise().minCoeff();
-        Eigen::VectorXf normFacs = mat.colwise().maxCoeff().transpose() - minVals;
+        Eigen::VectorXd minVals = mat.colwise().minCoeff();
+        Eigen::VectorXd normFacs = mat.colwise().maxCoeff().transpose() - minVals;
 
         // shift all values
-        Eigen::MatrixXf mat_norm = mat.rowwise() - minVals.transpose();
+        Eigen::MatrixXd mat_norm = mat.rowwise() - minVals.transpose();
 
         // norm
         _normToCol(normFacs, mat_norm);
@@ -209,12 +209,12 @@ namespace math {
     }
 
     // data should be have column-wise zero empirical mean 
-    inline Eigen::MatrixXf pcaSVD(const Eigen::MatrixXf& data, const size_t num_comp)
+    inline Eigen::MatrixXd pcaSVD(const Eigen::MatrixXd& data, const size_t num_comp)
     {
         // compute svd
         throw (std::runtime_error("I, Naautilus, removed this because it was deprecated and I don't know how to fix it; use COV"));
         /*
-        Eigen::BDCSVD<Eigen::MatrixXf> svd(data, Eigen::ComputeThinV);
+        Eigen::BDCSVD<Eigen::MatrixXd> svd(data, Eigen::ComputeThinV);
 
         if (svd.info() != Eigen::Success)
             throw (std::runtime_error("pcaSVD failed. Eigen::ComputationInfo " + std::to_string(static_cast<int32_t>(svd.info()))));
@@ -224,15 +224,15 @@ namespace math {
     }
 
     // data should be have column-wise zero empirical mean 
-    inline Eigen::MatrixXf pcaCovMat(const Eigen::MatrixXf& data, const size_t num_comp)
+    inline Eigen::MatrixXd pcaCovMat(const Eigen::MatrixXd& data, const size_t num_comp)
     {
         // covariance matrix
-        Eigen::MatrixXf covMat = data.transpose() * data;
+        Eigen::MatrixXd covMat = data.transpose() * data;
 
         // covariance matrices are symmetric, so use appropriate solver
-        Eigen::SelfAdjointEigenSolver <Eigen::MatrixXf> es(covMat);
-        Eigen::VectorXf eigenvalues = es.eigenvalues();
-        Eigen::MatrixXf eigenvectors = es.eigenvectors();
+        Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> es(covMat);
+        Eigen::VectorXd eigenvalues = es.eigenvalues();
+        Eigen::MatrixXd eigenvectors = es.eigenvectors();
 
         if (es.info() != Eigen::Success)
             throw (std::runtime_error("pcaCovMat failed. Eigen::ComputationInfo " + std::to_string(static_cast<int32_t>(es.info()))));
@@ -250,12 +250,12 @@ namespace math {
         return eigenvectors(Eigen::indexing::all, Eigen::seq(0, num_comp - 1));
     }
 
-    inline Eigen::MatrixXf pcaTransform(const Eigen::MatrixXf& data, const Eigen::MatrixXf& principal_components)
+    inline Eigen::MatrixXd pcaTransform(const Eigen::MatrixXd& data, const Eigen::MatrixXd& principal_components)
     {
         return data * principal_components;
     }
 
-    inline std::optional<Eigen::MatrixXf> pca(const std::vector<float>& data_in, const size_t num_dims, std::vector<float>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
+    inline std::optional<Eigen::MatrixXd> pca(const std::vector<double>& data_in, const size_t num_dims, std::vector<double>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
     {
         // do not transform if data is 1d
         if (num_dims <= 1)
@@ -266,8 +266,8 @@ namespace math {
             return std::nullopt;
         }
 
-        // convert std vector to Eigen MatrixXf
-        Eigen::MatrixXf data = convertStdVectorToEigenMatrix(data_in, num_dims);
+        // convert std vector to Eigen MatrixXd
+        Eigen::MatrixXd data = convertStdVectorToEigenMatrix(data_in, num_dims);
 
         // check number of component against number of rows and columns
         const size_t num_row = data.rows();
@@ -279,7 +279,7 @@ namespace math {
         assert(num_col == num_dims);
 
         // choose which data normalization to use
-        auto norm_data = [&](const Eigen::MatrixXf& dat) {
+        auto norm_data = [&](const Eigen::MatrixXd& dat) {
             if (norm == DATA_NORM::MINMAX)
                 return minMaxNormalization(dat);
             else if (norm == DATA_NORM::MEAN)
@@ -289,7 +289,7 @@ namespace math {
             };
 
         // choose which pcaSVD algorithm to use 
-        auto pca_alg = [&](const Eigen::MatrixXf& dat) {
+        auto pca_alg = [&](const Eigen::MatrixXd& dat) {
             if (algorithm == PCA_ALG::SVD)
                 return pcaSVD(dat, _num_comp);
             else // algorithm == PCA_ALG::COV
@@ -297,24 +297,24 @@ namespace math {
             };
 
         // prep data: normalization
-        Eigen::MatrixXf data_normed = norm_data(data);
+        Eigen::MatrixXd data_normed = norm_data(data);
 
         // Center the values of each variable in the dataset on 0 by subtracting the mean of the variable's observed values from each of those values
         data_normed = colwiseZeroMean(data_normed);
 
         // compute pcaSVD, get first num_comp components
-        Eigen::MatrixXf principal_components;
+        Eigen::MatrixXd principal_components;
         try {
             principal_components = pca_alg(data_normed);
         }
         catch (const std::runtime_error& ex) {
             std::cout << "PCA could not be computed: " << ex.what() << std::endl;
-            pca_out = std::vector(data.rows() * num_comp, 0.0f);
+            pca_out = std::vector(data.rows() * num_comp, 0.0);
             return std::nullopt;
         }
 
         // project data, compute pca components and
-        Eigen::MatrixXf data_transformed = pcaTransform(data_normed, principal_components);
+        Eigen::MatrixXd data_transformed = pcaTransform(data_normed, principal_components);
 
         // enforce same orientation (flip axis) for all algorithms 
         if (stdOrientation)

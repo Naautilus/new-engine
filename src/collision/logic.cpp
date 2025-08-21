@@ -77,20 +77,11 @@ void move_colliding_physics_objects(vector::worldspace position_a, vector::world
 do a binary search to find how far two colliding objects must be
 separated before they are no longer colliding
 */
-void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-    const int ITERATIONS = 8;
-    const double EXPONENT = 2; // to get more precision near less movement
-
-    double total_mass = a.physics_state.mass + b.physics_state.mass;
-
-    vector::worldspace original_position_a = a.physics_state.position;
-    vector::worldspace original_position_b = b.physics_state.position;
-    double max_size = sqrt(fmax(a_collider.bounding_box_width_squared, b_collider.bounding_box_width_squared));
-    vector::worldspace max_displacement;
-    if (direction.dot(original_position_a - original_position_b) < 0) direction *= -1;
-    max_displacement = max_size * (direction).normalized();
-    //std::cout << "max_displacement: " << max_displacement.str() << "\n";
-
+double _separate_colliding_physics_objects_sub(vector::worldspace max_displacement, double total_mass,
+                                               const int ITERATIONS, const double EXPONENT,
+                                               vector::worldspace original_position_a, vector::worldspace original_position_b,
+                                               collision::collider& a_collider, collision::collider& b_collider, 
+                                               physics_object::object& a, physics_object::object& b) {
     double fraction = 0.5;
     double fraction_change = 0.25;
     bool colliding = true;
@@ -108,7 +99,32 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
         fraction_change /= 2;
     }
 
-    fraction += fraction_change * 10;
+    fraction += fraction_change;
+    return fraction;
+}
+
+void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
+    const int ITERATIONS = 6;
+    const double EXPONENT = 2; // to get more precision near less movement
+
+    double total_mass = a.physics_state.mass + b.physics_state.mass;
+
+    vector::worldspace original_position_a = a.physics_state.position;
+    vector::worldspace original_position_b = b.physics_state.position;
+    double max_size = sqrt(fmax(a_collider.bounding_box_width_squared, b_collider.bounding_box_width_squared));
+    vector::worldspace max_displacement;
+    //if (direction.dot(original_position_a - original_position_b) < 0) direction *= -1;
+    max_displacement = max_size * (direction).normalized();
+    //std::cout << "max_displacement: " << max_displacement.str() << "\n";
+    
+    double fraction_direction_a = _separate_colliding_physics_objects_sub( max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
+    double fraction_direction_b = _separate_colliding_physics_objects_sub(-max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
+
+    printf("fraction_direction_a: %f\n", fraction_direction_a);
+    printf("fraction_direction_b: %f\n", fraction_direction_b);
+
+    if (fraction_direction_b < fraction_direction_a) max_displacement *= -1;
+    double fraction = fmin(fraction_direction_a, fraction_direction_b);
 
     move_colliding_physics_objects(
         original_position_a + pow(fraction, EXPONENT) *  max_displacement * (b.physics_state.mass / total_mass),
@@ -116,7 +132,6 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
         a_collider, b_collider, a, b
     );
 
-    //std::cout << "fraction: " << fraction << "\n";
 }
 
 void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {

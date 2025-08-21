@@ -32,9 +32,9 @@ model rendering and the mutex needs to be unlocked later
 std::shared_ptr<physics_object::object> camera_track_physics_object(camera_properties& camera_properties_);
 
 vector::worldspace get_triangle_normal(int i, mesh& model);
-float three_point_interpolate(double value_at_neg1, double value_at0, double value_at_pos1, double x);
-float linear_interpolate(double value_at0, double value_at1, double x);
-float smoothstep(double edge0, double edge1, double x);
+double three_point_interpolate(double value_at_neg1, double value_at0, double value_at_pos1, double x);
+double linear_interpolate(double value_at0, double value_at1, double x);
+double smoothstep(double edge0, double edge1, double x);
 void set_vertex_colors_by_brightness(vertex& v, double brightness_unfiltered);
 void apply_sunlight_to_model(mesh& model);
 void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vector::worldspace last_camera_position, vector::worldspace last_camera_target_velocity);

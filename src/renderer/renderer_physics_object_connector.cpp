@@ -206,7 +206,7 @@ vector::worldspace get_triangle_normal(int i, mesh& model) {
 	return normal;
 }
 
-float three_point_interpolate(double value_at_neg1, double value_at0, double value_at_pos1, double x) {
+double three_point_interpolate(double value_at_neg1, double value_at0, double value_at_pos1, double x) {
 	if (x > 0) {
 		return (1-x)*value_at0 + x*value_at_pos1;
 	} else {
@@ -214,11 +214,11 @@ float three_point_interpolate(double value_at_neg1, double value_at0, double val
 	}
 }
 
-float linear_interpolate(double value_at0, double value_at1, double x) {
+double linear_interpolate(double value_at0, double value_at1, double x) {
 	return (1-x)*value_at0 + x*value_at1;
 }
 
-float smoothstep(double edge0, double edge1, double x) {
+double smoothstep(double edge0, double edge1, double x) {
 		// scale, bias and saturate x to 0..1 range
 		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
 		// evaluate polynomial

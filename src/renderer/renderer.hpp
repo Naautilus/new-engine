@@ -23,8 +23,8 @@ struct renderer {
 	static bool key_pressed(GLFWwindow* window, int key);
     static void update_free_camera_state(GLFWwindow* window);
     static void update_pause_state(GLFWwindow* window);
-    static void apply_key_responses(GLFWwindow* window, float renderer_dt);
-    static void manual_camera_movement(GLFWwindow* window, float renderer_dt, camera_properties& camera_properties_);
+    static void apply_key_responses(GLFWwindow* window, double renderer_dt);
+    static void manual_camera_movement(GLFWwindow* window, double renderer_dt, camera_properties& camera_properties_);
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void set_vertices(std::vector<vertex>& new_vertices, GLuint& vertex_buffer);
 	static void set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& models);

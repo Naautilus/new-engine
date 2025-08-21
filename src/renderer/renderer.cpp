@@ -51,7 +51,7 @@ void renderer::update_pause_state(GLFWwindow* window) {
     else globals::pause_mutex.unlock();
 }
 
-void renderer::manual_camera_movement(GLFWwindow* window, float renderer_dt, camera_properties& camera_properties_) {
+void renderer::manual_camera_movement(GLFWwindow* window, double renderer_dt, camera_properties& camera_properties_) {
     const double TRANSLATION_SPEED_WALK = 20;
     const double TRANSLATION_SPEED_SPRINT = 100;
     const double ROTATION_SPEED = 1;
@@ -133,8 +133,8 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
     GLuint vertex_shader, fragment_shader, program;
     GLint mvp_location, vpos_location, vcol_location;
     GLuint vertex_buffer;
-    float renderer_dt = 0;
-    float time = 0;
+    double renderer_dt = 0;
+    double time = 0;
     std::vector<mesh> models;
     std::vector<mesh> ground;
     bool new_ground_ready;
@@ -210,8 +210,8 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
     // rgb(72, 116, 163)
     glClearColor(globals::current_simulation_state->sky_r/255.0, globals::current_simulation_state->sky_g/255.0, globals::current_simulation_state->sky_b/255.0, 1.0f);
-    float old_time = glfwGetTime();
-    float current_time = glfwGetTime();
+    double old_time = glfwGetTime();
+    double current_time = glfwGetTime();
     int frame_count = 0;
     while (!glfwWindowShouldClose(window)) {
 
@@ -220,7 +220,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         set_vertices_by_models(vertex_buffer, models);
 
         // initialize variables
-        float ratio;
+        double ratio;
         int width, height;
         mat4x4 m, v, p, vp, mvp;
 
@@ -253,7 +253,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         else manual_camera_movement(window, renderer_dt, camera_properties_);
 
         glfwGetFramebufferSize(window, &width, &height);
-        ratio = width / (float) height;
+        ratio = width / (double) height;
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -265,7 +265,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         time += renderer_dt;
         glUniform1f(shader_time, time);
         if (frame_count % 100 == 0) {
-            float fps = 1/renderer_dt;
+            double fps = 1/renderer_dt;
             //std::cout << "fps: " << fps << "\n";
         }
     }

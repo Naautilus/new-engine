@@ -146,7 +146,7 @@ int triangle::point_is_ahead_of_normal(vector::worldspace input_point) {
     return 0; // if the dot product of the triangle normal and the vector from the triangle's point 0 to the input point is positive, that point is in front of the triangle's plane
 }
 double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; taken from https://en.wikipedia.org/wiki/m%c3%b6ller%e2%80%93_trumbore_intersection_algorithm#definitions and modified
-    constexpr float epsilon = std::numeric_limits<double>::epsilon();
+    constexpr double epsilon = std::numeric_limits<double>::epsilon();
 
     vector::worldspace edge1 = points[1] - points[0];
     vector::worldspace edge2 = points[2] - points[0];

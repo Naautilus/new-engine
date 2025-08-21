@@ -149,11 +149,10 @@ std::optional<vector::worldspace> collider::get_collision_position_model_to_mode
     return line_segment_position_sum / (2 * line_segment_length_sum);
 }
 std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
-    double MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS = 1.0;
 
     //std::cout << "get_collision_normal_model_to_model: ";
-    std::vector<float> input_points = {};
-    std::vector<float> points_in_pca_space = {};
+    std::vector<double> input_points = {};
+    std::vector<double> points_in_pca_space = {};
     if (intersections.size() < 2) {
         //std::cout << "intersections.size() = " << intersections.size() << " < 2, so a normal cannot be found\n";
         return std::nullopt;
@@ -171,11 +170,11 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
     }
     size_t dimensions = 3;
     size_t pca_output_count = 3; // max allowed for 3d
-    std::optional<Eigen::MatrixXf> principal_components_optional = math::pca(input_points, dimensions, points_in_pca_space, pca_output_count);
+    std::optional<Eigen::MatrixXd> principal_components_optional = math::pca(input_points, dimensions, points_in_pca_space, pca_output_count);
     
     if (!principal_components_optional) return std::nullopt;
 
-    Eigen::MatrixXf principal_components = principal_components_optional.value();
+    Eigen::MatrixXd principal_components = principal_components_optional.value();
 
     /*
     for (int i = 0; i < points_in_pca_space.size(); i += 3) {
@@ -184,7 +183,7 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
     }
     */
 
-    std::cout << "principal_components:\n" << principal_components << "\ndone\n";
+    //std::cout << "principal_components:\n" << principal_components << "\ndone\n";
 
     vector::worldspace collision_plane_a = principal_components.cast<double>().col(0);
     vector::worldspace collision_plane_b = principal_components.cast<double>().col(1);
