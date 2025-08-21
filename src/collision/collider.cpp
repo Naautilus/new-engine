@@ -152,8 +152,8 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
     double MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS = 1.0;
 
     //std::cout << "get_collision_normal_model_to_model: ";
-    std::vector<float> input_points;
-    std::vector<float> pca_output;
+    std::vector<float> input_points = {};
+    std::vector<float> points_in_pca_space = {};
     if (intersections.size() < 2) {
         //std::cout << "intersections.size() = " << intersections.size() << " < 2, so a normal cannot be found\n";
         return std::nullopt;
@@ -171,41 +171,34 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
     }
     size_t dimensions = 3;
     size_t pca_output_count = 3; // max allowed for 3d
-    math::pca(input_points, dimensions, pca_output, pca_output_count);
+    std::optional<Eigen::MatrixXf> principal_components_optional = math::pca(input_points, dimensions, points_in_pca_space, pca_output_count);
+    
+    if (!principal_components_optional) return std::nullopt;
+
+    Eigen::MatrixXf principal_components = principal_components_optional.value();
 
     /*
-    for (int i = 0; i < pca_output.size(); i++) {
-        std::cout << "pca_output[" << i << "]: " << pca_output[i] << "\n";
-        if (i % 3 == 2) std::cout << "\n";
+    for (int i = 0; i < points_in_pca_space.size(); i += 3) {
+        vector::worldspace pca_component = {points_in_pca_space[i], points_in_pca_space[i+1], points_in_pca_space[i+2]};
+        printf("points_in_pca_space[%i]: %s (magnitude %e)\n", i/3, pca_component.str().c_str(), pca_component.norm());
     }
     */
-    
-    vector::worldspace collision_plane_a = vector::worldspace( // the 1st vector of pca_output
-        pca_output[0],
-        pca_output[1],
-        pca_output[2]
-    );
-    vector::worldspace collision_plane_b = vector::worldspace( // the 2nd vector of pca_output
-        pca_output[3],
-        pca_output[4],
-        pca_output[5]
-    );
-    //std::cout << "fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())): " << fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) << "\n";
-    //std::cout << "cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS): " << cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS * std::numbers::pi / 180) << "\n";
-    if (fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) > cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS * std::numbers::pi / 180)) {
-        //std::cout << "fabs(collision_plane_a.normalized().dot(collision_plane_b.normalized())) > cos(MINIMUM_DEGREES_BETWEEN_FIRST_AND_SECOND_PRINCIPAL_COMPONENTS)\n";
-        return std::nullopt;
-    }
-    vector::worldspace collision_normal = collision_plane_a.cross(collision_plane_b);
+
+    std::cout << "principal_components:\n" << principal_components << "\ndone\n";
+
+    vector::worldspace collision_plane_a = principal_components.cast<double>().col(0);
+    vector::worldspace collision_plane_b = principal_components.cast<double>().col(1);
+    vector::worldspace collision_normal  = principal_components.cast<double>().col(2);
     if (collision_normal.squaredNorm() == 0) {
         //std::cout << "collision_normal magnitude is 0, so a normal cannot be found\n";
         return std::nullopt;
     }
-    collision_normal.normalize();
     /*
-    std::cout << "pca_1: " << collision_plane_a.str() << "\n";
-    std::cout << "pca_2: " << collision_plane_b.str() << "\n";
-    std::cout << "pca_1 x pca_2 (collision_normal): " << collision_normal.str() << "\n";
+    printf("pca_1: %s (magnitude %e)\n", collision_plane_a.str().c_str(), collision_plane_a.norm());
+    printf("pca_2: %s (magnitude %e)\n", collision_plane_b.str().c_str(), collision_plane_b.norm());
+    printf("pca_1 x pca_2 (collision_normal): %s (magnitude %e)\n", collision_normal.str().c_str(), collision_normal.norm());
+    collision_normal.normalize();
+    printf("pca_1 x pca_2 (collision_normal): %s (magnitude %e)\n", collision_normal.str().c_str(), collision_normal.norm());
     */
     //globals::timer_.record("collision data normal");
     return collision_normal;

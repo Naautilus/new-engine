@@ -255,7 +255,7 @@ namespace math {
         return data * principal_components;
     }
 
-    inline bool pca(const std::vector<float>& data_in, const size_t num_dims, std::vector<float>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
+    inline std::optional<Eigen::MatrixXf> pca(const std::vector<float>& data_in, const size_t num_dims, std::vector<float>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
     {
         // do not transform if data is 1d
         if (num_dims <= 1)
@@ -263,7 +263,7 @@ namespace math {
             num_comp = num_dims;
             pca_out = data_in;
             std::cout << "pca: num_dims == 1, no transformation is performed" << std::endl;;
-            return false;
+            return std::nullopt;
         }
 
         // convert std vector to Eigen MatrixXf
@@ -310,7 +310,7 @@ namespace math {
         catch (const std::runtime_error& ex) {
             std::cout << "PCA could not be computed: " << ex.what() << std::endl;
             pca_out = std::vector(data.rows() * num_comp, 0.0f);
-            return false;
+            return std::nullopt;
         }
 
         // project data, compute pca components and
@@ -323,7 +323,7 @@ namespace math {
         // convert to std vector with [p0d0, p0d1, ..., p1d0, p1d1, ..., pNd0, pNd1, ..., pNdM]
         pca_out = convertEigenMatrixToStdVector(data_transformed);
 
-        return true;
+        return principal_components;
 
     }
 

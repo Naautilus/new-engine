@@ -108,6 +108,8 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
         fraction_change /= 2;
     }
 
+    fraction += fraction_change * 10;
+
     move_colliding_physics_objects(
         original_position_a + pow(fraction, EXPONENT) *  max_displacement * (b.physics_state.mass / total_mass),
         original_position_b + pow(fraction, EXPONENT) * -max_displacement * (a.physics_state.mass / total_mass),
@@ -119,6 +121,7 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
 
 void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
     const double COEFFICIENT_OF_FRICTION = 1.0;
+    const double BOUNCE = 0; // 0 = no bounce
     
     //globals::paused = true;
     //globals::pause_mutex.lock();
@@ -173,22 +176,24 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     globals::physics_objects_mutex.unlock();
     //*/
     ///*
-    double OVERLAP_VISUAL_SCALE = 10;
-    globals::physics_objects_mutex.lock();
-    for (line_segment ls : collision_data_optional.value().debug_line_segments) {
-        vector::worldspace start = ls.line_.origin;
-        vector::worldspace end = ls.line_.point_along_line(ls.length);
-        for (double fraction = 0; fraction <= 1; fraction += 0.025) {
-            vector::worldspace line_position = (1-fraction) * start + (fraction) * end;
-            auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(line_position, 0.0125 * OVERLAP_VISUAL_SCALE));
-            collision_visual->physics_state.position -= collision_point;
-            collision_visual->physics_state.position *= OVERLAP_VISUAL_SCALE;
-            collision_visual->physics_state.position += collision_point;
-            collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
-            globals::physics_objects.push_back(collision_visual);
+    std::vector<double> overlap_visual_scales = {10};
+    for (double overlap_visual_scale : overlap_visual_scales) {
+        globals::physics_objects_mutex.lock();
+        for (line_segment ls : collision_data_optional.value().debug_line_segments) {
+            vector::worldspace start = ls.line_.origin;
+            vector::worldspace end = ls.line_.point_along_line(ls.length);
+            for (double fraction = 0; fraction <= 1; fraction += 0.025) {
+                vector::worldspace line_position = (1-fraction) * start + (fraction) * end;
+                auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(line_position, 0.125));
+                collision_visual->physics_state.position -= collision_point;
+                collision_visual->physics_state.position *= overlap_visual_scale;
+                collision_visual->physics_state.position += collision_point;
+                collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+                globals::physics_objects.push_back(collision_visual);
+            }
         }
+        globals::physics_objects_mutex.unlock();
     }
-    globals::physics_objects_mutex.unlock();
     //*/
     //globals::pause_mutex.lock();
     //globals::pause_mutex.unlock();
@@ -217,7 +222,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         b.physics_state = original_physics_state_b;
     }
     
-    vector::worldspace velocity_to_cancel = -1 * (delta_velocity_normal + fraction_tangential * delta_velocity_tangential);
+    vector::worldspace velocity_to_cancel = -1 * ((1 + BOUNCE) * delta_velocity_normal + fraction_tangential * delta_velocity_tangential);
     vector::worldspace result = impulse_response_per_axis.colPivHouseholderQr().solve(velocity_to_cancel);
     
     /*
