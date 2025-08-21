@@ -237,7 +237,7 @@ object cube(vector::worldspace position_, double scale = 1) {
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = round(10.0 / constants::DELTA_T); //2;
+    o.properties.ticks_lifetime_remaining = round(1.0 / constants::DELTA_T);
     return o;
 }
 

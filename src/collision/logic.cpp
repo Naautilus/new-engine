@@ -172,7 +172,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     }
     globals::physics_objects_mutex.unlock();
     //*/
-    /*
+    ///*
     double OVERLAP_VISUAL_SCALE = 10;
     globals::physics_objects_mutex.lock();
     for (line_segment ls : collision_data_optional.value().debug_line_segments) {
@@ -189,7 +189,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         }
     }
     globals::physics_objects_mutex.unlock();
-    */
+    //*/
     //globals::pause_mutex.lock();
     //globals::pause_mutex.unlock();
     
@@ -298,36 +298,31 @@ double angle_of_incidence(vector::worldspace& velocity, vector::worldspace& grou
 }
 
 collider collider_representing_ground(collider& c) {
-    vector::worldspace position = c.position;
-    double width = 2 * sqrt(c.bounding_box_width_squared);
+    double GRID_SIZE = 100;
+    
+    double width = sqrt(c.bounding_box_width_squared * 2);
+    width = round(width/(GRID_SIZE*2)) * (GRID_SIZE*2);
+    if (width == 0) width += GRID_SIZE * 2;
     //std::cout << "width: " << width << "\n";
-    position.z() = ground::get_ground_altitude(position.x(), position.y()) + 0.5;
-    vector::worldspace normal = ground::get_surface_normal(position.x(), position.y(), width);
-    vector::worldspace x = normal.cross(vector::worldspace(0, 1, 0));
-    vector::worldspace y = normal.cross(x);
-    vector::worldspace z = normal;
-    x *= width;
-    y *= width;
-    z *= width;
-    vector::worldspace p0 = position + x;
-    vector::worldspace p1 = position + -0.5*x + 0.866*y;
-    vector::worldspace p2 = position + -0.5*x - 0.866*y;
-    vector::worldspace p3 = position + -0.05 * z;
-    collider output = collider({triangle(p0, p1, p2), triangle(p0, p1, p3), triangle(p0, p2, p3), triangle(p1, p2, p3)});
+    collider output = generate_rectangle(width, width, GRID_SIZE);
+    
+    vector::worldspace position_rounded;
+    position_rounded.x() = round(c.position.x()/GRID_SIZE) * GRID_SIZE;
+    position_rounded.y() = round(c.position.y()/GRID_SIZE) * GRID_SIZE;
+    position_rounded.z() = 0;
+
+    for (triangle& t : output.model_data_unrotated) {
+        for (vector::worldspace& point : t.points) {
+            point += position_rounded;
+            point.z() = ground::get_ground_altitude(point.x(), point.y()) + 1;
+        }
+    }
+
     output.update(
         vector::worldspace(0, 0, 0),
         vector::worldspace(0, 0, 0),
         Eigen::Quaterniond::Identity()
     );
-
-    
-    /*
-    std::cout << "collider representing ground created\n";
-    std::cout << "position:" << position.transpose() << "\n";
-    std::cout << "p0:" << p0.transpose() << "\n";
-    std::cout << "p1:" << p1.transpose() << "\n";
-    std::cout << "p2:" << p2.transpose() << "\n";
-    */
 
     return output;
 }
