@@ -297,7 +297,7 @@ object runway(vector::worldspace position_, double heading, double length, doubl
 
     object o("runway");
     o.properties.fixed = true;
-    o.add_physical_structure(module::physical_structure(collision::collider(), runway_base_, vector::localspace(0,0,-SURFACE_SEPARATION_FROM_BASE), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(*runway_base_), runway_base_, vector::localspace(0,0,-SURFACE_SEPARATION_FROM_BASE), vector::localspace(1, 1, 1)));
     o.add_physical_structure(module::physical_structure(collision::collider(collision::generate_rectangle(length, width, 20)), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
     o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;

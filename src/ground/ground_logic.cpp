@@ -41,8 +41,7 @@ double get_ground_altitude(double x, double y) {
         double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_HEIGHT_EFFECT[i];
     }
-    if (sum < WATER_LEVEL) sum = WATER_LEVEL;
-    sum -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y);
+    //if (sum < WATER_LEVEL) sum = WATER_LEVEL;
     return sum;
 }
 
@@ -53,7 +52,7 @@ color get_ground_color(double x, double y) {
         float noise = (float)perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_COLOR_EFFECT[i];
     }
-    if (get_ground_altitude(x, y) + constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y) < WATER_LEVEL + 1) return color{0, 0, 0.3};
+    //if (get_ground_altitude(x, y) + constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x*x + y*y) < WATER_LEVEL + 1) return color{0, 0, 0.3};
     return color{0, sum, 0};
 }
 

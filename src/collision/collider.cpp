@@ -190,18 +190,19 @@ std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_mo
     to get PCAspace data into worldspace, transpose it
     */
 
-    std::vector<vector::worldspace> pca_space_unit_vectors = {
-        vector::worldspace(1, 0, 0),
-        vector::worldspace(0, 1, 0),
-        vector::worldspace(0, 0, 1)
+    
+    Eigen::Matrix3d pca_space_unit_vectors_matrix = Eigen::Matrix3d::Identity();
+    //std::cout << "pca_space_unit_vectors_matrix:\n" << pca_space_unit_vectors_matrix << "\ndone\n";
+
+    Eigen::Matrix3d worldspace_unit_vectors_matrix = pca_space_unit_vectors_matrix * principal_components.transpose();
+    //std::cout << "worldspace_unit_vectors_matrix:\n" << worldspace_unit_vectors_matrix << "\ndone\n";
+
+    std::vector<vector::worldspace> worldspace_unit_vectors = {
+        worldspace_unit_vectors_matrix.row(0),
+        worldspace_unit_vectors_matrix.row(1),
+        worldspace_unit_vectors_matrix.row(2)
     };
-
-    std::vector<vector::worldspace> worldspace_unit_vectors;
-
-    for (vector::worldspace& v : pca_space_unit_vectors) {
-        vector::worldspace v_worldspace = v * principal_components.transpose();
-        worldspace_unit_vectors.push_back(v_worldspace.normalized());
-    }
+    
 
     /*
     for (int i = 0; i < points_in_pca_space.size(); i += 3) {

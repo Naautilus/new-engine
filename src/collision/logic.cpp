@@ -104,7 +104,7 @@ double _separate_colliding_physics_objects_sub(vector::worldspace max_displaceme
 }
 
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-    const int ITERATIONS = 8;
+    const int ITERATIONS = 7;
     const double EXPONENT = 2; // to get more precision near less movement
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
@@ -184,7 +184,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
     */
     
-    ///*
+    /*
     globals::physics_objects_mutex.lock();
     for (double line_position = 2; line_position <= 5; line_position += 0.05) {
         auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1, 0, 0, 1));
@@ -202,8 +202,8 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         globals::physics_objects.push_back(collision_visual_pca_secondary);
     }
     globals::physics_objects_mutex.unlock();
-    //*/
-    ///*
+    */
+    /*
     if (collision_data_.intersection_points) {
         std::vector<double> overlap_visual_scales = {10, 1000};
         for (double overlap_visual_scale : overlap_visual_scales) {
@@ -219,7 +219,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
             globals::physics_objects_mutex.unlock();
         }
     }
-    //*/
+    */
     //globals::pause_mutex.lock();
     //globals::pause_mutex.unlock();
     
@@ -293,7 +293,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
 
     //globals::timer_.record("damage");
 
-    create_debris_for_objects(a, b, damage, collision_point);
+    create_debris_for_objects(a, b, fmin(damage, 20000), collision_point);
 
     //globals::timer_.record("debris");
     
@@ -328,7 +328,7 @@ double angle_of_incidence(vector::worldspace& velocity, vector::worldspace& grou
 }
 
 collider collider_representing_ground(collider& c) {
-    double GRID_SIZE = 100;
+    double GRID_SIZE = 10;
     
     double width = sqrt(c.bounding_box_width_squared * 2);
     width = round(width/(GRID_SIZE*2)) * (GRID_SIZE*2);
@@ -344,7 +344,7 @@ collider collider_representing_ground(collider& c) {
     for (triangle& t : output.model_data_unrotated) {
         for (vector::worldspace& point : t.points) {
             point += position_rounded;
-            point.z() = ground::get_ground_altitude(point.x(), point.y()) + 1;
+            point.z() = ground::get_ground_altitude(point.x(), point.y());
         }
     }
 
@@ -374,12 +374,12 @@ void process_ground_collision(physics_object::object& o) {
         if (!m->collider.type == model_collider) continue;
         collider ground_collider = collider_representing_ground(m->collider);
 
-        ///*
+        /*
         globals::physics_objects_mutex.lock();
         auto collider_visual = std::make_shared<physics_object::object>(physics_object::blueprints::collider_visual(ground_object.physics_state.position, ground_collider));
         globals::physics_objects.push_back(collider_visual);
         globals::physics_objects_mutex.unlock();
-        //*/
+        */
 
         if (!m->collider.check_collision(ground_collider)) continue;
         //std::cout << "ground collision\n";

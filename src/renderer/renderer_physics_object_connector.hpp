@@ -17,11 +17,6 @@ Eigen::Quaterniond adjust_quaternion_angle(Eigen::Quaterniond q, double angle_mu
 Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats);
 mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_);
 
-extern const int GROUND_LODS;
-extern const double GROUND_INITIAL_TILE_SIZE;
-extern int GROUND_TILE_COUNT;
-extern const int GROUND_DEADZONE_TILES;
-
 std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_);
 
 /*

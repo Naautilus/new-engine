@@ -53,7 +53,9 @@ Eigen::Quaterniond average_approx(std::vector<Eigen::Quaterniond>& quats) {
 		return q_avg;
 }
 
-mesh get_ground_model_sub(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_) {
+namespace {
+
+mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, double tile_size, int count, int count_deadzone, bool color_variation, int x_, int y_, vector::localspace& last_camera_position_, bool water) {
     mesh model;
 
 	if (color_variation) {
@@ -105,14 +107,29 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 		v.y += y_pos;
 		v.z += z_pos;
 	}
-	for (vertex& v : model.vertices) {
-		int sample_points_squared = round(fmin(tile_size/original_tile_size, 3.0)); //std::round(sqrt(tile_size / original_tile_size));
-		v.z += ground::get_ground_altitude_averaged(v.x, v.y, tile_size, sample_points_squared);
-		color color_ = ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
-        v.r += color_.r;
-        v.g += color_.g;
-        v.b += color_.b;
-	}
+    if (!water) {
+        for (vertex& v : model.vertices) {
+            int sample_points_squared = round(fmin(tile_size/original_tile_size, 3.0)); //std::round(sqrt(tile_size / original_tile_size));
+            v.z += ground::get_ground_altitude_averaged(v.x, v.y, tile_size, sample_points_squared);
+            color color_ = ground::get_ground_color_averaged(v.x, v.y, tile_size, sample_points_squared);
+            v.r += color_.r;
+            v.g += color_.g;
+            v.b += color_.b;
+        }
+    } else {
+        for (vertex& v : model.vertices) {
+            v.z += 5000;
+            v.r = 0;
+            v.g = 0.075;
+            v.b = 0.2;
+        }
+    }
+
+    for (vertex& v : model.vertices) {
+        double x_relative = v.x - last_camera_position_.x();
+        double y_relative = v.y - last_camera_position_.y();
+        v.z -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x_relative*x_relative + y_relative*y_relative);
+    }
 
     // convert to opengl coordinate system
 	for (vertex& v : model.vertices) {
@@ -126,34 +143,41 @@ mesh get_ground_model_sub(double vertical_offset, double original_tile_size, dou
 	return model;
 }
 
-const int GROUND_LODS = 16;
-const double GROUND_INITIAL_TILE_SIZE = 0.4;
-int GROUND_TILE_COUNT = 32;
-const int GROUND_DEADZONE_TILES = 2;
-
-std::vector<mesh> get_ground_model(bool color_variation, vector::localspace last_camera_position_) {
+std::vector<mesh> get_terrain_model_lods(bool color_variation, vector::localspace last_camera_position_, const int LODS, const double INITIAL_TILE_SIZE, int TILE_COUNT, const int DEADZONE_TILES, bool water) {
 	std::vector<mesh> output;
-	double tile_size = GROUND_INITIAL_TILE_SIZE;
-	double tile_deadzone = GROUND_TILE_COUNT / 2 - GROUND_DEADZONE_TILES;
-	for (int i = 0; i < GROUND_LODS; i++) {
-		for (int x_ = -GROUND_TILE_COUNT; x_ < GROUND_TILE_COUNT; x_++) {
-			for (int y_ = -GROUND_TILE_COUNT; y_ < GROUND_TILE_COUNT; y_++) {
+	double tile_size = INITIAL_TILE_SIZE;
+	double tile_deadzone = TILE_COUNT / 2 - DEADZONE_TILES;
+	for (int i = 0; i < LODS; i++) {
+		for (int x_ = -TILE_COUNT; x_ < TILE_COUNT; x_++) {
+			for (int y_ = -TILE_COUNT; y_ < TILE_COUNT; y_++) {
 				if (i > 0 && abs(x_) < tile_deadzone && abs(y_) < tile_deadzone) continue;
-				mesh model = get_ground_model_sub(0, GROUND_INITIAL_TILE_SIZE, tile_size, GROUND_TILE_COUNT, i==0?0:tile_deadzone, color_variation, x_, y_, last_camera_position_);
+				mesh model = get_terrain_model_tile(0, INITIAL_TILE_SIZE, tile_size, TILE_COUNT, i==0?0:tile_deadzone, color_variation, x_, y_, last_camera_position_, water);
 				output.push_back(model);
 			}
 		}
 		tile_size *= 2;
 	}
-	/* // this one is a big green layer that goes under the map to visibly fill any cracks in the ground model
-	for (int x_ = -1; x_ < 1; x_++) {
-		for (int y_ = -1; y_ < 1; y_++) {
-			mesh model = get_ground_model_sub(-1e6, 1, 1e6, 4, 0, false, x_, y_, last_camera_position_);
-			output.push_back(model);
-		}
-	}
-	*/
 	return output;
+}
+
+const int GROUND_LODS = 16;
+const double GROUND_INITIAL_TILE_SIZE = 0.4;
+int GROUND_TILE_COUNT = 32;
+const int GROUND_DEADZONE_TILES = 2;
+
+const int WATER_LODS = 8;
+const double WATER_INITIAL_TILE_SIZE = 1000;
+int WATER_TILE_COUNT = 10;
+const int WATER_DEADZONE_TILES = 2;
+
+}
+
+std::vector<mesh> get_terrain_model(bool color_variation, vector::localspace last_camera_position_) {
+	std::vector<mesh> ground = get_terrain_model_lods(color_variation, last_camera_position_, GROUND_LODS, GROUND_INITIAL_TILE_SIZE, GROUND_TILE_COUNT, GROUND_DEADZONE_TILES, false);
+	std::vector<mesh> water = get_terrain_model_lods(color_variation, last_camera_position_, WATER_LODS, WATER_INITIAL_TILE_SIZE, WATER_TILE_COUNT, WATER_DEADZONE_TILES, true);
+	ground.reserve(ground.size() + water.size());
+    for (mesh& m : water) ground.push_back(m);
+    return ground;
 }
 
 /*
@@ -250,7 +274,7 @@ void apply_sunlight_to_model(mesh& model) {
 }
 
 void recalculate_ground(bool& new_ground_ready_, std::vector<mesh>& ground_, vector::worldspace last_camera_position, vector::worldspace last_camera_target_velocity) {
-	ground_ = get_ground_model(false, last_camera_position + 0.5*last_camera_target_velocity);
+	ground_ = get_terrain_model(false, last_camera_position + 0.5*last_camera_target_velocity);
 	for (mesh& m : ground_) {
 		apply_sunlight_to_model(m);
 	}
@@ -262,7 +286,7 @@ int ground_models_start_point = -1;
 void renderer::create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready) {
     if (ground_models_start_point == -1) {
 		models.clear();
-		auto models_ = get_ground_model(false, camera_properties_.last_camera_position + 1.5*camera_properties_.last_camera_target_velocity);
+		auto models_ = get_terrain_model(false, camera_properties_.last_camera_position + 1.5*camera_properties_.last_camera_target_velocity);
 		for (int i = 0; i < models_.size(); i++) {
 			models.push_back(models_[i]);
 		}
