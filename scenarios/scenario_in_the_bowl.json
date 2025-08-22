@@ -1,0 +1,24 @@
+{
+  "physics_objects": [
+    {
+      "blueprint": "f16_simple_forces_model",
+      "name": "plane1",
+      "position": {
+        "relative_to_ground": false,
+        "x": 0,
+        "y": 0,
+        "z": 9920
+      },
+      "velocity": {
+        "localspace": true,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "control_bindings": "plane_control_bindings_wasd"
+    },
+    {
+      "blueprint": "sun"
+    }
+  ]
+}

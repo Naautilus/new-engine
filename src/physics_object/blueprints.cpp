@@ -237,7 +237,26 @@ object cube(vector::worldspace position_, double scale = 1) {
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = round(1.0 / constants::DELTA_T);
+    o.properties.ticks_lifetime_remaining = 1;//round(1.0 / constants::DELTA_T);
+    return o;
+}
+
+object cube(vector::worldspace position_, double scale, double r, double g, double b) {
+    auto cube_ = std::make_shared<mesh>(*models::cube);
+    for (vertex& v : cube_->vertices) {
+        v.r = r;
+        v.g = g;
+        v.b = b;
+    }
+    object o("cube");
+    o.properties.fixed = true;
+    o.properties.functional = false;
+    o.add_physical_structure(module::physical_structure(collision::collider(), cube_, vector::localspace(0,0,0), vector::localspace(1,1,1) * scale));
+    o.physics_state.position = position_;
+    o.physics_state.mass = 1;
+    o.physics_state.health = 1;
+    o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
+    o.properties.ticks_lifetime_remaining = 0;//round(1.0 / constants::DELTA_T);
     return o;
 }
 
@@ -283,6 +302,42 @@ object runway(vector::worldspace position_, double heading, double length, doubl
     o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;
     o.physics_state.rotation = Eigen::AngleAxisd(-heading * std::numbers::pi / 180, vector::worldspace::UnitZ());
+    o.physics_state.mass = 1e100;
+    o.physics_state.health = 1e100;
+    o.physics_state.rotational_inertia = vector::localspace(1, 1, 1) * 1e100;
+    return o;
+}
+
+object bowl(vector::worldspace position_, double scale = 1) {
+    auto sphere_ = std::make_shared<mesh>(*models::sphere);
+    for (vertex& v : sphere_->vertices) {
+        v.r = 0.5;
+        v.g = 0.5;
+        v.b = 0.5;
+        v.sun_factor = 1.0;
+        v.x *= scale;
+        v.y *= scale;
+        v.z *= scale;
+        std::swap(v.x, v.z);
+    }
+
+    /*
+    for (int i = sphere_->vertices.size() - 3; i >= 0; i -= 3) {
+        if (sphere_->vertices[i].z < 0) continue;
+        if (sphere_->vertices[i+1].z < 0) continue;
+        if (sphere_->vertices[i+2].z < 0) continue;
+        sphere_->vertices.erase(sphere_->vertices.begin() + i);
+        sphere_->vertices.erase(sphere_->vertices.begin() + i);
+        sphere_->vertices.erase(sphere_->vertices.begin() + i);
+    }
+    */
+
+    std::cout << "sphere_->vertices.size(): " << sphere_->vertices.size() << "\n";
+
+    object o("sphere");
+    o.properties.fixed = true;
+    o.add_physical_structure(module::physical_structure(collision::collider(*sphere_), sphere_, vector::localspace(0,0,0), vector::localspace(1,1,1)));
+    o.physics_state.position = position_;
     o.physics_state.mass = 1e100;
     o.physics_state.health = 1e100;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1) * 1e100;

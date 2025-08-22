@@ -125,17 +125,10 @@ std::vector<line_segment> collider::_get_line_segments_of_intersection_model_to_
     //globals::timer_.record("collision data line segments");
     return output;
 }
-std::optional<vector::worldspace> collider::get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections) {
+std::optional<vector::worldspace> collider::get_collision_position_model_to_model(collider& c, std::vector<vector::worldspace> intersection_points) {
     vector::worldspace line_segment_position_sum = vector::worldspace(0, 0, 0);
-    double line_segment_length_sum = 0;
-    for (line_segment& ls : intersections) {
-        line_segment_position_sum += ls.line_.origin * ls.length;
-        line_segment_position_sum += ls.line_.point_along_line(ls.length) * ls.length;
-        line_segment_length_sum += ls.length;
-    }
-    if (line_segment_length_sum == 0) {
-        //std::cout << "get_point_of_collision_model_to_model(collider& c): line_segment_length_sum == 0\n";
-        return std::nullopt;
+    for (vector::worldspace& point : intersection_points) {
+        line_segment_position_sum += point;
     }
     if (
         std::isnan(line_segment_position_sum.x()) ||
@@ -146,44 +139,63 @@ std::optional<vector::worldspace> collider::get_collision_position_model_to_mode
         return std::nullopt;
     }
     //globals::timer_.record("collision data position");
-    return line_segment_position_sum / (2 * line_segment_length_sum);
+    return line_segment_position_sum / intersection_points.size();
 }
-std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections) {
+std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_model_to_model(collider& c, std::vector<vector::worldspace> intersection_points) {
+    
+    /*
+    Collisions are done by doing Principal Component Analysis on a vector of intersection points.
+
+    The points are ideally distributed in a circle/oval shape. The direction that is effectively the "normal"
+    of that vector of intersection points is the direction that of the 3rd (least) principal component.
+
+    Eigenvalues represent how much of the variation in the vector of points is explained by each principal component.
+
+    If the second eigenvalue is very small, that is a sign the data is almost linear and the third principal component
+    could potentially be more parallel than normal with the ground.
+
+    If the third eigenvalue is very large, approaching the second eigenvalue, then the data is too curved-in-3d
+    to get a good third principal component out of, causing the same issue as above.
+    */
+
+    const double MINIMUM_RATIO_OF_EIGENVALUE_2_TO_1 = 0.001;
+    const double MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2 = 0.1;
 
     //std::cout << "get_collision_normal_model_to_model: ";
     std::vector<double> input_points = {};
     std::vector<double> points_in_pca_space = {};
-    if (intersections.size() < 2) {
-        //std::cout << "intersections.size() = " << intersections.size() << " < 2, so a normal cannot be found\n";
+    if (intersection_points.size() < 3) {
+        //std::cout << "intersection_points.size() = " << intersection_points.size() << " < 3, so a normal cannot be found\n";
         return std::nullopt;
     }
-    for (line_segment& ls : intersections) {
-        input_points.push_back(ls.line_.origin.x());
-        input_points.push_back(ls.line_.origin.y());
-        input_points.push_back(ls.line_.origin.z());
-
-        input_points.push_back(ls.line_.point_along_line(ls.length).x());
-        input_points.push_back(ls.line_.point_along_line(ls.length).y());
-        input_points.push_back(ls.line_.point_along_line(ls.length).z());
+    for (vector::worldspace& point : intersection_points) {
+        input_points.push_back(point.x());
+        input_points.push_back(point.y());
+        input_points.push_back(point.z());
 
         //std::cout << "ls.line_.direction.norm(): " << ls.line_.direction.norm() << "\n";
     }
     size_t dimensions = 3;
     size_t pca_output_count = 3; // max allowed for 3d
-    std::optional<Eigen::MatrixXd> principal_components_optional = math::pca(input_points, dimensions, points_in_pca_space, pca_output_count);
+    std::optional<std::pair<Eigen::MatrixXd, Eigen::VectorXd>> principal_components_and_eigenvalues_optional = 
+        math::pca(input_points, dimensions, points_in_pca_space, pca_output_count, math::PCA_ALG::COV, math::DATA_NORM::MEAN, false);
     
-    if (!principal_components_optional) return std::nullopt;
+    if (!principal_components_and_eigenvalues_optional) return std::nullopt;
 
-    Eigen::MatrixXd principal_components = principal_components_optional.value();
+    Eigen::MatrixXd principal_components = principal_components_and_eigenvalues_optional.value().first;
+    Eigen::VectorXd eigenvalues = principal_components_and_eigenvalues_optional.value().second;
 
-    /*
+    ///*
     for (int i = 0; i < points_in_pca_space.size(); i += 3) {
         vector::worldspace pca_component = {points_in_pca_space[i], points_in_pca_space[i+1], points_in_pca_space[i+2]};
-        printf("points_in_pca_space[%i]: %s (magnitude %e)\n", i/3, pca_component.str().c_str(), pca_component.norm());
+        pca_component *= 1000;
+        printf("points_in_pca_space[%i] x 1000: %s (magnitude %e)\n", i/3, pca_component.str().c_str(), pca_component.norm());
     }
-    */
+    //*/
 
-    //std::cout << "principal_components:\n" << principal_components << "\ndone\n";
+    std::cout << "principal_components:\n" << principal_components << "\ndone\n";
+    
+    std::cout << "eigenvalues:\n" << eigenvalues << "\ndone\n";
 
     vector::worldspace collision_plane_a = principal_components.cast<double>().col(0);
     vector::worldspace collision_plane_b = principal_components.cast<double>().col(1);
@@ -192,15 +204,28 @@ std::optional<vector::worldspace> collider::get_collision_normal_model_to_model(
         //std::cout << "collision_normal magnitude is 0, so a normal cannot be found\n";
         return std::nullopt;
     }
-    /*
+
+    double ratio_of_eigenvalue_2_to_1 = eigenvalues.row(1).value() / eigenvalues.row(0).value();
+    if (ratio_of_eigenvalue_2_to_1 < MINIMUM_RATIO_OF_EIGENVALUE_2_TO_1) {
+        std::cout << "ratio_of_eigenvalue_2_to_1 (" << ratio_of_eigenvalue_2_to_1 << ") < " <<
+                     "MINIMUM_RATIO_OF_EIGENVALUE_2_TO_1 (" << MINIMUM_RATIO_OF_EIGENVALUE_2_TO_1 << ")\n";
+        return std::nullopt;
+    }
+
+    double ratio_of_eigenvalue_3_to_2 = eigenvalues.row(2).value() / eigenvalues.row(1).value();
+    if (ratio_of_eigenvalue_3_to_2 > MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2) {
+        std::cout << "ratio_of_eigenvalue_3_to_2 (" << ratio_of_eigenvalue_3_to_2 << ") < " <<
+                     "MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2 (" << MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2 << ")\n";
+        //return std::nullopt;
+    }
+
+    ///*
     printf("pca_1: %s (magnitude %e)\n", collision_plane_a.str().c_str(), collision_plane_a.norm());
     printf("pca_2: %s (magnitude %e)\n", collision_plane_b.str().c_str(), collision_plane_b.norm());
     printf("pca_1 x pca_2 (collision_normal): %s (magnitude %e)\n", collision_normal.str().c_str(), collision_normal.norm());
-    collision_normal.normalize();
-    printf("pca_1 x pca_2 (collision_normal): %s (magnitude %e)\n", collision_normal.str().c_str(), collision_normal.norm());
-    */
+    //*/
     //globals::timer_.record("collision data normal");
-    return collision_normal;
+    return std::make_optional<std::vector<vector::worldspace>>({collision_plane_a, collision_plane_b, collision_normal});
 }
 void collider::rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_) {
     model_data.clear();
@@ -293,13 +318,45 @@ bool collider::check_collision(collider& c) {
     }
     return false;
 }
+
+namespace {
+
+std::vector<vector::worldspace> to_roughly_equidistant_points(std::vector<line_segment> line_segments) {
+    const int POINT_COUNT = 100;
+    double length_sum = 0;
+    for (line_segment& ls : line_segments) length_sum += ls.length;
+    double points_per_meter = POINT_COUNT / length_sum;
+
+    std::vector<vector::worldspace> output;
+
+    for (line_segment& ls : line_segments) {
+        double points_ = ls.length * points_per_meter;
+        int points = round(points_);
+
+        if (points == 0) continue;
+
+        vector::worldspace start = ls.line_.origin;
+        vector::worldspace end = ls.line_.point_along_line(ls.length);
+
+        for (int i = 0; i < points; i++) {
+            double fraction = i * 1.0 / points;
+            vector::worldspace position = (1-fraction) * start + (fraction) * end;
+            output.push_back(position);
+        }
+    }
+    return output;
+}
+
+}
+
 std::optional<collision_data> collider::get_collision_data(collider& c) {
     if (type == model_collider && c.type == model_collider) {
         auto line_segments = _get_line_segments_of_intersection_model_to_model(c);
+        std::vector<vector::worldspace> intersection_points = to_roughly_equidistant_points(line_segments);
         return collision_data::optional(
-            get_collision_position_model_to_model(c, line_segments),
-            get_collision_normal_model_to_model(c, line_segments),
-            line_segments
+            get_collision_position_model_to_model(c, intersection_points),
+            get_collision_normal_model_to_model(c, intersection_points),
+            intersection_points
         );
     }
     if (type == point_collider && c.type == model_collider) {

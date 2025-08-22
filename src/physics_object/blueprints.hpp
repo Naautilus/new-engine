@@ -46,8 +46,10 @@ object sun();
 object axes(vector::worldspace position_, double scale);
 object sphere(vector::worldspace position_, double scale);
 object cube(vector::worldspace position_, double scale);
+object cube(vector::worldspace position_, double scale, double r, double g, double b);
 object collider_visual(vector::worldspace position_, collision::collider collider_);
 object runway(vector::worldspace position_, double heading, double length, double width);
+object bowl(vector::worldspace position_, double scale);
 void initialize_blueprints();
     
 }

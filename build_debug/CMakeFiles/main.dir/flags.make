@@ -13,5 +13,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles/main.dir/includes_CXX.rsp
 
-CXX_FLAGS = -g -Og -march=native -flto=12 -ffast-math -fomit-frame-pointer -fdiagnostics-color=always -g -std=gnu++23
+CXX_FLAGS = -g -Og -march=native -flto=12 -fomit-frame-pointer -fdiagnostics-color=always -g -std=gnu++23
 

@@ -14,16 +14,18 @@ std::optional<collision_data> collision_data::optional(std::optional<vector::wor
     return collision_data(position_.value(), normal_.value());
 }
 
-collision_data::collision_data(vector::worldspace position_, vector::worldspace normal_, std::vector<line_segment> debug_line_segments_) {
+collision_data::collision_data(vector::worldspace position_, std::vector<vector::worldspace> pca_components, std::vector<vector::worldspace> intersection_points_) {
     position = position_;
-    normal = normal_;
-    debug_line_segments = debug_line_segments_;
+    pca_primary = pca_components[0];
+    pca_secondary = pca_components[1];
+    normal = pca_components[2];
+    intersection_points = intersection_points_;
 }
 
-std::optional<collision_data> collision_data::optional(std::optional<vector::worldspace> position_, std::optional<vector::worldspace> normal_, std::vector<line_segment> debug_line_segments_) {
+std::optional<collision_data> collision_data::optional(std::optional<vector::worldspace> position_, std::optional<std::vector<vector::worldspace>> pca_components, std::vector<vector::worldspace> intersection_points_) {
     if (!position_) return std::nullopt;
-    if (!normal_) return std::nullopt;
-    return collision_data(position_.value(), normal_.value(), debug_line_segments_);
+    if (!pca_components) return std::nullopt;
+    return collision_data(position_.value(), pca_components.value(), intersection_points_);
 }
 
 }

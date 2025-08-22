@@ -9,6 +9,8 @@ using json = nlohmann::json;
 void initialize_physics_objects(std::vector<std::string> args) {
 
     globals::physics_objects.push_back(std::make_shared<physics_object::object>(physics_object::blueprints::runway(vector::worldspace(11000, -1500, 5075), 0, 1500, 50)));
+    globals::physics_objects.push_back(std::make_shared<physics_object::object>(physics_object::blueprints::bowl(vector::worldspace(0, 0, 10000), 100)));
+
 
     auto scenario_index = std::find(args.begin(), args.end(), "-scenario");
     if (scenario_index == args.end()) {

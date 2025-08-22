@@ -47,7 +47,7 @@ void renderer::update_pause_state(GLFWwindow* window) {
     while (key_pressed(window, GLFW_KEY_P)) glfwPollEvents();
     globals::paused = !globals::paused;
 
-    if (globals::paused) globals::pause_mutex.lock();
+    if (globals::paused) bool _ = globals::pause_mutex.try_lock();
     else globals::pause_mutex.unlock();
 }
 

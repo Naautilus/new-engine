@@ -209,22 +209,7 @@ namespace math {
     }
 
     // data should be have column-wise zero empirical mean 
-    inline Eigen::MatrixXd pcaSVD(const Eigen::MatrixXd& data, const size_t num_comp)
-    {
-        // compute svd
-        throw (std::runtime_error("I, Naautilus, removed this because it was deprecated and I don't know how to fix it; use COV"));
-        /*
-        Eigen::BDCSVD<Eigen::MatrixXd> svd(data, Eigen::ComputeThinV);
-
-        if (svd.info() != Eigen::Success)
-            throw (std::runtime_error("pcaSVD failed. Eigen::ComputationInfo " + std::to_string(static_cast<int32_t>(svd.info()))));
-
-        return svd.matrixV()(Eigen::indexing::all, Eigen::seq(0, num_comp - 1));
-        */
-    }
-
-    // data should be have column-wise zero empirical mean 
-    inline Eigen::MatrixXd pcaCovMat(const Eigen::MatrixXd& data, const size_t num_comp)
+    inline std::pair<Eigen::MatrixXd, Eigen::VectorXd> pcaCovMat(const Eigen::MatrixXd& data, const size_t num_comp)
     {
         // covariance matrix
         Eigen::MatrixXd covMat = data.transpose() * data;
@@ -247,7 +232,10 @@ namespace math {
         eigenvectors = eigenvectors * perm;     // permute columns
         eigenvalues = perm * eigenvalues;
 
-        return eigenvectors(Eigen::indexing::all, Eigen::seq(0, num_comp - 1));
+        return {
+            eigenvectors(Eigen::indexing::all, Eigen::seq(0, num_comp - 1)),
+            eigenvalues(Eigen::seq(0, num_comp - 1))
+        };
     }
 
     inline Eigen::MatrixXd pcaTransform(const Eigen::MatrixXd& data, const Eigen::MatrixXd& principal_components)
@@ -255,7 +243,7 @@ namespace math {
         return data * principal_components;
     }
 
-    inline std::optional<Eigen::MatrixXd> pca(const std::vector<double>& data_in, const size_t num_dims, std::vector<double>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
+    inline std::optional<std::pair<Eigen::MatrixXd, Eigen::VectorXd>> pca(const std::vector<double>& data_in, const size_t num_dims, std::vector<double>& pca_out, size_t& num_comp, const PCA_ALG algorithm = PCA_ALG::COV, const DATA_NORM norm = DATA_NORM::MEAN, const bool stdOrientation = true)
     {
         // do not transform if data is 1d
         if (num_dims <= 1)
@@ -288,14 +276,6 @@ namespace math {
                 return dat;
             };
 
-        // choose which pcaSVD algorithm to use 
-        auto pca_alg = [&](const Eigen::MatrixXd& dat) {
-            if (algorithm == PCA_ALG::SVD)
-                return pcaSVD(dat, _num_comp);
-            else // algorithm == PCA_ALG::COV
-                return pcaCovMat(dat, _num_comp);
-            };
-
         // prep data: normalization
         Eigen::MatrixXd data_normed = norm_data(data);
 
@@ -303,15 +283,17 @@ namespace math {
         data_normed = colwiseZeroMean(data_normed);
 
         // compute pcaSVD, get first num_comp components
-        Eigen::MatrixXd principal_components;
+        std::pair<Eigen::MatrixXd, Eigen::VectorXd> principal_components_and_eigenvalues;
         try {
-            principal_components = pca_alg(data_normed);
+            principal_components_and_eigenvalues = pcaCovMat(data_normed, _num_comp);
         }
         catch (const std::runtime_error& ex) {
             std::cout << "PCA could not be computed: " << ex.what() << std::endl;
             pca_out = std::vector(data.rows() * num_comp, 0.0);
             return std::nullopt;
         }
+
+        Eigen::MatrixXd& principal_components = principal_components_and_eigenvalues.first;
 
         // project data, compute pca components and
         Eigen::MatrixXd data_transformed = pcaTransform(data_normed, principal_components);
@@ -323,7 +305,7 @@ namespace math {
         // convert to std vector with [p0d0, p0d1, ..., p1d0, p1d1, ..., pNd0, pNd1, ..., pNdM]
         pca_out = convertEigenMatrixToStdVector(data_transformed);
 
-        return principal_components;
+        return principal_components_and_eigenvalues;
 
     }
 

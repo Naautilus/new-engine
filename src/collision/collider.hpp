@@ -27,8 +27,8 @@ struct collider {
     vector::worldspace get_collision_position_point_to_model(collider& c);
     std::optional<vector::worldspace> get_collision_normal_point_to_model(collider& c);
     std::vector<line_segment> _get_line_segments_of_intersection_model_to_model(collider& c);
-    std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<line_segment> intersections);
-    std::optional<vector::worldspace> get_collision_normal_model_to_model(collider& c, std::vector<line_segment> intersections);
+    std::optional<vector::worldspace> get_collision_position_model_to_model(collider& c, std::vector<vector::worldspace> intersection_points);
+    std::optional<std::vector<vector::worldspace>> get_collision_normal_model_to_model(collider& c, std::vector<vector::worldspace> intersection_points);
     void rotate_model_data(vector::worldspace position_, Eigen::Quaterniond rotation_);
     void set_bounding_box();
     public:

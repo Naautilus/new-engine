@@ -104,7 +104,7 @@ double _separate_colliding_physics_objects_sub(vector::worldspace max_displaceme
 }
 
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
-    const int ITERATIONS = 6;
+    const int ITERATIONS = 8;
     const double EXPONENT = 2; // to get more precision near less movement
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
@@ -120,8 +120,10 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
     double fraction_direction_a = _separate_colliding_physics_objects_sub( max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
     double fraction_direction_b = _separate_colliding_physics_objects_sub(-max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
 
+    /*
     printf("fraction_direction_a: %f\n", fraction_direction_a);
     printf("fraction_direction_b: %f\n", fraction_direction_b);
+    */
 
     if (fraction_direction_b < fraction_direction_a) max_displacement *= -1;
     double fraction = fmin(fraction_direction_a, fraction_direction_b);
@@ -138,8 +140,8 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     const double COEFFICIENT_OF_FRICTION = 1.0;
     const double BOUNCE = 0; // 0 = no bounce
     
-    //globals::paused = true;
-    //globals::pause_mutex.lock();
+    globals::paused = true;
+    globals::pause_mutex.lock();
     
     //globals::timer_.reset();
     //globals::timer_.record("start");
@@ -150,8 +152,9 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
         //std::cout << "process_colliding_physics_objects(...): optional collision data not present\n";
         return;
     }
-    vector::worldspace collision_point = collision_data_optional.value().position;
-    vector::worldspace collision_normal = collision_data_optional.value().normal;
+    collision_data& collision_data_ = collision_data_optional.value();
+    vector::worldspace collision_point = collision_data_.position;
+    vector::worldspace collision_normal = collision_data_.normal;
     if (std::isnan(collision_point.squaredNorm())) return;
     
     /*
@@ -184,30 +187,37 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     ///*
     globals::physics_objects_mutex.lock();
     for (double line_position = 2; line_position <= 5; line_position += 0.05) {
-        auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1));
+        auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1, 0, 0, 1));
         collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
         globals::physics_objects.push_back(collision_visual);
+
+        if (!collision_data_.pca_primary || !collision_data_.pca_secondary) continue;
+
+        auto collision_visual_pca_primary = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_data_.pca_primary.value(), 0.1, 1, 0, 0));
+        collision_visual_pca_primary->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+        globals::physics_objects.push_back(collision_visual_pca_primary);
+
+        auto collision_visual_pca_secondary = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_data_.pca_secondary.value(), 0.1, 0, 1, 0));
+        collision_visual_pca_secondary->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+        globals::physics_objects.push_back(collision_visual_pca_secondary);
     }
     globals::physics_objects_mutex.unlock();
     //*/
     ///*
-    std::vector<double> overlap_visual_scales = {10};
-    for (double overlap_visual_scale : overlap_visual_scales) {
-        globals::physics_objects_mutex.lock();
-        for (line_segment ls : collision_data_optional.value().debug_line_segments) {
-            vector::worldspace start = ls.line_.origin;
-            vector::worldspace end = ls.line_.point_along_line(ls.length);
-            for (double fraction = 0; fraction <= 1; fraction += 0.025) {
-                vector::worldspace line_position = (1-fraction) * start + (fraction) * end;
-                auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(line_position, 0.125));
+    if (collision_data_.intersection_points) {
+        std::vector<double> overlap_visual_scales = {10, 1000};
+        for (double overlap_visual_scale : overlap_visual_scales) {
+            globals::physics_objects_mutex.lock();
+            for (vector::worldspace& point : collision_data_.intersection_points.value()) {
+                auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(point, 0.05 * sqrt(overlap_visual_scale)));
                 collision_visual->physics_state.position -= collision_point;
                 collision_visual->physics_state.position *= overlap_visual_scale;
                 collision_visual->physics_state.position += collision_point;
                 collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
                 globals::physics_objects.push_back(collision_visual);
             }
+            globals::physics_objects_mutex.unlock();
         }
-        globals::physics_objects_mutex.unlock();
     }
     //*/
     //globals::pause_mutex.lock();
