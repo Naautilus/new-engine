@@ -128,8 +128,8 @@ void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& 
 
 // window creation + looping
 void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
-    float Z_NEAR = 2;
-    float Z_FAR = 1e7;
+    const float Z_NEAR = 10;
+    const float Z_FAR = 1e6;
 
     // initialize
     GLFWwindow* window;
