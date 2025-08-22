@@ -22,3 +22,17 @@ color& color::operator/=(const double& d) {
     b /= d;
     return *this;
 }
+color color::operator*(const float& f) const {
+    return color{
+        r * f,
+        g * f,
+        b * f
+    };
+}
+color color::operator+(const float& f) const {
+    return color{
+        r + f,
+        g + f,
+        b + f
+    };
+}

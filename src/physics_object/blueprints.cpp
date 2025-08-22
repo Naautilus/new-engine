@@ -224,7 +224,6 @@ object sphere(vector::worldspace position_, double scale = 1) {
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = round(0.1 / constants::DELTA_T);
     return o;
 }
 
