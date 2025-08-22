@@ -140,8 +140,8 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     const double COEFFICIENT_OF_FRICTION = 1.0;
     const double BOUNCE = 0; // 0 = no bounce
     
-    globals::paused = true;
-    globals::pause_mutex.lock();
+    //globals::paused = true;
+    //globals::pause_mutex.lock();
     
     //globals::timer_.reset();
     //globals::timer_.record("start");

@@ -185,26 +185,52 @@ std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_mo
     Eigen::MatrixXd principal_components = principal_components_and_eigenvalues_optional.value().first;
     Eigen::VectorXd eigenvalues = principal_components_and_eigenvalues_optional.value().second;
 
-    ///*
+    /*
+    currently, principal_components is the matrix you multiply worldspace data by to convert it to PCAspace;
+    to get PCAspace data into worldspace, transpose it
+    */
+
+    std::vector<vector::worldspace> pca_space_unit_vectors = {
+        vector::worldspace(1, 0, 0),
+        vector::worldspace(0, 1, 0),
+        vector::worldspace(0, 0, 1)
+    };
+
+    std::vector<vector::worldspace> worldspace_unit_vectors;
+
+    for (vector::worldspace& v : pca_space_unit_vectors) {
+        vector::worldspace v_worldspace = v * principal_components.transpose();
+        worldspace_unit_vectors.push_back(v_worldspace.normalized());
+    }
+
+    /*
     for (int i = 0; i < points_in_pca_space.size(); i += 3) {
         vector::worldspace pca_component = {points_in_pca_space[i], points_in_pca_space[i+1], points_in_pca_space[i+2]};
         pca_component *= 1000;
         printf("points_in_pca_space[%i] x 1000: %s (magnitude %e)\n", i/3, pca_component.str().c_str(), pca_component.norm());
     }
-    //*/
+    */
 
+    /*
     std::cout << "principal_components:\n" << principal_components << "\ndone\n";
-    
+    std::cout << "principal_components.transpose():\n" << principal_components.transpose() << "\ndone\n";
+    std::cout << "worldspace_unit_vectors:\n" 
+        << worldspace_unit_vectors[0].str() << "\n"
+        << worldspace_unit_vectors[1].str() << "\n"
+        << worldspace_unit_vectors[2].str() << "\n"
+        << "\ndone\n";
     std::cout << "eigenvalues:\n" << eigenvalues << "\ndone\n";
+    */
 
-    vector::worldspace collision_plane_a = principal_components.cast<double>().col(0);
-    vector::worldspace collision_plane_b = principal_components.cast<double>().col(1);
-    vector::worldspace collision_normal  = principal_components.cast<double>().col(2);
+    vector::worldspace collision_plane_a = worldspace_unit_vectors[0];
+    vector::worldspace collision_plane_b = worldspace_unit_vectors[1];
+    vector::worldspace collision_normal  = worldspace_unit_vectors[2];
     if (collision_normal.squaredNorm() == 0) {
         //std::cout << "collision_normal magnitude is 0, so a normal cannot be found\n";
         return std::nullopt;
     }
 
+    /*
     double ratio_of_eigenvalue_2_to_1 = eigenvalues.row(1).value() / eigenvalues.row(0).value();
     if (ratio_of_eigenvalue_2_to_1 < MINIMUM_RATIO_OF_EIGENVALUE_2_TO_1) {
         std::cout << "ratio_of_eigenvalue_2_to_1 (" << ratio_of_eigenvalue_2_to_1 << ") < " <<
@@ -218,12 +244,13 @@ std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_mo
                      "MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2 (" << MAXIMUM_RATIO_OF_EIGENVALUE_3_TO_2 << ")\n";
         //return std::nullopt;
     }
+    */
 
-    ///*
+    /*
     printf("pca_1: %s (magnitude %e)\n", collision_plane_a.str().c_str(), collision_plane_a.norm());
     printf("pca_2: %s (magnitude %e)\n", collision_plane_b.str().c_str(), collision_plane_b.norm());
     printf("pca_1 x pca_2 (collision_normal): %s (magnitude %e)\n", collision_normal.str().c_str(), collision_normal.norm());
-    //*/
+    */
     //globals::timer_.record("collision data normal");
     return std::make_optional<std::vector<vector::worldspace>>({collision_plane_a, collision_plane_b, collision_normal});
 }

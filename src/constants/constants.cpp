@@ -3,7 +3,7 @@
 
 namespace constants {
 
-const double DELTA_T = 0.01;
+const double DELTA_T = 0.001;
 const double LOG_INTERVAL = 0.005;
 const double TIME_LIMIT = -1;
 const double DAMAGE_MULTIPLIER = 2e-4;
