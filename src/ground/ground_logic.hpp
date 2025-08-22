@@ -26,7 +26,6 @@ extern std::unordered_map<ground_info, double, ground_info_hash> ground_altitude
 extern std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 extern std::mutex ground_altitude_averaged_mutex;
 extern std::mutex ground_color_averaged_mutex;
-extern double WATER_LEVEL;
 
 double get_ground_altitude(double x, double y);
 color get_ground_color(double x, double y);
@@ -38,5 +37,7 @@ vector::worldspace get_surface_normal(double x, double y, double epsilon);
 vector::worldspace get_surface_normal(double x, double y);
 
 bool line_of_sight(vector::worldspace a, vector::worldspace& b);
+
+double fluid_density(double altitude);
 
 }

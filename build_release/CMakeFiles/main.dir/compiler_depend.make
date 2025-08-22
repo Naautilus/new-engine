@@ -7629,11 +7629,14 @@ CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: C:/Users/user/Docume
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/control_bindings.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -7752,6 +7755,7 @@ CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: C:/Users/user/Docume
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_tempbuf.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_uninitialized.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
+  C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/streambuf.tcc \
   C:/msys64/mingw64/include/c++/15.2.0/bits/streambuf_iterator.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/string_view.tcc \
@@ -7806,6 +7810,7 @@ CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: C:/Users/user/Docume
   C:/msys64/mingw64/include/c++/15.2.0/iosfwd \
   C:/msys64/mingw64/include/c++/15.2.0/iostream \
   C:/msys64/mingw64/include/c++/15.2.0/istream \
+  C:/msys64/mingw64/include/c++/15.2.0/iterator \
   C:/msys64/mingw64/include/c++/15.2.0/limits \
   C:/msys64/mingw64/include/c++/15.2.0/locale \
   C:/msys64/mingw64/include/c++/15.2.0/memory \

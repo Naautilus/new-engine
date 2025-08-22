@@ -13,4 +13,10 @@ const double CYLINDER_VERTICES = 8;
 const double QUADRATIC_PLANET_CURVATURE_COEFFICIENT = 7.85e-8;// * 1e3; // the large multiplier is to make it extremely severe for testing purposes
 const double STANDARD_GRAVITY = 9.81;
 
+const double WATER_LEVEL = 5000;
+
+const double AIR_DENSITY = 1.293;
+const double AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE = 7990.0;
+const double WATER_DENSITY = 1000;
+
 }

@@ -118,7 +118,7 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
         }
     } else {
         for (vertex& v : model.vertices) {
-            v.z += 5000;
+            v.z += constants::WATER_LEVEL;
             v.r = 0;
             v.g = 0.075;
             v.b = 0.2;

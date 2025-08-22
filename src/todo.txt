@@ -1,0 +1,34 @@
+make air density falloff stop lagging the simulation
+    (it is currently disabled because running exp() on every aerodynamic_surface is very slow) {
+    probably just cache it in a hashmap.. more than good enough
+    maybe also make the sky darken with altitude {
+        not sure whether to do it by altitude or by density because density is 1000 in water and that's different...
+        density -> (sky color, fog) would make sense so that water could be foggy
+    }
+}
+
+fix water physics (the common physics bug of applying more drag than is possible) {
+    create either a bullshitted solution or start the venture into solver-type physics
+        (I guess not "start" because the collider velocity cancellation has a solver)
+}
+
+get rid of simulation_state
+    (it's nice in theory but it's an abandoned implementation of variable settings and it's getting in the way of things) {
+    I can add it back later in the cleanup branch when I know what I want from it better and I can make it up-to-date
+}
+
+optimize collisions (both between two meshes and between meshes and points) {
+    the f16 touching the ground/runway slows the simulation to 100% time usage
+    the f16 inside the bowl (sphere... i never got around to making it a bowl) {
+        make it a bowl or rename it
+    } lags despite having no collisions due to inoptimal/insufficient early paths
+    creating just a few aim9x's lags the simulation now, not sure why
+}
+optimize rotating collision meshes (it is like 50% of the cpu time in -Og)
+prettify terrain (shore, maybe some water depth)
+
+add fog? (but I don't want to deal with OpenGL slop right now)
+make objects decrease in height like terrain too?
+    (transfer the quadratic height drop to the OpenGL side of the renderer-physics_object connector)
+
+figure out interfaces between the 
