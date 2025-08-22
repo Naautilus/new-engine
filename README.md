@@ -2,7 +2,7 @@ Welcome to new-engine: a physics simulation with aircraft, missiles, debris and 
 
 <img width="2755" height="811" alt="new-engine" src="https://github.com/user-attachments/assets/cbe4eecc-ebf4-4a9e-acee-2179f0b5ab42" />
 
-An executable (/build/main.exe) is available for Windows x86-64. You will need OpenGL and GLFW installed, and you will need the /models/ and /scenarios/ folders alongside the /build/ folder. I run it with MSYS2 MinGW64.
+An executable (/build/main.exe) is available for Windows x86-64. You will need OpenGL installed, and you will need the /models/ and /scenarios/ folders alongside the /build/ folder. I run it with MSYS2 MinGW64.
 
 Run it with the arguments:
 
