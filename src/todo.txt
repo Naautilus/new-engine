@@ -31,4 +31,4 @@ add fog? (but I don't want to deal with OpenGL slop right now)
 make objects decrease in height like terrain too?
     (transfer the quadratic height drop to the OpenGL side of the renderer-physics_object connector)
 
-figure out interfaces between the 
+make interfaces between the different parts of the simulation? (collider, control, renderer...)
