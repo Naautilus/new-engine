@@ -1,0 +1,19 @@
+#version 330 core
+
+uniform float time;
+in vec3 color;
+out vec4 FragColor;
+
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void main()
+{
+
+    vec2 uv = gl_FragCoord.xy / vec2(8000.0, 6000.0); // Assuming screen size is 800x600
+    float randomValue = rand(uv * 10.0 + rand(vec2(time, log(time)))); // Adjust multiplier to change randomness frequency
+    vec3 color_ = color + vec3(randomValue/100);
+
+    FragColor = vec4(color_, 1.0);
+}

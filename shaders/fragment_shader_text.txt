@@ -1,19 +1,41 @@
 #version 330 core
 
 uniform float time;
+uniform float z_near;
+uniform float z_far;
+uniform float fog_1_over_e_factor;
+uniform vec3 sky_color;
+uniform vec2 resolution;
+uniform float fov;
 in vec3 color;
+in vec4 gl_FragCoord;
 out vec4 FragColor;
-
-float rand(vec2 co) {
-    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
-}
 
 void main()
 {
 
-    vec2 uv = gl_FragCoord.xy / vec2(8000.0, 6000.0); // Assuming screen size is 800x600
-    float randomValue = rand(uv * 10.0 + rand(vec2(time, log(time)))); // Adjust multiplier to change randomness frequency
-    vec3 color_ = color + vec3(randomValue/100);
+    float z_buffer = gl_FragCoord.z;
+    float z_normalized = 2.0 * z_buffer - 1.0;
+    float z_eyespace = 2*z_far*z_near / (z_far + z_near - (z_far - z_near)*(2*z_buffer -1));
+    
+    vec2 screen_position = gl_FragCoord.xy;
+    screen_position /= resolution.xy;
+    screen_position = (screen_position * 1) - vec2(0.5, 0.5);
+    screen_position.x *= (resolution.x / resolution.y);
 
-    FragColor = vec4(color_, 1.0);
+    float unit_distances_from_center = length(screen_position * 2 * tan(fov / 2));
+
+
+    float distance_z = z_eyespace;// * (1 / cos(unit_distances_from_center));
+    float distance_xy = distance_z * unit_distances_from_center;
+    float distance = sqrt(distance_xy * distance_xy + distance_z * distance_z);
+
+    //if (unit_distances_from_center > fov/2) distance = 0;
+    //if (distance_xy > 100) distance = 0;
+
+
+    float fog_fraction = distance / 100000;
+    fog_fraction = min(1.0, fog_fraction);
+    vec3 color_with_fog = (1 - fog_fraction) * color + (fog_fraction) * sky_color;
+    FragColor = vec4(color_with_fog, 1.0);
 }

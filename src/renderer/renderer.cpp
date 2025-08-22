@@ -128,6 +128,9 @@ void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& 
 
 // window creation + looping
 void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
+    float Z_NEAR = 2;
+    float Z_FAR = 1e7;
+
     // initialize
     GLFWwindow* window;
     GLuint vertex_shader, fragment_shader, program;
@@ -191,8 +194,29 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
+    glUseProgram(program);
+
     const GLchar* shader_time_name = "time";
     auto shader_time = glGetUniformLocation(program, shader_time_name);
+
+    const GLchar* shader_fov_name = "fov";
+    auto shader_fov = glGetUniformLocation(program, shader_fov_name);
+
+    const GLchar* shader_z_near_name = "z_near";
+    auto shader_z_near = glGetUniformLocation(program, shader_z_near_name);
+    glUniform1f(shader_z_near, Z_NEAR);
+    
+    const GLchar* shader_z_far_name = "z_far";
+    auto shader_z_far = glGetUniformLocation(program, shader_z_far_name);
+    glUniform1f(shader_z_far, Z_FAR);
+
+    const GLchar* shader_sky_color_name = "sky_color";
+    auto shader_sky_color = glGetUniformLocation(program, shader_sky_color_name);
+    glUniform3f(shader_sky_color, globals::current_simulation_state->sky_r/255.0, globals::current_simulation_state->sky_g/255.0, globals::current_simulation_state->sky_b/255.0);
+
+    const GLchar* shader_resolution_name = "resolution";
+    auto shader_resolution = glGetUniformLocation(program, shader_resolution_name);
+    glUniform2f(shader_resolution, window_size_x, window_size_y);
 
     // model view projection:
     // Model: modelspace --> worldspace
@@ -230,10 +254,10 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         vec3 center;
         vec3_add(center, camera_properties_.camera_position, camera_properties_.camera_z_direction);
         mat4x4_look_at(v,eye,center, camera_properties_.camera_y_direction);
-        mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, 2, 1e9); //FOV of 90°
+        mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, Z_NEAR, Z_FAR); //FOV of 90°
+        glUniform1f(shader_fov, camera_properties_.fov * std::numbers::pi / 180);
         //mat4x4_ortho(p, -100.f, 100.f, -100.f, 100.f, -10000.f, 10000.f);
         mat4x4_mul(vp, p, v);
-        glUseProgram(program);
         int vertex_index = 0;
         // identity means no rotation
         mat4x4_identity(m);
