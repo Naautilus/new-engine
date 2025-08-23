@@ -611,5 +611,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
  C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h

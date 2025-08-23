@@ -126,16 +126,6 @@ void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& 
     set_vertices(vertices, vertex_buffer);
 }
 
-float ACES_film(float x)
-{
-    float a = 2.51f;
-    float b = 0.03f;
-    float c = 2.43f;
-    float d = 0.59f;
-    float e = 0.14f;
-    return std::clamp((x*(a*x+b))/(x*(c*x+d)+e), 0.0f, 1.0f);
-}
-
 // window creation + looping
 void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
     const float Z_NEAR = 10;
@@ -222,7 +212,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
     const GLchar* shader_sky_color_name = "sky_color";
     auto shader_sky_color = glGetUniformLocation(program, shader_sky_color_name);
-    glUniform3f(shader_sky_color, globals::current_simulation_state->sky_r/255.0, globals::current_simulation_state->sky_g/255.0, globals::current_simulation_state->sky_b/255.0);
+    glUniform3f(shader_sky_color, globals::current_simulation_state->sky_color.r, globals::current_simulation_state->sky_color.g, globals::current_simulation_state->sky_color.b);
 
     const GLchar* shader_resolution_name = "resolution";
     auto shader_resolution = glGetUniformLocation(program, shader_resolution_name);
@@ -243,12 +233,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
     glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*) (sizeof(float) * 3));
 
     // rgb(72, 116, 163)
-    color sky_color_graded = {
-        ACES_film(globals::current_simulation_state->sky_r / (float)256.0),
-        ACES_film(globals::current_simulation_state->sky_g / (float)256.0),
-        ACES_film(globals::current_simulation_state->sky_b / (float)256.0),
-    };
-    glClearColor(sky_color_graded.r, sky_color_graded.g, sky_color_graded.b, 1.0f);
+    //glClearColor(72, 116, 163, 1.0f);
     double old_time = glfwGetTime();
     double current_time = glfwGetTime();
     int frame_count = 0;

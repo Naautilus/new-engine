@@ -214,6 +214,7 @@ CMakeFiles/main.dir/src/collision/collider.cpp.obj: C:/Users/user/Documents/code
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
@@ -828,6 +829,7 @@ CMakeFiles/main.dir/src/collision/collision_data.cpp.obj: C:/Users/user/Document
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -2072,6 +2074,7 @@ CMakeFiles/main.dir/src/collision/meshes.cpp.obj: C:/Users/user/Documents/code_w
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -2678,6 +2681,7 @@ CMakeFiles/main.dir/src/collision/shapes.cpp.obj: C:/Users/user/Documents/code_w
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -4479,6 +4483,7 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseBinaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -8261,6 +8266,7 @@ CMakeFiles/main.dir/src/module/autocannon.cpp.obj: C:/Users/user/Documents/code_
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -8884,6 +8890,7 @@ CMakeFiles/main.dir/src/module/jet_engine.cpp.obj: C:/Users/user/Documents/code_
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/models.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp \
@@ -9504,6 +9511,7 @@ CMakeFiles/main.dir/src/module/module.cpp.obj: C:/Users/user/Documents/code_wind
   C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/math/random.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/models.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp \
@@ -10128,6 +10136,7 @@ CMakeFiles/main.dir/src/module/physical_structure.cpp.obj: C:/Users/user/Documen
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -11378,6 +11387,7 @@ CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj: C:/Users/user/Documen
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/models.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.hpp \
@@ -13241,6 +13251,7 @@ CMakeFiles/main.dir/src/physics_object/logger.cpp.obj: C:/Users/user/Documents/c
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -13863,6 +13874,7 @@ CMakeFiles/main.dir/src/physics_object/object.cpp.obj: C:/Users/user/Documents/c
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -15087,6 +15099,7 @@ CMakeFiles/main.dir/src/physics_object/properties.cpp.obj: C:/Users/user/Documen
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -17322,6 +17335,7 @@ CMakeFiles/main.dir/src/renderer/mesh.cpp.obj: C:/Users/user/Documents/code_wind
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
+  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
@@ -24306,6 +24320,8 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/bmi2intrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avxvnniintrin.h:
 
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avxvnniint8intrin.h:
+
 C:/msys64/mingw64/include/c++/15.2.0/bits/enable_special_members.h:
 
 C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/Core/ArithmeticSequence.h:
@@ -24489,8 +24505,6 @@ C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/Eigenvalues/
 C:/Users/user/Documents/code_windows/new-engine/src/collision/collision_data.cpp:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h:
-
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avxvnniint8intrin.h:
 
 C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/Eigenvalues/EigenSolver.h:
 
