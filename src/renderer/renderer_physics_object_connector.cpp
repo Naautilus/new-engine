@@ -260,19 +260,19 @@ double smoothstep(double edge0, double edge1, double x) {
 
 void set_vertex_colors_by_brightness(vertex& v, double brightness_unfiltered) {
     
-    ///*
+    /*
 	double brightness = smoothstep(-1, 1, 0.8*brightness_unfiltered)*2-1;
 	v.r = (1-v.sun_factor)*v.r + 2 * v.sun_factor*v.r*three_point_interpolate(0.5, 1, 1.5, brightness);
 	v.g = (1-v.sun_factor)*v.g + 2 * v.sun_factor*v.g*three_point_interpolate(0.6, 1, 1.4, brightness);
 	v.b = (1-v.sun_factor)*v.b + 2 * v.sun_factor*v.b*three_point_interpolate(0.8, 1, 1.3, brightness);
-    //*/
+    */
     
-    /*
-    double brightness = fmax(brightness_unfiltered*1.0, 0) + 1.0 + fmin(brightness_unfiltered*0.2, 0);
+    ///*
+    double brightness = three_point_interpolate(0.3, 0.35, 1, brightness_unfiltered); // ground albedo is about 0.3
     v.r = (1-v.sun_factor)*v.r + v.sun_factor*v.r*brightness*1.5;
     v.g = (1-v.sun_factor)*v.g + v.sun_factor*v.g*brightness*1.4;
     v.b = (1-v.sun_factor)*v.b + v.sun_factor*v.b*brightness*1.3;
-    */
+    //*/
 }
 
 void apply_sunlight_to_model(mesh& model) {

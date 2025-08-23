@@ -23,6 +23,7 @@ return clamp((x*(a*x+b))/(x*(c*x+d)+e), 0.0, 1.0);
 
 void main()
 {
+    float gamma = 2.2;
 
     float fog_1_over_e_factor = 200000;
 
@@ -49,9 +50,13 @@ void main()
 
     float fog_fraction = 1 - exp(-distance / fog_1_over_e_factor);
 
-    vec3 color_with_fog = (1 - fog_fraction) * color + (fog_fraction) * sky_color;
+    //linear_color_to_srgb
+    //vec3 color_srgb = pow(color, 1.0/gamma);
+    vec3 color_srgb = sqrt(color);
 
-    color_with_fog = ACES_film(color_with_fog * 0.55);
+    vec3 color_with_fog = (1 - fog_fraction) * color_srgb + (fog_fraction) * sky_color;
+
+    color_with_fog = ACES_film(color_with_fog * 0.6);
 
     FragColor = vec4(color_with_fog, 1.0);
 }
