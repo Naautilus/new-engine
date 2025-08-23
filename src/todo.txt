@@ -22,12 +22,10 @@ optimize collisions (both between two meshes and between meshes and points) {
     the f16 inside the bowl (sphere... i never got around to making it a bowl) {
         make it a bowl or rename it
     } lags despite having no collisions due to inoptimal/insufficient early paths
-    creating just a few aim9x's lags the simulation now, not sure why
 }
 optimize rotating collision meshes (it is like 50% of the cpu time in -Og)
 prettify terrain (shore, maybe some water depth)
 
-add fog? (but I don't want to deal with OpenGL slop right now)
 make objects decrease in height like terrain too?
     (transfer the quadratic height drop to the OpenGL side of the renderer-physics_object connector)
 
