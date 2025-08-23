@@ -268,7 +268,7 @@ void set_vertex_colors_by_brightness(vertex& v, double brightness_unfiltered) {
     */
     
     ///*
-    double brightness = three_point_interpolate(0.3, 0.35, 1, brightness_unfiltered); // ground albedo is about 0.3
+    double brightness = three_point_interpolate(0.25, 0.4, 1, brightness_unfiltered); // ground albedo is about 0.3
     v.r = (1-v.sun_factor)*v.r + v.sun_factor*v.r*brightness*1.5;
     v.g = (1-v.sun_factor)*v.g + v.sun_factor*v.g*brightness*1.4;
     v.b = (1-v.sun_factor)*v.b + v.sun_factor*v.b*brightness*1.3;

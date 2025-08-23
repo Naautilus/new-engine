@@ -10,8 +10,7 @@ uniform float fov;
 in vec3 color;
 in vec4 gl_FragCoord;
 out vec4 FragColor;
-// note: this one is experiencing some issues in that it goes pink when oversaturated
-
+// this one is ugly; dark = green and light = pink
 
 //=================================================================================================
 //
@@ -66,10 +65,12 @@ vec3 ACESFitted(vec3 color)
 
 // END of externally sourced file
 
+
 void main()
 {
+    float gamma = 2.2;
 
-    float fog_1_over_e_factor = 50000;
+    float fog_1_over_e_factor = 200000;
 
     float fog_start = 20;
     float fog_end = 21;
@@ -94,9 +95,13 @@ void main()
 
     float fog_fraction = 1 - exp(-distance / fog_1_over_e_factor);
 
-    vec3 color_with_fog = (1 - fog_fraction) * color + (fog_fraction) * sky_color;
+    //linear_color_to_srgb
+    //vec3 color_srgb = pow(color, 1.0/gamma);
+    vec3 color_srgb = sqrt(color);
 
-    color_with_fog = ACESFitted(color_with_fog * 10.0);
+    vec3 color_with_fog = (1 - fog_fraction) * color_srgb + (fog_fraction) * sky_color;
+
+    color_with_fog = ACESFitted(color_with_fog * 0.6);
 
     FragColor = vec4(color_with_fog, 1.0);
 }
