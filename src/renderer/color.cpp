@@ -36,3 +36,10 @@ color color::operator+(const float& f) const {
         b + f
     };
 }
+color color::operator+(const color& c) const {
+    return color{
+        r + c.r,
+        g + c.g,
+        b + c.b
+    };
+}

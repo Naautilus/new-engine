@@ -75,8 +75,8 @@ void initialize_models() {
     f16_wrapped = std::make_shared<mesh>(models::stl_to_mesh("f16_wrapped", 0.2, 0.2, 0.2, 1));
     sphere = std::make_shared<mesh>(models::stl_to_mesh("sphere",  1, 0.8, 0.6, 0));
     axes = std::make_shared<mesh>(models::stl_to_mesh("axes", 1, 0.2, 0.2, 0.5));
-    runway_base = std::make_shared<mesh>(models::stl_to_mesh("runway", 0.0, 0.1, 0.0, 1));
-    runway_surface = std::make_shared<mesh>(models::stl_to_mesh("cube", 0.15, 0.15, 0.15, 1));
+    runway_base = std::make_shared<mesh>(models::stl_to_mesh("runway", 0.0, 0.08, 0.0, 1));
+    runway_surface = std::make_shared<mesh>(models::stl_to_mesh("cube", 0.1, 0.1, 0.1, 1));
 
 }
 

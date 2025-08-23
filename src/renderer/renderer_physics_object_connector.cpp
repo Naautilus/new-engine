@@ -169,9 +169,9 @@ std::vector<mesh> get_terrain_model_lods(bool color_variation, vector::localspac
 	return output;
 }
 
-const int GROUND_LODS = 16;
-const double GROUND_INITIAL_TILE_SIZE = 0.4;
-int GROUND_TILE_COUNT = 32;
+const int GROUND_LODS = 14;
+const double GROUND_INITIAL_TILE_SIZE = 1.6;
+int GROUND_TILE_COUNT = 36;
 const int GROUND_DEADZONE_TILES = 2;
 
 const int WATER_LODS = 8;

@@ -1,5 +1,6 @@
 // top of cpp marker
 #include "ground_logic.hpp"
+#include "../renderer/color.hpp"
 
 namespace ground {
 
@@ -31,34 +32,85 @@ struct ground_info_hash {
     }
 };
 
-const siv::PerlinNoise::seed_type seed = 123456u;
+const siv::PerlinNoise::seed_type seed = 1234567u;
 const siv::PerlinNoise perlin{ seed };
 std::vector<double> PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
-std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};
-std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
+std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,  20000};
+std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,     0,      0};
+vector::worldspace TERRAIN_OFFSET(35000, -2000, -10000);
 std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
 std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 std::mutex ground_altitude_averaged_mutex;
 std::mutex ground_color_averaged_mutex;
 
+// relative to water level
+std::vector<std::pair<double, color>> ground_color_heightmap = {
+    {    0, color{0.22, 0.12, 0.04}},
+    {   49, color{0.22, 0.12, 0.04}},
+    {   50, color{0.1, 0.1, 0.1}},
+    {   51, color{0.0, 0.08, 0.0}},
+    { 1500, color{0.0, 0.06, 0.0}},
+    { 3500, color{0.1, 0.1, 0.1}},
+    { 5000, color{0.1, 0.1, 0.1}},
+    { 5100, color{1.0, 1.0, 1.0}}
+};
+
+color get_ground_color_from_heightmap(double z) {
+    z -= constants::WATER_LEVEL;
+    //std::cout << "z: " << z << "\n";
+
+    /*
+    std::cout << "heightmap:\n";
+    for (auto& pair : ground_color_heightmap) {
+        std::cout << pair.first << " -> {" << pair.second.r << ", " << pair.second.g << ", " << pair.second.b << "}\n";
+    }
+    */
+
+    if (z < ground_color_heightmap[0].first) return ground_color_heightmap[0].second;
+    int last = ground_color_heightmap.size() - 1;
+    if (z > ground_color_heightmap[last].first) return ground_color_heightmap[last].second;
+
+    int lower_index = 0;
+    while (z > ground_color_heightmap[lower_index].first) lower_index++;
+    lower_index--;
+
+    double& lower = ground_color_heightmap[lower_index].first;
+    double& higher = ground_color_heightmap[lower_index + 1].first;
+    double fraction = (z - lower) / (higher - lower);
+
+    //std::cout << "lower_index: " << lower_index << "\n";
+    //std::cout << "fraction: " << fraction << "\n";
+
+    color& lower_color = ground_color_heightmap[lower_index].second;
+    color& higher_color = ground_color_heightmap[lower_index + 1].second;
+
+    color output = lower_color * (1 - fraction) + higher_color * (fraction);
+    //std::cout << "output: {" << output.r << ", " << output.g << ", " << output.b << "}\n";
+    return output;
+}
+
 // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
-double get_ground_altitude(double x, double y) {
+double get_ground_altitude(double x_, double y_) {
+    double x = x_ + TERRAIN_OFFSET.x();
+    double y = y_ + TERRAIN_OFFSET.y();
     double sum = 0;
     for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
         double noise = perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_HEIGHT_EFFECT[i];
     }
-    return sum;
+    return sum + TERRAIN_OFFSET.z();
 }
 
 // NOTE: this function is too simple for hashing to help (~1437.5 ns with vs. ~637 ns without)
-color get_ground_color(double x, double y) {
+color get_ground_color(double x_, double y_) {
+    double x = x_ + TERRAIN_OFFSET.x();
+    double y = y_ + TERRAIN_OFFSET.y();
     float sum = 0;
     for (int i = 0; i < PERLIN_WIDTH.size(); i++) {
         float noise = (float)perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_COLOR_EFFECT[i];
     }
-    return color{0, sum, 0};
+    return get_ground_color_from_heightmap(get_ground_altitude(x_, y_));// * (1 + sum);
 }
 
 double get_ground_altitude_averaged(double x, double y, double width, int count) {

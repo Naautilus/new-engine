@@ -10,4 +10,5 @@ struct color{
     color& operator/=(const double& d);
 	color operator*(const float& f) const;
 	color operator+(const float& f) const;
+	color operator+(const color& c) const;
 };
