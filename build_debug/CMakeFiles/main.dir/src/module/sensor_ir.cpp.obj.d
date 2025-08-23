@@ -617,6 +617,7 @@ CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
  C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h \
  C:/Users/user/Documents/code_windows/new-engine/src/collision/collider.hpp \
@@ -632,7 +633,6 @@ CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/iterator \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.hpp \

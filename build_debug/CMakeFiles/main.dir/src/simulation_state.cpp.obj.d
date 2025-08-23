@@ -610,6 +610,7 @@ CMakeFiles/main.dir/src/simulation_state.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_uninitialized.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/out_ptr.h \
  C:/msys64/mingw64/include/c++/15.2.0/pstl/glue_memory_defs.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/iterator \
@@ -618,5 +619,4 @@ CMakeFiles/main.dir/src/simulation_state.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
- C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h \
- C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp
+ C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h

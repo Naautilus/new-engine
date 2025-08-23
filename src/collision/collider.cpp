@@ -14,7 +14,16 @@ bool collider::check_collision_point_to_model(collider& c) {
     if (relative_velocity.squaredNorm() < 1.0) return false;
     relative_velocity *= constants::DELTA_T;
     line_segment path_to_check(position, position+relative_velocity);
+    
+    vector::worldspace path_center = position + (relative_velocity / 2);
+    double path_radius = (relative_velocity.norm() / 2);
+    vector::worldspace bounding_box_center = (c.bounding_box_min + c.bounding_box_max) / 2;
+    double bounding_box_radius = sqrt(c.bounding_box_width_squared) / 2;
+
+    if ((bounding_box_center - path_center).squaredNorm() > (bounding_box_radius + path_radius) * (bounding_box_radius + path_radius)) return false;
     for (triangle& t : c.model_data) {
+        //if (!tri1.is_intersecting_triangle_bounding_box(tri2)) continue;
+        if ((t.centroid - path_center).squaredNorm() > (t.radius + path_radius) * (t.radius + path_radius)) continue;
         if (t.is_intersecting_line_segment(path_to_check)) return true;
     }
     return false;
@@ -106,8 +115,8 @@ std::vector<line_segment> collider::_get_line_segments_of_intersection_model_to_
         for (triangle& tri2 : c.model_data) {
             //std::cout << "tri1: [" << tri1.points[0].str() << ", " << tri1.points[1].str() << ", " << tri1.points[2].str() << "]\n";
             //std::cout << "tri2: [" << tri2.points[0].str() << ", " << tri2.points[1].str() << ", " << tri2.points[2].str() << "]\n";
-            if ((tri1.centroid - tri2.centroid).squaredNorm() > (tri1.radius + tri2.radius) * (tri1.radius + tri2.radius)) continue;
             if (!tri1.is_intersecting_triangle_bounding_box(tri2)) continue;
+            if ((tri1.centroid - tri2.centroid).squaredNorm() > (tri1.radius + tri2.radius) * (tri1.radius + tri2.radius)) continue;
             if (!tri1.is_intersecting_triangle(tri2)) continue;
             
             //std::cout << "tri1 and tri2 are intersecting\n";
