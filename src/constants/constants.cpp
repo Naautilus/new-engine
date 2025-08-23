@@ -4,7 +4,7 @@
 namespace constants {
 
 const double DELTA_T = 0.005;
-const double LOG_INTERVAL = 0.005;
+const double LOG_INTERVAL = 1;
 const double TIME_LIMIT = -1;
 const double DAMAGE_MULTIPLIER = 2e-4;
 const double UNCONTROLLABLE_HEALTH_FRACTION = 0.8;
