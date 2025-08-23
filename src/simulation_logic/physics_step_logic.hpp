@@ -3,17 +3,8 @@
 #include "../simulation_state.hpp"
 #include "../physics_object/logger.hpp"
 
-void set_functional_physics_objects_list();
-void step_physics_object_controls();
-void step_physics_object_lifespans();
-void step_physics_object_collisions();
-void step_physics_object_ground_collisions();
-void step_physics_object_deletion();
-void step_physics_object_movement_and_modules();
 void step_physics_objects();
 
-extern int log_counter;
-extern int log_counter_interval;
 void log_physics_objects();
 
 void wait_delta_t();

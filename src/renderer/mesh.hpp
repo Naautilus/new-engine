@@ -2,7 +2,7 @@
 #include "vertex.hpp"
 #include "../vector/vector_spaces.hpp"
 
-namespace collision{
+namespace collision {
 
 struct collider;
 

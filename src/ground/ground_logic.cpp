@@ -3,28 +3,36 @@
 
 namespace ground {
 
-bool ground_info::operator==(const ground_info& g) const {
-    return
-        (x == g.x) &&
-        (y == g.y) &&
-        (width == g.width) &&
-        (count == g.count);
-}
 
-std::size_t ground_info_hash::operator()(const ground_info& g) const {
-    std::hash<double> hash_fn;
-    std::size_t h1 = hash_fn(g.x);
-    std::size_t h2 = hash_fn(g.y);
-    std::size_t h3 = hash_fn(g.width);
-    std::size_t h4 = hash_fn(g.count);
-    std::size_t output = h1;
-    output ^= h2 + 0x9e3779b9 + (output<<6) + (output>>2);
-    output ^= h3 + 0x9e3779b9 + (output<<6) + (output>>2);
-    output ^= h4 + 0x9e3779b9 + (output<<6) + (output>>2);
-    return output;
-}
+struct ground_info {
+    double x, y, width;
+    int count;
+    bool operator==(const ground_info& g) const {
+        return
+            (x == g.x) &&
+            (y == g.y) &&
+            (width == g.width) &&
+            (count == g.count);
+    }
+};
+
+struct ground_info_hash {
+    std::size_t operator()(const ground_info& g) const {
+        std::hash<double> hash_fn;
+        std::size_t h1 = hash_fn(g.x);
+        std::size_t h2 = hash_fn(g.y);
+        std::size_t h3 = hash_fn(g.width);
+        std::size_t h4 = hash_fn(g.count);
+        std::size_t output = h1;
+        output ^= h2 + 0x9e3779b9 + (output<<6) + (output>>2);
+        output ^= h3 + 0x9e3779b9 + (output<<6) + (output>>2);
+        output ^= h4 + 0x9e3779b9 + (output<<6) + (output>>2);
+        return output;
+    }
+};
 
 const siv::PerlinNoise::seed_type seed = 123456u;
+const siv::PerlinNoise perlin{ seed };
 std::vector<double> PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
 std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,   5000};
 std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,  0.15,      0};
