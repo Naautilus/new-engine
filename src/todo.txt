@@ -29,4 +29,4 @@ prettify terrain (shore, maybe some water depth)
 make objects decrease in height like terrain too?
     (transfer the quadratic height drop to the OpenGL side of the renderer-physics_object connector)
 
-make interfaces between the different parts of the simulation? (collider, control, renderer...)
+make interfaces between the different parts of the simulation? (collider, control, renderer....)
