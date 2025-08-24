@@ -129,7 +129,7 @@ void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& 
 // window creation + looping
 void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
     const float Z_NEAR = 10;
-    const float Z_FAR = 1e7;
+    const float Z_FAR = 3e8;
 
     // initialize
     GLFWwindow* window;
@@ -218,6 +218,9 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
     auto shader_resolution = glGetUniformLocation(program, shader_resolution_name);
     glUniform2f(shader_resolution, window_size_x, window_size_y);
 
+    const GLchar* shader_air_density_name = "air_density";
+    auto shader_air_density = glGetUniformLocation(program, shader_air_density_name);
+
     // model view projection:
     // Model: modelspace --> worldspace
     // View: worldspace --> cameraspace
@@ -275,6 +278,14 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         update_free_camera_state(window);
         if (!globals::free_camera) apply_key_responses(window, renderer_dt);
         else manual_camera_movement(window, renderer_dt, camera_properties_);
+
+        std::cout << "ground::fluid_density(camera_properties_.camera_position[1]): " << ground::fluid_density(camera_properties_.camera_position[1]) << "\n";
+        std::cout << "ground::fluid_density(constants::WATER_LEVEL + 1): " << ground::fluid_density(constants::WATER_LEVEL + 1) << "\n";
+
+        float fluid_density_fraction = (float)fmin(ground::fluid_density(camera_properties_.camera_position[1]) / ground::fluid_density(constants::WATER_LEVEL + 1), 1.0);
+        std::cout << "altitude: " << camera_properties_.camera_position[1] << "\n";
+        std::cout << "fluid_density_fraction: " << fluid_density_fraction << "\n";
+        glUniform1f(shader_air_density, fluid_density_fraction);
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (double) height;

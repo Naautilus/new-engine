@@ -48,7 +48,7 @@ extern const double DAMAGE_MULTIPLIER;
 extern const double UNCONTROLLABLE_HEALTH_FRACTION;
 extern const double SAFE_COLLISION_SPEED;
 extern const double CYLINDER_VERTICES;
-extern const double QUADRATIC_PLANET_CURVATURE_COEFFICIENT;
+extern const double PLANET_RADIUS;
 extern const double STANDARD_GRAVITY;
 extern const double WATER_LEVEL;
 extern const double AIR_DENSITY;

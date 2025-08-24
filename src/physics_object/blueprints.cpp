@@ -216,10 +216,16 @@ object axes(vector::worldspace position_, double scale = 1) {
 }
 
 object sphere(vector::worldspace position_, double scale = 1) {
+    auto sphere_ = std::make_shared<mesh>(*models::sphere);
+    for (vertex& v : sphere_->vertices) {
+        v.r = 0;
+        v.g = 0;
+        v.b = 0;
+    }
     object o("sphere");
     o.properties.fixed = true;
     o.properties.functional = false;
-    o.add_physical_structure(module::physical_structure(collision::collider(), models::sphere, vector::localspace(0,0,0), vector::localspace(1,1,1) * scale));
+    o.add_physical_structure(module::physical_structure(collision::collider(), sphere_, vector::localspace(0,0,0), vector::localspace(1,1,1) * scale));
     o.physics_state.position = position_;
     o.physics_state.mass = 1;
     o.physics_state.health = 1;

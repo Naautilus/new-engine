@@ -7,6 +7,7 @@ uniform float z_far;
 uniform vec3 sky_color;
 uniform vec2 resolution;
 uniform float fov;
+uniform float air_density;
 in vec3 color;
 in vec4 gl_FragCoord;
 out vec4 FragColor;
@@ -24,9 +25,9 @@ return clamp((x*(a*x+b))/(x*(c*x+d)+e), 0.0, 1.0);
 void main()
 {
     float gamma = 2.2;
-    float sky_brightness = 1.0;
+    float sky_brightness = 1.0 * air_density;
 
-    float fog_1_over_e_factor = 200000;
+    float fog_1_over_e_factor = 200000 / air_density;
 
     float fog_start = 20;
     float fog_end = 21;

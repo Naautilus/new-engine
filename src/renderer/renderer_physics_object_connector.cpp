@@ -137,7 +137,9 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
     for (vertex& v : model.vertices) {
         double x_relative = v.x - last_camera_position_.x();
         double y_relative = v.y - last_camera_position_.y();
-        v.z -= constants::QUADRATIC_PLANET_CURVATURE_COEFFICIENT * (x_relative*x_relative + y_relative*y_relative);
+        double distance = sqrt(x_relative * x_relative + y_relative * y_relative);
+        if (distance > constants::PLANET_RADIUS) v.z += std::numeric_limits<double>::quiet_NaN();
+        v.z += sqrt(constants::PLANET_RADIUS * constants::PLANET_RADIUS - distance * distance) - constants::PLANET_RADIUS;
     }
 
     // convert to opengl coordinate system
@@ -169,14 +171,14 @@ std::vector<mesh> get_terrain_model_lods(bool color_variation, vector::localspac
 	return output;
 }
 
-const int GROUND_LODS = 14;
+const int GROUND_LODS = 18;
 const double GROUND_INITIAL_TILE_SIZE = 1.6;
-int GROUND_TILE_COUNT = 36;
+int GROUND_TILE_COUNT = 32;
 const int GROUND_DEADZONE_TILES = 2;
 
-const int WATER_LODS = 8;
+const int WATER_LODS = 9;
 const double WATER_INITIAL_TILE_SIZE = 1000;
-int WATER_TILE_COUNT = 10;
+int WATER_TILE_COUNT = 20;
 const int WATER_DEADZONE_TILES = 2;
 
 }

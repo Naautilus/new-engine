@@ -4,7 +4,7 @@
 
 simulation_state::simulation_state() {
     ground_function = ground::get_ground_altitude;
-    sky_color = color{0.08, 0.49, 1.44};
+    sky_color = color{0.08, 0.45, 1.44};
     gravity = 9.81;
     air_density = 1.293;
     timescale = 1;
