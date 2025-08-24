@@ -30,4 +30,8 @@ extern int error_count;
 
 extern timer::timer timer_;
 
+extern std::vector<double> sensor_ir_activations;
+extern std::mutex sensor_ir_activations_mutex;
+
+
 }

@@ -397,9 +397,8 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
         std::cout << s.str() << "\n";
     }
     */
-    const int GRID_WIDTH = 30;
     const double LAST_TARGET_BONUS = 0.4;
-    sensor_cell_grid grid = sensor_cell_grid(GRID_WIDTH, view_cone_halfarc);
+    sensor_cell_grid grid = sensor_cell_grid(constants::SENSOR_IR_GRID_WIDTH, view_cone_halfarc);
     double target_recognition_radius = tan(target_recognition_cone_halfarc * std::numbers::pi / 180);
     for (signal_point& p : signals_unfiltered) {
         grid.increase_signals_in_circle(p.position_scopespace.scope_x(), p.position_scopespace.scope_y(), target_recognition_radius, p.position_scopespace.distance(), p.signal_strength);
@@ -412,6 +411,16 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
     ) {
         grid.increase_signals_in_circle(last_detection_scopespace.scope_x(), last_detection_scopespace.scope_y(), target_recognition_radius, last_detection_scopespace.distance(), last_detection_signal_strength);
     }
+    
+    globals::sensor_ir_activations_mutex.lock();
+    globals::sensor_ir_activations.clear();
+    for (auto& row : grid.points) {
+        for (auto& point : row) {
+            globals::sensor_ir_activations.push_back(point.signal_strength);
+        }
+    }
+    globals::sensor_ir_activations_mutex.unlock();
+
     signal_point center = grid.get_largest_signal();
 
     /*

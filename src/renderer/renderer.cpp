@@ -242,6 +242,13 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
     const GLchar* shader_air_density_name = "air_density";
     auto shader_air_density = glGetUniformLocation(program, shader_air_density_name);
 
+    const GLchar* shader_sensor_activations_name = "sensor_activations";
+    auto shader_sensor_activations = glGetUniformLocation(program, shader_sensor_activations_name);
+
+    const GLchar* shader_sensor_cell_count_name = "sensor_cell_count";
+    auto shader_sensor_cell_count = glGetUniformLocation(program, shader_sensor_cell_count_name);
+    glUniform1f(shader_sensor_cell_count, constants::SENSOR_IR_GRID_WIDTH);
+
     // model view projection:
     // Model: modelspace --> worldspace
     // View: worldspace --> cameraspace
@@ -311,6 +318,13 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         std::cout << "fluid_density_fraction: " << fluid_density_fraction << "\n";
         */
         glUniform1f(shader_air_density, fluid_density_fraction);
+
+        globals::sensor_ir_activations_mutex.lock();
+        float sensor_ir_activations[constants::SENSOR_IR_GRID_WIDTH * constants::SENSOR_IR_GRID_WIDTH];
+        for (int i = 0; i < globals::sensor_ir_activations.size(); i++) sensor_ir_activations[i] = (float)globals::sensor_ir_activations[i];
+        globals::sensor_ir_activations_mutex.unlock();
+        const GLfloat* gl_sensor_ir_activations = (const float*)sensor_ir_activations;
+        glUniform1fv(shader_sensor_activations, constants::SENSOR_IR_GRID_WIDTH * constants::SENSOR_IR_GRID_WIDTH, gl_sensor_ir_activations);
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (double) height;
