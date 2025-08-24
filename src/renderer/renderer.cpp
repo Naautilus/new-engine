@@ -126,18 +126,10 @@ void renderer::set_vertices_by_models(GLuint& vertex_buffer, std::vector<mesh>& 
     set_vertices(vertices, vertex_buffer);
 }
 
-struct depth_partition {
-    float z_near;
-    float z_far;
-};
-
 // window creation + looping
 void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_) {
-    std::vector<depth_partition> depth_partitions = {
-        {1e-1, 2e2},
-        {2e2, 4e5},
-        {4e5, 8e8}
-    };
+    const float Z_NEAR = 10;
+    const float Z_FAR = 3e8;
 
     // initialize
     GLFWwindow* window;
@@ -212,11 +204,11 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
     const GLchar* shader_z_near_name = "z_near";
     auto shader_z_near = glGetUniformLocation(program, shader_z_near_name);
-    glUniform1f(shader_z_near, depth_partitions[0].z_near);
+    glUniform1f(shader_z_near, Z_NEAR);
     
     const GLchar* shader_z_far_name = "z_far";
     auto shader_z_far = glGetUniformLocation(program, shader_z_far_name);
-    glUniform1f(shader_z_far, depth_partitions[depth_partitions.size() - 1].z_far);
+    glUniform1f(shader_z_far, Z_FAR);
 
     const GLchar* shader_sky_color_name = "sky_color";
     auto shader_sky_color = glGetUniformLocation(program, shader_sky_color_name);
@@ -257,37 +249,27 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         // initialize variables
         double ratio;
         int width, height;
+        mat4x4 m, v, p, vp, mvp;
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        for (int i = 0; i < depth_partitions.size(); i++) {
-            float slice_near = i * (1.0 / depth_partitions.size());
-            float slice_far = (i+1) * (1.0 / depth_partitions.size());
-            glDepthRange(slice_near, slice_far);
-
-            depth_partition& depth_partition_ = depth_partitions[i];
-            mat4x4 m, v, p, vp, mvp;
-    
-            // view matrix (v) controls camera position and angle
-            vec3 eye;
-            vec3_dup(eye, camera_properties_.camera_position);
-            vec3 center;
-            vec3_add(center, camera_properties_.camera_position, camera_properties_.camera_z_direction);
-            mat4x4_look_at(v,eye,center, camera_properties_.camera_y_direction);
-            mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, depth_partition_.z_near, depth_partition_.z_far); //FOV of 90°
-            glUniform1f(shader_fov, camera_properties_.fov * std::numbers::pi / 180);
-            //mat4x4_ortho(p, -100.f, 100.f, -100.f, 100.f, -10000.f, 10000.f);
-            mat4x4_mul(vp, p, v);
-            int vertex_index = 0;
-            // identity means no rotation
-            mat4x4_identity(m);
-            mat4x4_mul(mvp, vp, m);
-            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
-            for (int i = 0; i < models.size(); i++) {
-                vertex_index += models[i].indices.size();
-            }
-            glDrawArrays(GL_TRIANGLES, 0, vertex_index);
+        // view matrix (v) controls camera position and angle
+        vec3 eye;
+        vec3_dup(eye, camera_properties_.camera_position);
+        vec3 center;
+        vec3_add(center, camera_properties_.camera_position, camera_properties_.camera_z_direction);
+        mat4x4_look_at(v,eye,center, camera_properties_.camera_y_direction);
+        mat4x4_perspective(p, camera_properties_.fov * std::numbers::pi / 180, window_size_x/(double)window_size_y, Z_NEAR, Z_FAR); //FOV of 90°
+        glUniform1f(shader_fov, camera_properties_.fov * std::numbers::pi / 180);
+        //mat4x4_ortho(p, -100.f, 100.f, -100.f, 100.f, -10000.f, 10000.f);
+        mat4x4_mul(vp, p, v);
+        int vertex_index = 0;
+        // identity means no rotation
+        mat4x4_identity(m);
+        mat4x4_mul(mvp, vp, m);
+        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
+        for (int i = 0; i < models.size(); i++) {
+            vertex_index += models[i].indices.size();
         }
+        glDrawArrays(GL_TRIANGLES, 0, vertex_index);
 
         // camera + rotation
         glfwSwapBuffers(window);
