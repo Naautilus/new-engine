@@ -109,17 +109,40 @@ object debris_1kg() {
     return debris(1.0);
 }
 
+
+control_bindings plane_control_bindings_mouse() {
+    control_bindings control_bindings_;
+    controls::input pitch = controls::input(controls::pitch, controls::instant, -0.3, 0.3, 1);
+    pitch.add_mouse_position_input(controls::MOUSE_Y, -3);
+    control_bindings_.inputs.push_back(pitch);
+    controls::input yaw = controls::input(controls::yaw, controls::instant, -0.6, 0.6, 1);
+    yaw.add_mouse_position_input(controls::MOUSE_X, 3);
+    control_bindings_.inputs.push_back(yaw);
+    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1);
+    roll.add_key(GLFW_KEY_A, -3);
+    roll.add_key(GLFW_KEY_D, 3);
+    control_bindings_.inputs.push_back(roll);
+    controls::input engine1 = controls::input(controls::engine1, controls::trim_not_resetting, 0, 1, 1);
+    engine1.add_key(GLFW_KEY_Z, 0.5);
+    engine1.add_key(GLFW_KEY_X, -0.5);
+    control_bindings_.inputs.push_back(engine1);
+    controls::input gun1 = controls::input(controls::gun1, controls::instant, 0, 1, 1);
+    gun1.add_key(GLFW_KEY_SPACE, 1);
+    control_bindings_.inputs.push_back(gun1);
+    return control_bindings_;
+}
+
 control_bindings plane_control_bindings_wasd() {
     control_bindings control_bindings_;
-    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.15, 0.15, 1);
+    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.3, 0.3, 1);
     pitch.add_key(GLFW_KEY_W, -3);
     pitch.add_key(GLFW_KEY_S, 3);
     control_bindings_.inputs.push_back(pitch);
-    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.3, 0.3, 1);
+    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1);
     yaw.add_key(GLFW_KEY_E, -3);
     yaw.add_key(GLFW_KEY_Q, 3);
     control_bindings_.inputs.push_back(yaw);
-    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.2, 0.2, 1);
+    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1);
     roll.add_key(GLFW_KEY_A, -3);
     roll.add_key(GLFW_KEY_D, 3);
     control_bindings_.inputs.push_back(roll);
@@ -135,15 +158,15 @@ control_bindings plane_control_bindings_wasd() {
 
 control_bindings plane_control_bindings_ijkl() {
     control_bindings control_bindings_;
-    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.15, 0.15, 1);
+    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.3, 0.3, 1);
     pitch.add_key(GLFW_KEY_I, -3);
     pitch.add_key(GLFW_KEY_K, 3);
     control_bindings_.inputs.push_back(pitch);
-    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.3, 0.3, 1);
+    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1);
     yaw.add_key(GLFW_KEY_O, -3);
     yaw.add_key(GLFW_KEY_U, 3);
     control_bindings_.inputs.push_back(yaw);
-    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.2, 0.2, 1);
+    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1);
     roll.add_key(GLFW_KEY_J, -3);
     roll.add_key(GLFW_KEY_L, 3);
     control_bindings_.inputs.push_back(roll);
@@ -355,6 +378,7 @@ void initialize_blueprints() {
     named_objects.push_back(named_blueprint<object>{debris_1kg, "debris_1kg"});
     named_objects.push_back(named_blueprint<object>{f16_simple_forces_model, "f16_simple_forces_model"});
     named_objects.push_back(named_blueprint<object>{sun, "sun"});
+    named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_mouse, "plane_control_bindings_mouse"});
     named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_wasd, "plane_control_bindings_wasd"});
     named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_ijkl, "plane_control_bindings_ijkl"});
 }

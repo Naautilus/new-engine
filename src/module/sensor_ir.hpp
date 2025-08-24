@@ -70,7 +70,7 @@ struct sensor_ir : module {
     double get_time_to_impact_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent);
     double find_smallest_positive_root(double a, double b, double c);
     vector::localspace get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain);
-    vector::localspace get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent);
+    vector::localspace get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain);
     vector::localspace get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain);
     std::vector<signal_point> get_signals_from_physics_objects(physics_object::object* parent);
     vector::scopespace get_target_direction(physics_object::object* parent);

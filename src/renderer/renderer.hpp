@@ -14,6 +14,7 @@
 
 static std::string vertex_shader_text;
 static std::string fragment_shader_text;
+static std::string fragment_shader_2_text;
 
 struct renderer {
 
@@ -32,6 +33,7 @@ struct renderer {
     public:
 
     static bool key_pressed(GLFWwindow* window, int key);
+    static double mouse_position(GLFWwindow* window, controls::mouse_axis mouse_axis_);
     static void apply_key_responses(GLFWwindow* window, double renderer_dt);
 	
 	static void create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);

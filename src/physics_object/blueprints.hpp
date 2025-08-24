@@ -39,6 +39,7 @@ object bullet_20mm();
 Eigen::Quaterniond random_quaternion();
 object debris(double mass);
 object debris_1kg();
+control_bindings plane_control_bindings_mouse();
 control_bindings plane_control_bindings_wasd();
 control_bindings plane_control_bindings_ijkl();
 object f16_simple_forces_model();

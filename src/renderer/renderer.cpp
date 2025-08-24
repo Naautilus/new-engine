@@ -36,6 +36,27 @@ bool renderer::key_pressed(GLFWwindow* window, int key) {
     return result;
 }
 
+double renderer::mouse_position(GLFWwindow* window, controls::mouse_axis mouse_axis_) {
+    double x_position, y_position;
+    glfwGetCursorPos(window, &x_position, &y_position);
+    int x_size, y_size;
+    glfwGetWindowSize(window, &x_size, &y_size);
+    const char* error_message;
+    if (glfwGetError(&error_message)) std::cout << "[!!!] error: " << error_message << "\n";
+    std::cout << "x_size: " << x_size << "\n";
+    std::cout << "y_size: " << y_size << "\n";
+    x_position /= x_size;
+    y_position /= y_size;
+    x_position = (2 * x_position) - 1;
+    y_position = (2 * y_position) - 1;
+    if (mouse_axis_ == controls::MOUSE_X) {
+        std::cout << "x_position: " << x_position << "\n";
+        return x_position;
+    }
+    std::cout << "y_position: " << y_position << "\n";
+    return y_position;
+}
+
 void renderer::update_free_camera_state(GLFWwindow* window) {
     if (!key_pressed(window, GLFW_KEY_0)) return;
     while (key_pressed(window, GLFW_KEY_0)) glfwPollEvents();
@@ -285,10 +306,10 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         */
 
         float fluid_density_fraction = (float)fmin(ground::fluid_density(camera_properties_.camera_position[1]) / ground::fluid_density(constants::WATER_LEVEL + 1), 1.0);
-        ///*
+        /*
         std::cout << "altitude: " << camera_properties_.camera_position[1] << "\n";
         std::cout << "fluid_density_fraction: " << fluid_density_fraction << "\n";
-        //*/
+        */
         glUniform1f(shader_air_density, fluid_density_fraction);
 
         glfwGetFramebufferSize(window, &width, &height);

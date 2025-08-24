@@ -28,11 +28,14 @@ double _get_response_for_response_type(double renderer_dt, controls::input& c, d
 }
 
 void _process_control_input(GLFWwindow* window, double renderer_dt, controls::input& c, physics_object::object& o) {
-    if (c.key_inputs.size() == 0) return;
+    if (c.key_inputs.size() == 0 && c.mouse_position_inputs.size() == 0) return;
 
     double response_ = 0;
     for (controls::key k : c.key_inputs) {
         if (renderer::key_pressed(window, k.key_number)) response_ += k.axis_response;
+    }
+    for (controls::mouse_position_input m : c.mouse_position_inputs) {
+        response_ += m.axis_response * renderer::mouse_position(window, m.mouse_axis_);
     }
 
     c.response_unmultiplied = _get_response_for_response_type(renderer_dt, c, response_);

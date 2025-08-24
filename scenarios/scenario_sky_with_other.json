@@ -1,0 +1,56 @@
+{
+  "physics_objects": [
+    {
+      "blueprint": "f16_simple_forces_model",
+      "name": "plane1",
+      "position": {
+        "relative_to_ground": false,
+        "x": -1030,
+        "y": 495,
+        "z": 10000
+      },
+      "velocity": {
+        "localspace": true,
+        "x": 500,
+        "y": 0,
+        "z": 0
+      },
+      "control_bindings": "plane_control_bindings_wasd"
+    },
+    {
+      "blueprint": "f16_simple_forces_model",
+      "name": "plane2",
+      "position": {
+        "relative_to_ground": false,
+        "x": 0,
+        "y": 500,
+        "z": 10000
+      },
+      "rotation": {
+        "degrees_around_axis": -45,
+        "axis": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        }
+      },
+      "velocity": {
+        "localspace": true,
+        "x": 500,
+        "y": 0,
+        "z": 0
+      },
+      "control_bindings": "plane_control_bindings_ijkl",
+      "count": 1,
+      "clone_offset": {
+        "localspace": true,
+        "x": 20,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "blueprint": "sun"
+    }
+  ]
+}
