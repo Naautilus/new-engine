@@ -7,7 +7,7 @@
         "relative_to_ground": false,
         "x": -1030,
         "y": 495,
-        "z": 20000
+        "z": 10000
       },
       "velocity": {
         "localspace": true,
@@ -24,7 +24,7 @@
         "relative_to_ground": false,
         "x": -1000,
         "y": 500,
-        "z": 20000
+        "z": 10000
       },
       "rotation": {
         "degrees_around_axis": 0,
