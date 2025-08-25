@@ -23,7 +23,7 @@
       "position": {
         "relative_to_ground": false,
         "x": 0,
-        "y": 500,
+        "y": -500,
         "z": 10000
       },
       "rotation": {

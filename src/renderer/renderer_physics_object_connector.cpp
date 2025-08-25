@@ -430,26 +430,26 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 }
 
 void renderer::create_sensor_preview(std::vector<mesh>& models, camera_properties& camera_properties_) {
-    globals::sensor_ir_activations_mutex.lock();
-    double width_per_element = 0.3 / (constants::SENSOR_IR_GRID_WIDTH);
+    std::lock_guard<std::mutex> lock(globals::sensor_ir_activations_mutex);
+    double width_per_element = 20.0 / constants::SENSOR_IR_GRID_WIDTH;
     for (int x = 0; x < globals::sensor_ir_activations.size(); x++) {
         for (int y = 0; y < globals::sensor_ir_activations[x].size(); y++) {
             double signal_strength = globals::sensor_ir_activations[x][y];
             vertex origin;
-            origin.x = 1;
-            origin.y = x * width_per_element;
-            origin.z = y * width_per_element;
+            origin.x = 20;
+            origin.y = (x - globals::sensor_ir_activations.size() * 0.5) * width_per_element;
+            origin.z = (y - globals::sensor_ir_activations[x].size() * 0.5) * width_per_element;
             double brightness = signal_strength;
             origin.r = brightness;
             origin.g = brightness;
             origin.b = brightness;
             origin.sun_factor = 0;
 
-            vertex offset_x = origin;
+            vertex offset_x{0, 0, 0, 0, 0, 0, 0};
             offset_x.y += width_per_element;
 
-            vertex offset_y = origin;
-            offset_x.z += width_per_element;
+            vertex offset_y{0, 0, 0, 0, 0, 0, 0};
+            offset_y.z += width_per_element;
 
             std::vector<vertex> vertices = {
                 origin,
@@ -459,6 +459,26 @@ void renderer::create_sensor_preview(std::vector<mesh>& models, camera_propertie
                 origin + offset_x,
                 origin + offset_y
             };
+
+            for (vertex& v : vertices) {
+                vector::localspace position_localspace(v.x, v.y, v.z);
+                vector::worldspace position_worldspace = position_localspace.to_worldspace_positional(
+                    camera_properties_.previous_camera_rotations.back(),
+                    camera_properties_.last_camera_position
+                );
+                v.x = position_worldspace.x();
+                v.y = position_worldspace.y();
+                v.z = position_worldspace.z();
+            }
+            
+            for (vertex& v : vertices) {
+                double x_ = v.x;
+                double y_ = v.y;
+                double z_ = v.z;
+                v.x = y_;
+                v.y = z_;
+                v.z = -x_;
+            }
 
             models.push_back(mesh(vertices));
         }

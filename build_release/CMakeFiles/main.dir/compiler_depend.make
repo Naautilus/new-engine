@@ -4273,11 +4273,6 @@ CMakeFiles/main.dir/src/controls/controls.cpp.obj: C:/Users/user/Documents/code_
   C:/Users/user/Documents/code_windows/new-engine/src/controls/controls.hpp
 
 CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.cpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/collision/collider.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/collision/collider_type.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/collision/collision_data.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/collision/meshes.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/collision/shapes.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/constants/constants.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Cholesky \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Core \
@@ -4488,12 +4483,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseBinaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.inc \
   C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/src/plugins/ReshapedMethods.inc \
-  C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
-  C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
   C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.hpp \
@@ -4504,7 +4493,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/msys64/mingw64/include/_mingw_secapi.h \
   C:/msys64/mingw64/include/_mingw_stat64.h \
   C:/msys64/mingw64/include/_timeval.h \
-  C:/msys64/mingw64/include/assert.h \
   C:/msys64/mingw64/include/c++/15.2.0/algorithm \
   C:/msys64/mingw64/include/c++/15.2.0/array \
   C:/msys64/mingw64/include/c++/15.2.0/atomic \
@@ -4609,11 +4597,9 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_numeric.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_pair.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_raw_storage_iter.h \
-  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_tempbuf.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_uninitialized.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
-  C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/streambuf.tcc \
   C:/msys64/mingw64/include/c++/15.2.0/bits/streambuf_iterator.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/string_view.tcc \
@@ -4630,7 +4616,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/msys64/mingw64/include/c++/15.2.0/bits/utility.h \
   C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
   C:/msys64/mingw64/include/c++/15.2.0/bits/version.h \
-  C:/msys64/mingw64/include/c++/15.2.0/cassert \
   C:/msys64/mingw64/include/c++/15.2.0/cctype \
   C:/msys64/mingw64/include/c++/15.2.0/cerrno \
   C:/msys64/mingw64/include/c++/15.2.0/charconv \
@@ -4668,7 +4653,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/msys64/mingw64/include/c++/15.2.0/iosfwd \
   C:/msys64/mingw64/include/c++/15.2.0/iostream \
   C:/msys64/mingw64/include/c++/15.2.0/istream \
-  C:/msys64/mingw64/include/c++/15.2.0/iterator \
   C:/msys64/mingw64/include/c++/15.2.0/limits \
   C:/msys64/mingw64/include/c++/15.2.0/locale \
   C:/msys64/mingw64/include/c++/15.2.0/memory \
@@ -4712,7 +4696,6 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_wi
   C:/msys64/mingw64/include/c++/15.2.0/type_traits \
   C:/msys64/mingw64/include/c++/15.2.0/typeinfo \
   C:/msys64/mingw64/include/c++/15.2.0/unordered_map \
-  C:/msys64/mingw64/include/c++/15.2.0/utility \
   C:/msys64/mingw64/include/c++/15.2.0/vector \
   C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/atomic_word.h \
   C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/basic_file.h \

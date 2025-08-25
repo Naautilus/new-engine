@@ -265,7 +265,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
         create_ground_models(models, camera_properties_, ground, new_ground_ready);
         create_models_from_physics_objects(models, camera_properties_);
-        create_sensor_preview(models, camera_properties_);
+        //create_sensor_preview(models, camera_properties_);
         set_vertices_by_models(vertex_buffer, models);
 
         // initialize variables

@@ -6,7 +6,7 @@ mesh::mesh() {
     //std::cout << "New mesh created";
 }
 mesh::mesh(std::vector<vertex>& vertices_) {
-    std::cout << "New mesh created\n";
+    //std::cout << "New mesh created\n";
 
     /*
     currently this fucks up lighting

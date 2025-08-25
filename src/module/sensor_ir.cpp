@@ -213,32 +213,53 @@ vector::worldspace sensor_ir::get_worldspace_position(physics_object::object* pa
     return position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position);
 }
 
+enum guidance_mode {
+    NONE,
+    INITIAL,
+    FAR,
+    CLOSE
+};
+
 void sensor_ir::update(physics_object::object* parent) {
-    //std::cout << "\n-----------------\n\n";
-    //if (health <= 0) return;
     time_since_launch += constants::DELTA_T;
     vector::worldspace current_detection_relative_worldspace = get_target_position(parent);
 
     double target_distance = current_detection_relative_worldspace.norm();
     if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
     //std::cout << "record target distance: " << record_target_distance << std::endl;
-    vector::localspace guidance_pid_inputs = vector::localspace(0, 0, 0);
 
-    double far_gain = 6.0;
-    double close_gain = 1.0;
-    far_gain *= std::clamp((time_since_launch-0.1)*0.5, 0.0, 1.0);
-    far_gain *= 1-get_g_limit_fraction(parent->physics_state.recorded_acceleration.norm(), 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
-    vector::localspace guidance_pid_inputs_far = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, far_gain);
-    vector::localspace guidance_pid_inputs_close = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, close_gain);
-    
-    ///*
-    if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 0) {
-        guidance_pid_inputs = guidance_pid_inputs_close;
+    guidance_mode guidance_mode_;
+    if (time_since_launch < 0.3) {
+        guidance_mode_ = NONE;
+    } else if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 1.0) {
+        guidance_mode_ = CLOSE;
+    } else if (time_since_launch > 2.0) {
+        guidance_mode_ = FAR;
     } else {
-        guidance_pid_inputs = guidance_pid_inputs_far;
+        guidance_mode_ = INITIAL;
     }
-    //*/
-    
+
+    double acceleration = parent->physics_state.recorded_acceleration.norm();
+    std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
+    double gain_limiter = 1-get_g_limit_fraction(acceleration, 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
+    vector::localspace guidance_pid_inputs;
+    switch(guidance_mode_) {
+        case INITIAL:
+            guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, 10.0 * gain_limiter);
+            break;
+        case FAR:
+            guidance_pid_inputs = 
+                get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 10.0 * gain_limiter) +
+                get_guidance_direct(current_detection_relative_worldspace, parent, 5.0 * gain_limiter) +
+                get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, 0.0 * gain_limiter);
+            break;
+        case CLOSE:
+            guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 20.0 * gain_limiter);
+            break;
+        default:
+            guidance_pid_inputs = vector::worldspace(0, 0, 0);
+            break;
+    }
     
     //std::cout << interp << std::endl;
     pid_roll.update(guidance_pid_inputs.x());
@@ -251,7 +272,7 @@ void sensor_ir::update(physics_object::object* parent) {
     || std::isnan(pid_roll.output)
     || std::isnan(pid_pitch.output)
     || std::isnan(pid_yaw.output)) {
-        std::cout << "bull shit\n";
+        std::cout << "NaN detected in sensor_ir \n";
         std::cout << *(int*)nullptr;
     }
 
@@ -320,6 +341,13 @@ vector::localspace sensor_ir::get_guidance_direct(vector::worldspace current_det
     );
     //std::cout << "get_guidance_direct output: " << output.str() << "\n";
     return output;
+}
+
+vector::localspace sensor_ir::get_guidance_target_velocity(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
+    vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
+    vector::worldspace enemy_velocity = get_enemy_velocity(current_detection_worldspace, last_detection_worldspace);
+    vector::worldspace aimpoint = enemy_velocity;
+    return get_guidance_direct(aimpoint, parent, gain);
 }
 
 vector::localspace sensor_ir::get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
@@ -413,10 +441,13 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
     }
     
     globals::sensor_ir_activations_mutex.lock();
+    globals::sensor_ir_activations.clear();
     for (int x = 0; x < grid.points.size(); x++) {
+        std::vector<double> row;
         for (int y = 0; y < grid.points[x].size(); y++) {
-            globals::sensor_ir_activations[x][y] = grid.points[x][y].signal_strength;
+            row.push_back(grid.points[x][y].signal_strength);
         }
+        globals::sensor_ir_activations.push_back(row);
     }
     globals::sensor_ir_activations_mutex.unlock();
     signal_point center = grid.get_largest_signal();
