@@ -1162,5 +1162,5 @@ set(OLD_GLOB
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "C:/Users/user/Documents/code_windows/new-engine/build_debug/build_debug/CMakeFiles/cmake.verify_globs")
+  file(TOUCH_NOCREATE "C:/Users/user/Documents/code_windows/new-engine/build_debug/CMakeFiles/cmake.verify_globs")
 endif()

@@ -37,7 +37,8 @@ struct renderer {
     static void apply_key_responses(GLFWwindow* window, double renderer_dt);
 	
 	static void create_ground_models(std::vector<mesh>& models, camera_properties& camera_properties_, std::vector<mesh>& ground, bool& new_ground_ready);
-	static void create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, bool& new_ground_ready);
+	static void create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_);
+	static void create_sensor_preview(std::vector<mesh>& models, camera_properties& camera_properties_);
 	
     static void run_window(int window_size_x, int window_size_y, int window_pos_x, int window_pos_y, camera_properties camera_properties_);
 };

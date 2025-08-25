@@ -55,7 +55,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = C:\Users\user\Documents\code_windows\new-engine
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug
+CMAKE_BINARY_DIR = C:\Users\user\Documents\code_windows\new-engine\build_debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -75,7 +75,7 @@ CMakeFiles/main.dir/src/collision/collider.cpp.obj: CMakeFiles/main.dir/flags.ma
 CMakeFiles/main.dir/src/collision/collider.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/collision/collider.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/collision/collider.cpp
 CMakeFiles/main.dir/src/collision/collider.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/collision/collider.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/collision/collider.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collision/collider.cpp.obj -MF CMakeFiles\main.dir\src\collision\collider.cpp.obj.d -o CMakeFiles\main.dir\src\collision\collider.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\collision\collider.cpp
 
 CMakeFiles/main.dir/src/collision/collider.cpp.i: cmake_force
@@ -90,7 +90,7 @@ CMakeFiles/main.dir/src/collision/collision_data.cpp.obj: CMakeFiles/main.dir/fl
 CMakeFiles/main.dir/src/collision/collision_data.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/collision/collision_data.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/collision/collision_data.cpp
 CMakeFiles/main.dir/src/collision/collision_data.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/collision/collision_data.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/collision/collision_data.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collision/collision_data.cpp.obj -MF CMakeFiles\main.dir\src\collision\collision_data.cpp.obj.d -o CMakeFiles\main.dir\src\collision\collision_data.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\collision\collision_data.cpp
 
 CMakeFiles/main.dir/src/collision/collision_data.cpp.i: cmake_force
@@ -105,7 +105,7 @@ CMakeFiles/main.dir/src/collision/logic.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/collision/logic.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/collision/logic.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/collision/logic.cpp
 CMakeFiles/main.dir/src/collision/logic.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/collision/logic.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/collision/logic.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collision/logic.cpp.obj -MF CMakeFiles\main.dir\src\collision\logic.cpp.obj.d -o CMakeFiles\main.dir\src\collision\logic.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\collision\logic.cpp
 
 CMakeFiles/main.dir/src/collision/logic.cpp.i: cmake_force
@@ -120,7 +120,7 @@ CMakeFiles/main.dir/src/collision/meshes.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/collision/meshes.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/collision/meshes.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/collision/meshes.cpp
 CMakeFiles/main.dir/src/collision/meshes.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/collision/meshes.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/collision/meshes.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collision/meshes.cpp.obj -MF CMakeFiles\main.dir\src\collision\meshes.cpp.obj.d -o CMakeFiles\main.dir\src\collision\meshes.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\collision\meshes.cpp
 
 CMakeFiles/main.dir/src/collision/meshes.cpp.i: cmake_force
@@ -135,7 +135,7 @@ CMakeFiles/main.dir/src/collision/shapes.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/collision/shapes.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/collision/shapes.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/collision/shapes.cpp
 CMakeFiles/main.dir/src/collision/shapes.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/collision/shapes.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/collision/shapes.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collision/shapes.cpp.obj -MF CMakeFiles\main.dir\src\collision\shapes.cpp.obj.d -o CMakeFiles\main.dir\src\collision\shapes.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\collision\shapes.cpp
 
 CMakeFiles/main.dir/src/collision/shapes.cpp.i: cmake_force
@@ -150,7 +150,7 @@ CMakeFiles/main.dir/src/constants/constants.cpp.obj: CMakeFiles/main.dir/flags.m
 CMakeFiles/main.dir/src/constants/constants.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/constants/constants.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/constants/constants.cpp
 CMakeFiles/main.dir/src/constants/constants.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/constants/constants.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/constants/constants.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/constants/constants.cpp.obj -MF CMakeFiles\main.dir\src\constants\constants.cpp.obj.d -o CMakeFiles\main.dir\src\constants\constants.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\constants\constants.cpp
 
 CMakeFiles/main.dir/src/constants/constants.cpp.i: cmake_force
@@ -165,7 +165,7 @@ CMakeFiles/main.dir/src/controls/controls.cpp.obj: CMakeFiles/main.dir/flags.mak
 CMakeFiles/main.dir/src/controls/controls.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/controls/controls.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/controls/controls.cpp
 CMakeFiles/main.dir/src/controls/controls.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/controls/controls.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/controls/controls.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/controls/controls.cpp.obj -MF CMakeFiles\main.dir\src\controls\controls.cpp.obj.d -o CMakeFiles\main.dir\src\controls\controls.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\controls\controls.cpp
 
 CMakeFiles/main.dir/src/controls/controls.cpp.i: cmake_force
@@ -180,7 +180,7 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/globals/globals.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/globals/globals.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/globals/globals.cpp
 CMakeFiles/main.dir/src/globals/globals.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/globals/globals.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/globals/globals.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/globals/globals.cpp.obj -MF CMakeFiles\main.dir\src\globals\globals.cpp.obj.d -o CMakeFiles\main.dir\src\globals\globals.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\globals\globals.cpp
 
 CMakeFiles/main.dir/src/globals/globals.cpp.i: cmake_force
@@ -195,7 +195,7 @@ CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj: CMakeFiles/main.dir/flags.m
 CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.cpp
 CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/ground/ground_logic.cpp.obj -MF CMakeFiles\main.dir\src\ground\ground_logic.cpp.obj.d -o CMakeFiles\main.dir\src\ground\ground_logic.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\ground\ground_logic.cpp
 
 CMakeFiles/main.dir/src/ground/ground_logic.cpp.i: cmake_force
@@ -210,7 +210,7 @@ CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj: CMakeFiles/main.di
 CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/interface/collider_interface.cpp
 CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/interface/collider_interface.cpp.obj -MF CMakeFiles\main.dir\src\interface\collider_interface.cpp.obj.d -o CMakeFiles\main.dir\src\interface\collider_interface.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\interface\collider_interface.cpp
 
 CMakeFiles/main.dir/src/interface/collider_interface.cpp.i: cmake_force
@@ -225,7 +225,7 @@ CMakeFiles/main.dir/src/interface/control_interface.cpp.obj: CMakeFiles/main.dir
 CMakeFiles/main.dir/src/interface/control_interface.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/interface/control_interface.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/interface/control_interface.cpp
 CMakeFiles/main.dir/src/interface/control_interface.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/main.dir/src/interface/control_interface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/main.dir/src/interface/control_interface.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/interface/control_interface.cpp.obj -MF CMakeFiles\main.dir\src\interface\control_interface.cpp.obj.d -o CMakeFiles\main.dir\src\interface\control_interface.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\interface\control_interface.cpp
 
 CMakeFiles/main.dir/src/interface/control_interface.cpp.i: cmake_force
@@ -240,7 +240,7 @@ CMakeFiles/main.dir/src/interface/model_interface.cpp.obj: CMakeFiles/main.dir/f
 CMakeFiles/main.dir/src/interface/model_interface.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/interface/model_interface.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/interface/model_interface.cpp
 CMakeFiles/main.dir/src/interface/model_interface.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/main.dir/src/interface/model_interface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/main.dir/src/interface/model_interface.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/interface/model_interface.cpp.obj -MF CMakeFiles\main.dir\src\interface\model_interface.cpp.obj.d -o CMakeFiles\main.dir\src\interface\model_interface.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\interface\model_interface.cpp
 
 CMakeFiles/main.dir/src/interface/model_interface.cpp.i: cmake_force
@@ -255,7 +255,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/main.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/main.cpp
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.obj -MF CMakeFiles\main.dir\src\main.cpp.obj.d -o CMakeFiles\main.dir\src\main.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\main.cpp
 
 CMakeFiles/main.dir/src/main.cpp.i: cmake_force
@@ -270,7 +270,7 @@ CMakeFiles/main.dir/src/math/pid.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/math/pid.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/math/pid.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/math/pid.cpp
 CMakeFiles/main.dir/src/math/pid.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/main.dir/src/math/pid.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/main.dir/src/math/pid.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/math/pid.cpp.obj -MF CMakeFiles\main.dir\src\math\pid.cpp.obj.d -o CMakeFiles\main.dir\src\math\pid.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\math\pid.cpp
 
 CMakeFiles/main.dir/src/math/pid.cpp.i: cmake_force
@@ -285,7 +285,7 @@ CMakeFiles/main.dir/src/math/random.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/math/random.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/math/random.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/math/random.cpp
 CMakeFiles/main.dir/src/math/random.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/main.dir/src/math/random.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/main.dir/src/math/random.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/math/random.cpp.obj -MF CMakeFiles\main.dir\src\math\random.cpp.obj.d -o CMakeFiles\main.dir\src\math\random.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\math\random.cpp
 
 CMakeFiles/main.dir/src/math/random.cpp.i: cmake_force
@@ -300,7 +300,7 @@ CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: CMakeFiles/main.dir/
 CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/aerodynamic_surface.cpp
 CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj -MF CMakeFiles\main.dir\src\module\aerodynamic_surface.cpp.obj.d -o CMakeFiles\main.dir\src\module\aerodynamic_surface.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\aerodynamic_surface.cpp
 
 CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.i: cmake_force
@@ -315,7 +315,7 @@ CMakeFiles/main.dir/src/module/autocannon.cpp.obj: CMakeFiles/main.dir/flags.mak
 CMakeFiles/main.dir/src/module/autocannon.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/autocannon.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/autocannon.cpp
 CMakeFiles/main.dir/src/module/autocannon.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/main.dir/src/module/autocannon.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/main.dir/src/module/autocannon.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/autocannon.cpp.obj -MF CMakeFiles\main.dir\src\module\autocannon.cpp.obj.d -o CMakeFiles\main.dir\src\module\autocannon.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\autocannon.cpp
 
 CMakeFiles/main.dir/src/module/autocannon.cpp.i: cmake_force
@@ -330,7 +330,7 @@ CMakeFiles/main.dir/src/module/jet_engine.cpp.obj: CMakeFiles/main.dir/flags.mak
 CMakeFiles/main.dir/src/module/jet_engine.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/jet_engine.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/jet_engine.cpp
 CMakeFiles/main.dir/src/module/jet_engine.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/main.dir/src/module/jet_engine.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/main.dir/src/module/jet_engine.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/jet_engine.cpp.obj -MF CMakeFiles\main.dir\src\module\jet_engine.cpp.obj.d -o CMakeFiles\main.dir\src\module\jet_engine.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\jet_engine.cpp
 
 CMakeFiles/main.dir/src/module/jet_engine.cpp.i: cmake_force
@@ -345,7 +345,7 @@ CMakeFiles/main.dir/src/module/module.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/module/module.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/module.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/module.cpp
 CMakeFiles/main.dir/src/module/module.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/main.dir/src/module/module.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/main.dir/src/module/module.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/module.cpp.obj -MF CMakeFiles\main.dir\src\module\module.cpp.obj.d -o CMakeFiles\main.dir\src\module\module.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\module.cpp
 
 CMakeFiles/main.dir/src/module/module.cpp.i: cmake_force
@@ -360,7 +360,7 @@ CMakeFiles/main.dir/src/module/physical_structure.cpp.obj: CMakeFiles/main.dir/f
 CMakeFiles/main.dir/src/module/physical_structure.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/physical_structure.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.cpp
 CMakeFiles/main.dir/src/module/physical_structure.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/main.dir/src/module/physical_structure.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/main.dir/src/module/physical_structure.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/physical_structure.cpp.obj -MF CMakeFiles\main.dir\src\module\physical_structure.cpp.obj.d -o CMakeFiles\main.dir\src\module\physical_structure.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\physical_structure.cpp
 
 CMakeFiles/main.dir/src/module/physical_structure.cpp.i: cmake_force
@@ -375,7 +375,7 @@ CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.cpp
 CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj -MF CMakeFiles\main.dir\src\module\sensor_ir.cpp.obj.d -o CMakeFiles\main.dir\src\module\sensor_ir.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\sensor_ir.cpp
 
 CMakeFiles/main.dir/src/module/sensor_ir.cpp.i: cmake_force
@@ -390,7 +390,7 @@ CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj: CMakeFiles/main.dir/f
 CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/module/solid_rocket_motor.cpp
 CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.obj -MF CMakeFiles\main.dir\src\module\solid_rocket_motor.cpp.obj.d -o CMakeFiles\main.dir\src\module\solid_rocket_motor.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\module\solid_rocket_motor.cpp
 
 CMakeFiles/main.dir/src/module/solid_rocket_motor.cpp.i: cmake_force
@@ -405,7 +405,7 @@ CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj: CMakeFiles/main.dir/f
 CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/blueprints.cpp
 CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/blueprints.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\blueprints.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\blueprints.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\blueprints.cpp
 
 CMakeFiles/main.dir/src/physics_object/blueprints.cpp.i: cmake_force
@@ -420,7 +420,7 @@ CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj: CMakeFiles/main
 CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/control_bindings.cpp
 CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\control_bindings.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\control_bindings.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\control_bindings.cpp
 
 CMakeFiles/main.dir/src/physics_object/control_bindings.cpp.i: cmake_force
@@ -435,7 +435,7 @@ CMakeFiles/main.dir/src/physics_object/logger.cpp.obj: CMakeFiles/main.dir/flags
 CMakeFiles/main.dir/src/physics_object/logger.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/logger.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/logger.cpp
 CMakeFiles/main.dir/src/physics_object/logger.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/main.dir/src/physics_object/logger.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/main.dir/src/physics_object/logger.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/logger.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\logger.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\logger.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\logger.cpp
 
 CMakeFiles/main.dir/src/physics_object/logger.cpp.i: cmake_force
@@ -450,7 +450,7 @@ CMakeFiles/main.dir/src/physics_object/object.cpp.obj: CMakeFiles/main.dir/flags
 CMakeFiles/main.dir/src/physics_object/object.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/object.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/object.cpp
 CMakeFiles/main.dir/src/physics_object/object.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/main.dir/src/physics_object/object.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/main.dir/src/physics_object/object.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/object.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\object.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\object.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\object.cpp
 
 CMakeFiles/main.dir/src/physics_object/object.cpp.i: cmake_force
@@ -465,7 +465,7 @@ CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj: CMakeFiles/main.di
 CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/physics_state.cpp
 CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/physics_state.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\physics_state.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\physics_state.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\physics_state.cpp
 
 CMakeFiles/main.dir/src/physics_object/physics_state.cpp.i: cmake_force
@@ -480,7 +480,7 @@ CMakeFiles/main.dir/src/physics_object/properties.cpp.obj: CMakeFiles/main.dir/f
 CMakeFiles/main.dir/src/physics_object/properties.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/physics_object/properties.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/physics_object/properties.cpp
 CMakeFiles/main.dir/src/physics_object/properties.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/main.dir/src/physics_object/properties.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/main.dir/src/physics_object/properties.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/physics_object/properties.cpp.obj -MF CMakeFiles\main.dir\src\physics_object\properties.cpp.obj.d -o CMakeFiles\main.dir\src\physics_object\properties.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\physics_object\properties.cpp
 
 CMakeFiles/main.dir/src/physics_object/properties.cpp.i: cmake_force
@@ -495,7 +495,7 @@ CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj: CMakeFiles/main.di
 CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/apply_key_responses.cpp
 CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.obj -MF CMakeFiles\main.dir\src\renderer\apply_key_responses.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\apply_key_responses.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\apply_key_responses.cpp
 
 CMakeFiles/main.dir/src/renderer/apply_key_responses.cpp.i: cmake_force
@@ -510,7 +510,7 @@ CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj: CMakeFiles/main.dir/
 CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/camera_properties.cpp
 CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/camera_properties.cpp.obj -MF CMakeFiles\main.dir\src\renderer\camera_properties.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\camera_properties.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\camera_properties.cpp
 
 CMakeFiles/main.dir/src/renderer/camera_properties.cpp.i: cmake_force
@@ -525,7 +525,7 @@ CMakeFiles/main.dir/src/renderer/color.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/renderer/color.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/color.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.cpp
 CMakeFiles/main.dir/src/renderer/color.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/main.dir/src/renderer/color.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/main.dir/src/renderer/color.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/color.cpp.obj -MF CMakeFiles\main.dir\src\renderer\color.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\color.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\color.cpp
 
 CMakeFiles/main.dir/src/renderer/color.cpp.i: cmake_force
@@ -540,7 +540,7 @@ CMakeFiles/main.dir/src/renderer/mesh.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/renderer/mesh.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/mesh.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/mesh.cpp
 CMakeFiles/main.dir/src/renderer/mesh.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/main.dir/src/renderer/mesh.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/main.dir/src/renderer/mesh.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/mesh.cpp.obj -MF CMakeFiles\main.dir\src\renderer\mesh.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\mesh.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\mesh.cpp
 
 CMakeFiles/main.dir/src/renderer/mesh.cpp.i: cmake_force
@@ -555,7 +555,7 @@ CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj: CMakeFiles/main.d
 CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/model_file_interface.cpp
 CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.obj -MF CMakeFiles\main.dir\src\renderer\model_file_interface.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\model_file_interface.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\model_file_interface.cpp
 
 CMakeFiles/main.dir/src/renderer/model_file_interface.cpp.i: cmake_force
@@ -570,7 +570,7 @@ CMakeFiles/main.dir/src/renderer/models.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/renderer/models.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/models.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/models.cpp
 CMakeFiles/main.dir/src/renderer/models.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/main.dir/src/renderer/models.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/main.dir/src/renderer/models.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/models.cpp.obj -MF CMakeFiles\main.dir\src\renderer\models.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\models.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\models.cpp
 
 CMakeFiles/main.dir/src/renderer/models.cpp.i: cmake_force
@@ -585,7 +585,7 @@ CMakeFiles/main.dir/src/renderer/renderer.cpp.obj: CMakeFiles/main.dir/flags.mak
 CMakeFiles/main.dir/src/renderer/renderer.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/renderer.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/renderer.cpp
 CMakeFiles/main.dir/src/renderer/renderer.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/renderer.cpp.obj -MF CMakeFiles\main.dir\src\renderer\renderer.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\renderer.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\renderer.cpp
 
 CMakeFiles/main.dir/src/renderer/renderer.cpp.i: cmake_force
@@ -600,7 +600,7 @@ CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj: CMak
 CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/renderer_physics_object_connector.cpp
 CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.obj -MF CMakeFiles\main.dir\src\renderer\renderer_physics_object_connector.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\renderer_physics_object_connector.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\renderer_physics_object_connector.cpp
 
 CMakeFiles/main.dir/src/renderer/renderer_physics_object_connector.cpp.i: cmake_force
@@ -615,7 +615,7 @@ CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj: CMakeFiles/main.dir/fl
 CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/renderer_thread.cpp
 CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.obj -MF CMakeFiles\main.dir\src\renderer\renderer_thread.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\renderer_thread.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\renderer_thread.cpp
 
 CMakeFiles/main.dir/src/renderer/renderer_thread.cpp.i: cmake_force
@@ -630,7 +630,7 @@ CMakeFiles/main.dir/src/renderer/vertex.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/renderer/vertex.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/renderer/vertex.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/vertex.cpp
 CMakeFiles/main.dir/src/renderer/vertex.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/main.dir/src/renderer/vertex.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/main.dir/src/renderer/vertex.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/vertex.cpp.obj -MF CMakeFiles\main.dir\src\renderer\vertex.cpp.obj.d -o CMakeFiles\main.dir\src\renderer\vertex.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\vertex.cpp
 
 CMakeFiles/main.dir/src/renderer/vertex.cpp.i: cmake_force
@@ -645,7 +645,7 @@ CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj: CMa
 CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/simulation_logic/initialize_physics_objects.cpp
 CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.obj -MF CMakeFiles\main.dir\src\simulation_logic\initialize_physics_objects.cpp.obj.d -o CMakeFiles\main.dir\src\simulation_logic\initialize_physics_objects.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\simulation_logic\initialize_physics_objects.cpp
 
 CMakeFiles/main.dir/src/simulation_logic/initialize_physics_objects.cpp.i: cmake_force
@@ -660,7 +660,7 @@ CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj: CMakeFiles/
 CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/simulation_logic/physics_step_logic.cpp
 CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.obj -MF CMakeFiles\main.dir\src\simulation_logic\physics_step_logic.cpp.obj.d -o CMakeFiles\main.dir\src\simulation_logic\physics_step_logic.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\simulation_logic\physics_step_logic.cpp
 
 CMakeFiles/main.dir/src/simulation_logic/physics_step_logic.cpp.i: cmake_force
@@ -675,7 +675,7 @@ CMakeFiles/main.dir/src/simulation_state.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/simulation_state.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/simulation_state.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.cpp
 CMakeFiles/main.dir/src/simulation_state.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/main.dir/src/simulation_state.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/main.dir/src/simulation_state.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/simulation_state.cpp.obj -MF CMakeFiles\main.dir\src\simulation_state.cpp.obj.d -o CMakeFiles\main.dir\src\simulation_state.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\simulation_state.cpp
 
 CMakeFiles/main.dir/src/simulation_state.cpp.i: cmake_force
@@ -690,7 +690,7 @@ CMakeFiles/main.dir/src/timer/timer.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/timer/timer.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/timer/timer.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/timer/timer.cpp
 CMakeFiles/main.dir/src/timer/timer.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/main.dir/src/timer/timer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/main.dir/src/timer/timer.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/timer/timer.cpp.obj -MF CMakeFiles\main.dir\src\timer\timer.cpp.obj.d -o CMakeFiles\main.dir\src\timer\timer.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\timer\timer.cpp
 
 CMakeFiles/main.dir/src/timer/timer.cpp.i: cmake_force
@@ -705,7 +705,7 @@ CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj: CMakeFiles/main.dir/flags.
 CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
 CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj: C:/Users/user/Documents/code_windows/new-engine/src/vector/vector_spaces.cpp
 CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/vector/vector_spaces.cpp.obj -MF CMakeFiles\main.dir\src\vector\vector_spaces.cpp.obj.d -o CMakeFiles\main.dir\src\vector\vector_spaces.cpp.obj -c C:\Users\user\Documents\code_windows\new-engine\src\vector\vector_spaces.cpp
 
 CMakeFiles/main.dir/src/vector/vector_spaces.cpp.i: cmake_force
@@ -720,7 +720,7 @@ CMakeFiles/main.dir/src/renderer/glad.c.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/renderer/glad.c.obj: CMakeFiles/main.dir/includes_C.rsp
 CMakeFiles/main.dir/src/renderer/glad.c.obj: C:/Users/user/Documents/code_windows/new-engine/src/renderer/glad.c
 CMakeFiles/main.dir/src/renderer/glad.c.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building C object CMakeFiles/main.dir/src/renderer/glad.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building C object CMakeFiles/main.dir/src/renderer/glad.c.obj"
 	C:\msys64\mingw64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/src/renderer/glad.c.obj -MF CMakeFiles\main.dir\src\renderer\glad.c.obj.d -o CMakeFiles\main.dir\src\renderer\glad.c.obj -c C:\Users\user\Documents\code_windows\new-engine\src\renderer\glad.c
 
 CMakeFiles/main.dir/src/renderer/glad.c.i: cmake_force
@@ -829,7 +829,7 @@ main.exe: CMakeFiles/main.dir/build.make
 main.exe: CMakeFiles/main.dir/linkLibs.rsp
 main.exe: CMakeFiles/main.dir/objects1.rsp
 main.exe: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Linking CXX executable main.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Linking CXX executable main.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\main.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -841,6 +841,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\user\Documents\code_windows\new-engine C:\Users\user\Documents\code_windows\new-engine C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug C:\Users\user\Documents\code_windows\new-engine\build_debug\build_debug\CMakeFiles\main.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\user\Documents\code_windows\new-engine C:\Users\user\Documents\code_windows\new-engine C:\Users\user\Documents\code_windows\new-engine\build_debug C:\Users\user\Documents\code_windows\new-engine\build_debug C:\Users\user\Documents\code_windows\new-engine\build_debug\CMakeFiles\main.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/main.dir/depend
 

@@ -11,8 +11,8 @@ cmake --build .
 
 when (re)creating the /build_[...]/ directory or changing CMakeLists.txt:
 [run from /new_engine]
-cmake -G "MinGW Makefiles" -B build_release -DCMAKE_BUILD_TYPE=Release ..
-cmake -G "MinGW Makefiles" -B build_debug -DCMAKE_BUILD_TYPE=Debug ..
+cmake -G "MinGW Makefiles" -B build_release -DCMAKE_BUILD_TYPE=Release .
+cmake -G "MinGW Makefiles" -B build_debug -DCMAKE_BUILD_TYPE=Debug .
 
 
 

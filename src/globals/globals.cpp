@@ -23,7 +23,7 @@ int error_count = 0;
 
 timer::timer timer_ = timer::timer("timer", timer::timer::NANOSECONDS);
 
-std::vector<double> sensor_ir_activations;
+std::vector<std::vector<double>> sensor_ir_activations;
 std::mutex sensor_ir_activations_mutex;
 
 }

@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 set(CMAKE_RELATIVE_PATH_TOP_SOURCE "C:/Users/user/Documents/code_windows/new-engine")
-set(CMAKE_RELATIVE_PATH_TOP_BINARY "C:/Users/user/Documents/code_windows/new-engine/build_debug/build_debug")
+set(CMAKE_RELATIVE_PATH_TOP_BINARY "C:/Users/user/Documents/code_windows/new-engine/build_debug")
 
 # Force unix paths in dependencies.
 set(CMAKE_FORCE_UNIX_PATHS 1)

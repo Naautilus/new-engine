@@ -338,7 +338,7 @@ void renderer::create_ground_models(std::vector<mesh>& models, camera_properties
     */
 }
 
-void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_, bool& new_ground_ready) {
+void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_) {
 
     globals::physics_objects_mutex.lock();    
     auto physics_objects_ = globals::physics_objects;
@@ -427,4 +427,40 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 	}
 
 
+}
+
+void renderer::create_sensor_preview(std::vector<mesh>& models, camera_properties& camera_properties_) {
+    globals::sensor_ir_activations_mutex.lock();
+    double width_per_element = 0.3 / (constants::SENSOR_IR_GRID_WIDTH);
+    for (int x = 0; x < globals::sensor_ir_activations.size(); x++) {
+        for (int y = 0; y < globals::sensor_ir_activations[x].size(); y++) {
+            double signal_strength = globals::sensor_ir_activations[x][y];
+            vertex origin;
+            origin.x = 1;
+            origin.y = x * width_per_element;
+            origin.z = y * width_per_element;
+            double brightness = signal_strength;
+            origin.r = brightness;
+            origin.g = brightness;
+            origin.b = brightness;
+            origin.sun_factor = 0;
+
+            vertex offset_x = origin;
+            offset_x.y += width_per_element;
+
+            vertex offset_y = origin;
+            offset_x.z += width_per_element;
+
+            std::vector<vertex> vertices = {
+                origin,
+                origin + offset_x,
+                origin + offset_y,
+                origin + offset_x + offset_y,
+                origin + offset_x,
+                origin + offset_y
+            };
+
+            models.push_back(mesh(vertices));
+        }
+    }
 }

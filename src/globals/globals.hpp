@@ -5,6 +5,12 @@
 #include "../simulation_state.hpp"
 #include <mutex>
 
+namespace module {
+
+struct sensor_cell_grid;
+
+}
+
 namespace globals {
 
 extern std::chrono::time_point<std::chrono::high_resolution_clock> last_time;
@@ -30,7 +36,7 @@ extern int error_count;
 
 extern timer::timer timer_;
 
-extern std::vector<double> sensor_ir_activations;
+extern std::vector<std::vector<double>> sensor_ir_activations;
 extern std::mutex sensor_ir_activations_mutex;
 
 

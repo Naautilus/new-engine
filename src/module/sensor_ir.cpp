@@ -413,14 +413,12 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
     }
     
     globals::sensor_ir_activations_mutex.lock();
-    globals::sensor_ir_activations.clear();
-    for (auto& row : grid.points) {
-        for (auto& point : row) {
-            globals::sensor_ir_activations.push_back(point.signal_strength);
+    for (int x = 0; x < grid.points.size(); x++) {
+        for (int y = 0; y < grid.points[x].size(); y++) {
+            globals::sensor_ir_activations[x][y] = grid.points[x][y].signal_strength;
         }
     }
     globals::sensor_ir_activations_mutex.unlock();
-
     signal_point center = grid.get_largest_signal();
 
     /*

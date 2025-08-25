@@ -613,4 +613,24 @@ CMakeFiles/main.dir/src/globals/globals.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/simulation_state.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/renderer/color.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/mutex \
- C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h
+ C:/msys64/mingw64/include/c++/15.2.0/bits/unique_lock.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/module.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/meshes.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/shapes.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collider.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collider_type.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/collision/collision_data.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/eigen_pca/eigen-pca.hpp \
+ C:/msys64/mingw64/include/c++/15.2.0/cassert \
+ C:/msys64/mingw64/include/assert.h \
+ C:/msys64/mingw64/include/c++/15.2.0/utility \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Core \
+ C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/Eigenvalues \
+ C:/Users/user/Documents/code_windows/new-engine/src/eigen/Eigen/SVD \
+ C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
+ C:/msys64/mingw64/include/c++/15.2.0/iterator \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/math/pid.hpp
