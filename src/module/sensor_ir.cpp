@@ -233,7 +233,7 @@ void sensor_ir::update(physics_object::object* parent) {
         guidance_mode_ = NONE;
     } else if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 1.0) {
         guidance_mode_ = CLOSE;
-    } else if (time_since_launch > 2.0) {
+    } else if (time_since_launch > 1.0) {
         guidance_mode_ = FAR;
     } else {
         guidance_mode_ = INITIAL;
@@ -249,12 +249,12 @@ void sensor_ir::update(physics_object::object* parent) {
             break;
         case FAR:
             guidance_pid_inputs = 
-                get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 10.0 * gain_limiter) +
+                get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 30.0 * gain_limiter) +
                 get_guidance_direct(current_detection_relative_worldspace, parent, 5.0 * gain_limiter) +
                 get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, 0.0 * gain_limiter);
             break;
         case CLOSE:
-            guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 20.0 * gain_limiter);
+            guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 50.0 * gain_limiter);
             break;
         default:
             guidance_pid_inputs = vector::worldspace(0, 0, 0);

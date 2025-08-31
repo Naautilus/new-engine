@@ -2,7 +2,7 @@
 #include "renderer_thread.hpp"
 
 void renderer_function_sleep() {
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 void renderer_function() {
@@ -20,7 +20,7 @@ void renderer_function() {
 	renderer_function_sleep();
 	t1.detach();
 	renderer_function_sleep();
-	std::thread t2(renderer::run_window, 1440, 1920, 1440*0, 100, camera_properties("aim9x", true, vector::localspace(-20, 0, 10)));
+	std::thread t2(renderer::run_window, 1440, 1920, 1440*1, 100, camera_properties("aim9x", false, vector::localspace(-20, 0, 10)));
 	renderer_function_sleep();
 	t2.detach();
 	//renderer_function_sleep();
