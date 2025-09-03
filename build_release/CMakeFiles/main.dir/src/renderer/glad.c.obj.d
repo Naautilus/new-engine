@@ -1,5 +1,5 @@
 CMakeFiles/main.dir/src/renderer/glad.c.obj: \
- C:\Users\user\Documents\code_windows\new-engine\src\renderer\glad.c \
+ C:\users\user\documents\code_windows\new-engine\src\renderer\glad.c \
  C:/msys64/mingw64/include/stdio.h \
  C:/msys64/mingw64/include/corecrt_stdio_config.h \
  C:/msys64/mingw64/include/corecrt.h C:/msys64/mingw64/include/_mingw.h \
@@ -20,7 +20,7 @@ CMakeFiles/main.dir/src/renderer/glad.c.obj: \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h \
  C:/msys64/mingw64/include/errno.h C:/msys64/mingw64/include/string.h \
  C:/msys64/mingw64/include/sec_api/string_s.h \
- C:\Users\user\Documents\code_windows\new-engine\src\renderer\glad.h \
+ C:\users\user\documents\code_windows\new-engine\src\renderer\glad.h \
  C:/msys64/mingw64/include/KHR/khrplatform.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
  C:/msys64/mingw64/include/stdint.h \

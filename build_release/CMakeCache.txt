@@ -264,7 +264,7 @@ new_engine_BINARY_DIR:STATIC=C:/Users/user/Documents/code_windows/new-engine/bui
 new_engine_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-new_engine_SOURCE_DIR:STATIC=C:/Users/user/Documents/code_windows/new-engine
+new_engine_SOURCE_DIR:STATIC=C:/users/user/documents/code_windows/new-engine
 
 
 ########################

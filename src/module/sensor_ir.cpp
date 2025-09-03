@@ -240,7 +240,7 @@ void sensor_ir::update(physics_object::object* parent) {
     }
 
     double acceleration = parent->physics_state.recorded_acceleration.norm();
-    std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
+    //std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
     double gain_limiter = 1-get_g_limit_fraction(acceleration, 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
     vector::localspace guidance_pid_inputs;
     switch(guidance_mode_) {

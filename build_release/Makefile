@@ -56,7 +56,7 @@ RM = C:\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\user\Documents\code_windows\new-engine
+CMAKE_SOURCE_DIR = C:\users\user\documents\code_windows\new-engine
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = C:\Users\user\Documents\code_windows\new-engine\build_release

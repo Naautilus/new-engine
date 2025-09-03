@@ -1,6 +1,6 @@
 CMakeFiles/main.dir/src/timer/timer.cpp.obj: \
- C:\Users\user\Documents\code_windows\new-engine\src\timer\timer.cpp \
- C:\Users\user\Documents\code_windows\new-engine\src\timer\timer.hpp \
+ C:\users\user\documents\code_windows\new-engine\src\timer\timer.cpp \
+ C:\users\user\documents\code_windows\new-engine\src\timer\timer.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/chrono \
  C:/msys64/mingw64/include/c++/15.2.0/bits/chrono.h \
  C:/msys64/mingw64/include/c++/15.2.0/ratio \

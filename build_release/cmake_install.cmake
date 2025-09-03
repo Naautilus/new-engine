@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/user/Documents/code_windows/new-engine
+# Install script for directory: C:/users/user/documents/code_windows/new-engine
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
