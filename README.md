@@ -10,7 +10,9 @@ Run it with the arguments:
 
 ```./main.exe -scenario ground```
 
-to load /scenarios/scenario_ground.json. You can change `ground` to whichever scenario you want to see.
+to load /scenarios/scenario_ground.json. You can change `ground` to whichever scenario in /scenarios/ you want to use.
+
+A missile camera can be enabled with the -missile-cam argument, which splits the screen in half into two windows, one for the plane and one for the missile.
 
 Controls:
 
