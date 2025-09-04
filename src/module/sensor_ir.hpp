@@ -57,6 +57,8 @@ struct sensor_ir : module {
     vector::scopespace last_detection_scopespace;
     double last_detection_signal_strength;
     vector::worldspace current_detection_relative_worldspace;
+    vector::worldspace current_detection_worldspace;
+    vector::worldspace detection_velocity;
     sensor_ir(double gimbal_cone_halfarc_, double view_cone_halfarc_, double target_recognition_cone_halfarc_, Eigen::Quaterniond rotation_, vector::localspace position_, double length, double width, double health_);
     vector::worldspace get_worldspace_position(physics_object::object* parent);
     void update(physics_object::object* parent) override;

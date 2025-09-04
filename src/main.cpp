@@ -38,12 +38,12 @@ int main(int argc, char* argv[]) {
     );
     ls = t1.intersection(t2);
     std::cout << "Intersection results:\n";
-    std::cout << "start = " << ls.line_.point_along_line(0).transpose() << "\n";
-    std::cout << "end = " << ls.line_.point_along_line(ls.length).transpose() << "\n";
+    std::cout << "start = " << ls.line_.point_along_line(0).str() << "\n";
+    std::cout << "end = " << ls.line_.point_along_line(ls.length).str() << "\n";
     ls = t2.intersection(t1);
     std::cout << "Intersection results:\n";
-    std::cout << "start = " << ls.line_.point_along_line(0).transpose() << "\n";
-    std::cout << "end = " << ls.line_.point_along_line(ls.length).transpose() << "\n";
+    std::cout << "start = " << ls.line_.point_along_line(0).str() << "\n";
+    std::cout << "end = " << ls.line_.point_along_line(ls.length).str() << "\n";
 
     t1 = collision::triangle(
         vector::worldspace(0.00, 0.00, 0.00),
@@ -57,12 +57,12 @@ int main(int argc, char* argv[]) {
     );
     ls = t1.intersection(t2);
     std::cout << "Intersection results:\n";
-    std::cout << "start = " << ls.line_.point_along_line(0).transpose() << "\n";
-    std::cout << "end = " << ls.line_.point_along_line(ls.length).transpose() << "\n";
+    std::cout << "start = " << ls.line_.point_along_line(0).str() << "\n";
+    std::cout << "end = " << ls.line_.point_along_line(ls.length).str() << "\n";
     ls = t2.intersection(t1);
     std::cout << "Intersection results:\n";
-    std::cout << "start = " << ls.line_.point_along_line(0).transpose() << "\n";
-    std::cout << "end = " << ls.line_.point_along_line(ls.length).transpose() << "\n";
+    std::cout << "start = " << ls.line_.point_along_line(0).str() << "\n";
+    std::cout << "end = " << ls.line_.point_along_line(ls.length).str() << "\n";
     return 0;
     */
 

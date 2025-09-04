@@ -209,11 +209,23 @@ vector::worldspace sensor_ir::get_worldspace_position(physics_object::object* pa
 void sensor_ir::update(physics_object::object* parent) {}
 
 void sensor_ir::update_current_and_last_detection(physics_object::object* parent) {
-    std::cout << "last_detection_relative_worldspace: " << current_detection_relative_worldspace.transpose() << "\n";
-    //std::cout << "parent->physics_state.position: " << parent->physics_state.position.transpose() << "\n";
-    //std::cout << "parent->physics_state.rotation: " << parent->physics_state.rotation << "\n";
-    last_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
+    std::cout << "update_current_and_last_detection START\n";
+
+    last_detection_worldspace = current_detection_worldspace;
     current_detection_relative_worldspace = get_target_position(parent);
+    current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
+    detection_velocity = (1/constants::DELTA_T) * (current_detection_worldspace - last_detection_worldspace);
+
+    std::cout << "last_detection_worldspace: " << last_detection_worldspace.str() << "\n";
+    std::cout << "current_detection_worldspace: " << current_detection_worldspace.str() << "\n";
+    std::cout << "detection_velocity: " << detection_velocity.str() << "\n";
+
+    std::cout << "parent->physics_state.position: " << parent->physics_state.position.str() << "\n";
+    std::cout << "parent->physics_state.rotation: " << parent->physics_state.rotation << "\n";
+
+    std::cout << "sensor_ir position: " << position.str() << "\n";
+    std::cout << "sensor_ir rotation: " << rotation << "\n";
+    std::cout << "update_current_and_last_detection END\n\n";
 }
 
 vector::worldspace sensor_ir::get_enemy_velocity(vector::worldspace current_detection_worldspace, vector::worldspace last_detection_worldspace) {

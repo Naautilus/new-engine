@@ -23,11 +23,11 @@
       "position": {
         "relative_to_ground": false,
         "x": 0,
-        "y": -100,
+        "y": -500,
         "z": 10000
       },
       "rotation": {
-        "degrees_around_axis": -5,
+        "degrees_around_axis": -45,
         "axis": {
           "x": 0,
           "y": 0,

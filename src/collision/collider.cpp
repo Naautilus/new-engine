@@ -223,7 +223,7 @@ std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_mo
 
     /*
     std::cout << "principal_components:\n" << principal_components << "\ndone\n";
-    std::cout << "principal_components.transpose():\n" << principal_components.transpose() << "\ndone\n";
+    std::cout << "principal_components.str():\n" << principal_components.str() << "\ndone\n";
     std::cout << "worldspace_unit_vectors:\n" 
         << worldspace_unit_vectors[0].str() << "\n"
         << worldspace_unit_vectors[1].str() << "\n"
