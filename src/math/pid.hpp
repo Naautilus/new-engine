@@ -10,6 +10,7 @@ struct pid {
 	double output = 0;
 	std::vector<double> previous_input_buffer;
 	int previous_input_buffer_position = 0;
+    pid();
 	pid(double p, double i, double d, double authority_limit_);
 	void update(double input);
 };

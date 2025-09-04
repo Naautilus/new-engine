@@ -639,12 +639,13 @@ CMakeFiles/main.dir/src/collision/logic.cpp.obj: \
  C:/Users/user/Documents/code_windows/new-engine/src/module/aerodynamic_surface.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/module/autocannon.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/module/jet_engine.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.hpp \
- C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/missile_avionics.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/ground/ground_logic.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/ground/PerlinNoise.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/iterator \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stream_iterator.h \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.hpp \
+ C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/module/solid_rocket_motor.hpp \
  C:/Users/user/Documents/code_windows/new-engine/src/renderer/glad.h \
  C:/msys64/mingw64/include/KHR/khrplatform.h \

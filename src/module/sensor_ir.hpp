@@ -60,6 +60,7 @@ struct sensor_ir : module {
     sensor_ir(double gimbal_cone_halfarc_, double view_cone_halfarc_, double target_recognition_cone_halfarc_, Eigen::Quaterniond rotation_, vector::localspace position_, double length, double width, double health_);
     vector::worldspace get_worldspace_position(physics_object::object* parent);
     void update(physics_object::object* parent) override;
+    void update_current_and_last_detection(physics_object::object* parent);
     vector::worldspace get_enemy_velocity(vector::worldspace current_detection_worldspace, vector::worldspace last_detection_worldspace);
     std::vector<signal_point> get_signals_from_physics_objects(physics_object::object* parent);
     vector::scopespace get_target_direction(physics_object::object* parent);

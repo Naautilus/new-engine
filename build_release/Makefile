@@ -561,6 +561,30 @@ src/module/jet_engine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/module/jet_engine.cpp.s
 .PHONY : src/module/jet_engine.cpp.s
 
+src/module/missile_avionics.obj: src/module/missile_avionics.cpp.obj
+.PHONY : src/module/missile_avionics.obj
+
+# target to build an object file
+src/module/missile_avionics.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/module/missile_avionics.cpp.obj
+.PHONY : src/module/missile_avionics.cpp.obj
+
+src/module/missile_avionics.i: src/module/missile_avionics.cpp.i
+.PHONY : src/module/missile_avionics.i
+
+# target to preprocess a source file
+src/module/missile_avionics.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/module/missile_avionics.cpp.i
+.PHONY : src/module/missile_avionics.cpp.i
+
+src/module/missile_avionics.s: src/module/missile_avionics.cpp.s
+.PHONY : src/module/missile_avionics.s
+
+# target to generate assembly for a file
+src/module/missile_avionics.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/module/missile_avionics.cpp.s
+.PHONY : src/module/missile_avionics.cpp.s
+
 src/module/module.obj: src/module/module.cpp.obj
 .PHONY : src/module/module.obj
 
@@ -1248,6 +1272,9 @@ help:
 	@echo ... src/module/jet_engine.obj
 	@echo ... src/module/jet_engine.i
 	@echo ... src/module/jet_engine.s
+	@echo ... src/module/missile_avionics.obj
+	@echo ... src/module/missile_avionics.i
+	@echo ... src/module/missile_avionics.s
 	@echo ... src/module/module.obj
 	@echo ... src/module/module.i
 	@echo ... src/module/module.s

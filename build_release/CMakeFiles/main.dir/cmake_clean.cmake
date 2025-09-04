@@ -35,6 +35,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/src/module/autocannon.cpp.obj.d"
   "CMakeFiles/main.dir/src/module/jet_engine.cpp.obj"
   "CMakeFiles/main.dir/src/module/jet_engine.cpp.obj.d"
+  "CMakeFiles/main.dir/src/module/missile_avionics.cpp.obj"
+  "CMakeFiles/main.dir/src/module/missile_avionics.cpp.obj.d"
   "CMakeFiles/main.dir/src/module/module.cpp.obj"
   "CMakeFiles/main.dir/src/module/module.cpp.obj.d"
   "CMakeFiles/main.dir/src/module/physical_structure.cpp.obj"

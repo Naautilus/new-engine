@@ -206,7 +206,13 @@ vector::worldspace sensor_ir::get_worldspace_position(physics_object::object* pa
     return position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position);
 }
 
-void sensor_ir::update(physics_object::object* parent) {
+void sensor_ir::update(physics_object::object* parent) {}
+
+void sensor_ir::update_current_and_last_detection(physics_object::object* parent) {
+    std::cout << "last_detection_relative_worldspace: " << current_detection_relative_worldspace.transpose() << "\n";
+    //std::cout << "parent->physics_state.position: " << parent->physics_state.position.transpose() << "\n";
+    //std::cout << "parent->physics_state.rotation: " << parent->physics_state.rotation << "\n";
+    last_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
     current_detection_relative_worldspace = get_target_position(parent);
 }
 
@@ -214,20 +220,10 @@ vector::worldspace sensor_ir::get_enemy_velocity(vector::worldspace current_dete
     return (1/constants::DELTA_T) * (current_detection_worldspace - last_detection_worldspace);
 }
 
-double sensor_ir::get_time_to_impact_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent) {
-    vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
-    vector::worldspace missile_velocity = parent->physics_state.velocity;
-    vector::worldspace enemy_velocity = get_enemy_velocity(current_detection_worldspace, last_detection_worldspace);
-    vector::worldspace relative_velocity = enemy_velocity - missile_velocity;
-
-    double time_to_impact = current_detection_relative_worldspace.norm() / relative_velocity.norm();
-    return time_to_impact;
-}
-
 std::vector<signal_point> sensor_ir::get_signals_from_physics_objects(physics_object::object* parent) {
     std::vector<signal_point> output;
     double max_scopespace_offset = tan(view_cone_halfarc * std::numbers::pi / 180);
-
+//
     globals::functional_physics_objects_mutex.lock();
     auto functional_physics_objects_ = globals::functional_physics_objects;
     globals::functional_physics_objects_mutex.unlock();

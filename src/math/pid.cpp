@@ -1,6 +1,12 @@
 // top of cpp marker
 #include "pid.hpp"
 
+pid::pid() {
+    gain_p = 0;
+    gain_i = 0;
+    gain_d = 0;
+    authority_limit = 0;
+}
 pid::pid(double p, double i, double d, double authority_limit_) {
     gain_p = p;
     gain_i = i;

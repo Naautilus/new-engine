@@ -27,6 +27,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/user/Documents/code_windows/new-engine/src/module/aerodynamic_surface.cpp" "CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/aerodynamic_surface.cpp.obj.d"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/autocannon.cpp" "CMakeFiles/main.dir/src/module/autocannon.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/autocannon.cpp.obj.d"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/jet_engine.cpp" "CMakeFiles/main.dir/src/module/jet_engine.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/jet_engine.cpp.obj.d"
+  "C:/Users/user/Documents/code_windows/new-engine/src/module/missile_avionics.cpp" "CMakeFiles/main.dir/src/module/missile_avionics.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/missile_avionics.cpp.obj.d"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/module.cpp" "CMakeFiles/main.dir/src/module/module.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/module.cpp.obj.d"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.cpp" "CMakeFiles/main.dir/src/module/physical_structure.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/physical_structure.cpp.obj.d"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.cpp" "CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj" "gcc" "CMakeFiles/main.dir/src/module/sensor_ir.cpp.obj.d"

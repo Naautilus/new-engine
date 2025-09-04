@@ -1134,6 +1134,7 @@ set(OLD_GLOB
   "C:/Users/user/Documents/code_windows/new-engine/src/module/aerodynamic_surface.cpp"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/autocannon.cpp"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/jet_engine.cpp"
+  "C:/Users/user/Documents/code_windows/new-engine/src/module/missile_avionics.cpp"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/module.cpp"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/physical_structure.cpp"
   "C:/Users/user/Documents/code_windows/new-engine/src/module/sensor_ir.cpp"
