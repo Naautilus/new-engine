@@ -51,6 +51,7 @@ object aim9x() {
 
     o.add_solid_rocket_motor(module::solid_rocket_motor(12800, 5, vector::localspace(1, 0, 0), vector::localspace(-1.4, 0, 0), 0.127*0.5, 0.127*0.5, 100));
     o.add_sensor_ir(module::sensor_ir(60, 60, 10, Eigen::Quaterniond(1, 0, 0, 0), vector::localspace(0, 0, 0), 0.1, 0.1, 100));
+    o.add_missile_avionics(module::missile_avionics(1, 0, 0.25, Eigen::Quaterniond(1, 0, 0, 0), vector::localspace(0, 0, 0)));
     return o;
 }
 

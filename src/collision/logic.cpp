@@ -45,8 +45,8 @@ void create_debris_for_objects(physics_object::object& a, physics_object::object
         vector::worldspace velocity = (1-interp) * a.physics_state.velocity + interp * b.physics_state.velocity;
         //std::cout << mass << std::endl;
         auto d = std::make_shared<physics_object::object>(physics_object::blueprints::debris(mass));
-        //std::cout << "position: " << position.transpose() << std::endl;
-        //std::cout << "velocity: " << velocity.transpose() << std::endl;
+        //std::cout << "position: " << position.str() << std::endl;
+        //std::cout << "velocity: " << velocity.str() << std::endl;
         d->physics_state.position = position;
         d->physics_state.velocity = velocity;
     
@@ -262,9 +262,9 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     std::cout << "impulse response x: " << impulse_response_per_axis.row(0) << "\n";
     std::cout << "impulse response y: " << impulse_response_per_axis.row(1) << "\n";
     std::cout << "impulse response z: " << impulse_response_per_axis.row(2) << "\n";
-    std::cout << "original delta_velocity: " << delta_velocity.transpose() << "\n";
-    std::cout << "original delta_velocity_normal: " << delta_velocity_normal.transpose() << "\n";
-    std::cout << "resulting impulse: " << result.transpose() << "\n";
+    std::cout << "original delta_velocity: " << delta_velocity.str() << "\n";
+    std::cout << "original delta_velocity_normal: " << delta_velocity_normal.str() << "\n";
+    std::cout << "resulting impulse: " << result.str() << "\n";
     */
 
     a.apply_impulse(collision_point,  result);
@@ -273,7 +273,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     //globals::timer_.record("delta_velocity cancellation");
 
     /*
-    std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).transpose() << "\n";
+    std::cout << "new delta_velocity: " << (b.physics_state.velocity_at_point(collision_point) - a.physics_state.velocity_at_point(collision_point)).str() << "\n";
     std::cout << "a.physics_state.velocity_at_point(collision_point): " << a.physics_state.velocity_at_point(collision_point).str() << "\n";
     std::cout << "b.physics_state.velocity_at_point(collision_point): " << b.physics_state.velocity_at_point(collision_point).str() << "\n";
     */

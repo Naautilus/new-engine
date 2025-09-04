@@ -71,12 +71,12 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     coefficients_matrix.row(0) = direction;
     coefficients_matrix.row(1) = p.direction;
     coefficients_matrix.row(2) = l.direction;
-    //std::cout << "direction: " << direction.transpose() << "\n";
-    //std::cout << "p.direction: " << p.direction.transpose() << "\n";
-    //std::cout << "l.direction: " << l.direction.transpose() << "\n";
+    //std::cout << "direction: " << direction.str() << "\n";
+    //std::cout << "p.direction: " << p.direction.str() << "\n";
+    //std::cout << "l.direction: " << l.direction.str() << "\n";
 
     //for (int i = 0; i < 3; i++) {
-    //    std::cout << "matrix[" << i << "]: " << coefficients_matrix.row(i).transpose() << "\n";
+    //    std::cout << "matrix[" << i << "]: " << coefficients_matrix.row(i).str() << "\n";
     //}
     
     Eigen::Vector3d constraint_vector;
@@ -88,7 +88,7 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     //std::cout << "0: " << 0 << "\n";
     
     Eigen::Vector3d result = coefficients_matrix.colPivHouseholderQr().solve(constraint_vector);
-    //std::cout << "result: " << result.transpose() << "\n";
+    //std::cout << "result: " << result.str() << "\n";
 
     l.origin = result;
 
@@ -239,8 +239,8 @@ std::optional<line_segment> triangle::intersection(line& l) {
     }
     line_segment output = line_segment(intersection_points[0], intersection_points[1]);
     //std::cout << ":)\n";
-    //std::cout << "origin: " << output.line_.origin.transpose() << "\n";
-    //std::cout << "direction: " << output.line_.direction.transpose() << "\n";
+    //std::cout << "origin: " << output.line_.origin.str() << "\n";
+    //std::cout << "direction: " << output.line_.direction.str() << "\n";
     //std::cout << "length: " << output.length << "\n";
     return output;
 }

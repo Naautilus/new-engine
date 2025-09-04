@@ -18,11 +18,12 @@ children are stored in a shared modules list with
 the datatype std::shared_ptr<module>.
 
 children should:
-- be in a unique file module_this_module_type.cpp
+- be in a unique file this_module_type.cpp
 - extend : module
 - have a void update(physics_object::object* parent) override {} function
 - have a void physics_object::object::add_this_module_type(this_module_type t) {} function outside the struct definition
-- have a void add_this_module_type(this_module_type t); defined incompletely in the physics_object.cpp file
+- have a void add_this_module_type(this_module_type t); declared at the end of the object.cpp file
+- have a void add_this_module_type(this_module_type t); defined at the end of the module's .cpp file and .hpp file
 - have an incomplete type defined at the end of this file
 */
 
@@ -51,6 +52,7 @@ struct module {
 struct aerodynamic_surface;
 struct autocannon;
 struct jet_engine;
+struct missile_avionics;
 struct physical_structure;
 struct sensor_ir;
 struct solid_rocket_motor;

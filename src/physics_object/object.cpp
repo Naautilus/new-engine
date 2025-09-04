@@ -71,6 +71,7 @@ void object::update_modules() {
 void add_aerodynamic_surface(module::aerodynamic_surface a);
 void add_autocannon(module::autocannon a);
 void add_jet_engine(module::jet_engine j);
+void add_missile_avionics(module::missile_avionics a);
 void add_physical_structure(module::physical_structure s);
 void add_sensor_ir(module::sensor_ir s);
 void add_solid_rocket_motor(module::solid_rocket_motor s);

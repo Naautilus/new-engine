@@ -4,24 +4,6 @@
 #include "../simulation_state.hpp"
 #include "../math/random.hpp"
 
-/*
-module is a general-purpose struct whose children
-are things like aerodynamic surfaces, engines, etc.
-anything outside the raw physics object which takes
-in inputs and exerts forces, etc.
-
-children are stored in a shared modules list with
-the datatype std::shared_ptr<module>.
-
-children should:
-- be in a unique file module_this_module_type.cpp
-- extend : module
-- have a void update(physics_object::object* parent) override {} function
-- have a void physics_object::object::add_this_module_type(this_module_type t) {} function outside the struct definition
-- have a void add_this_module_type(this_module_type t); defined incompletely in the physics_object.cpp file
-- have an incomplete type defined at the end of this file
-*/
-
 namespace module {
     
 visual_model::visual_model(std::shared_ptr<mesh> mesh_data_, vector::localspace position_, vector::localspace scaling_, Eigen::Quaterniond rotation_) {

@@ -185,8 +185,8 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
     glEnable(GL_DEPTH_TEST);
 
-    std::cout << "vertex_shader_text: " << vertex_shader_text << "END\n";
-    std::cout << "fragment_shader_text: " << fragment_shader_text << "END\n";
+    std::cout << "vertex_shader_text: " << vertex_shader_text << "END\n\n";
+    std::cout << "fragment_shader_text: " << fragment_shader_text << "END\n\n";
 
     // the part i really don't understand
     glGenBuffers(1, &vertex_buffer);
