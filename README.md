@@ -1,6 +1,8 @@
-Welcome to new-engine: a physics simulation with aircraft, missiles, debris and collision physics.
+Welcome to new-engine: a physics simulation with aircraft, missiles, debris and collision physics, made in C++ with no game engine.
 
-<img width="2755" height="811" alt="new-engine" src="https://github.com/user-attachments/assets/cbe4eecc-ebf4-4a9e-acee-2179f0b5ab42" />
+<img width="2755" height="811" alt="big crash" src="https://github.com/user-attachments/assets/cbe4eecc-ebf4-4a9e-acee-2179f0b5ab42" />
+
+<img width="1412" height="1694" alt="big crash" src="https://github.com/user-attachments/assets/5d424a59-e6b7-4de9-9f26-419e93624a93" />
 
 An executable (/build/main.exe) is available for Windows x86-64. You will need OpenGL installed, and you will need the /models/ and /scenarios/ folders alongside the /build/ folder. I run it with MSYS2 MinGW64.
 
