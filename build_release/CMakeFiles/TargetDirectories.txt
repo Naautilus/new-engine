@@ -1,3 +1,0 @@
-C:/Users/user/Documents/code_windows/new-engine/build_release/CMakeFiles/main.dir
-C:/Users/user/Documents/code_windows/new-engine/build_release/CMakeFiles/edit_cache.dir
-C:/Users/user/Documents/code_windows/new-engine/build_release/CMakeFiles/rebuild_cache.dir
