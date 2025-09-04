@@ -29,6 +29,7 @@ signal_point::signal_point(double distance_, double scope_x_, double scope_y_, d
     position_scopespace.scope_y() = scope_y_;
     signal_strength = signal_strength_;
 }
+
 std::string signal_point::str() {
     std::string output = "";
     output += position_scopespace.str();
@@ -206,87 +207,6 @@ vector::worldspace sensor_ir::get_worldspace_position(physics_object::object* pa
     return position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position);
 }
 
-enum guidance_mode {
-    NONE,
-    INITIAL,
-    FAR,
-    CLOSE
-};
-
-void sensor_ir::update(physics_object::object* parent) {
-    time_since_launch += constants::DELTA_T;
-    vector::worldspace current_detection_relative_worldspace = get_target_position(parent);
-
-    double target_distance = current_detection_relative_worldspace.norm();
-    if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
-    //std::cout << "record target distance: " << record_target_distance << std::endl;
-
-    guidance_mode guidance_mode_;
-    if (time_since_launch < 0.3) {
-        guidance_mode_ = NONE;
-    } else if (get_time_to_impact_first_degree_prediction(current_detection_relative_worldspace, parent) < 1.0) {
-        guidance_mode_ = CLOSE;
-    } else if (time_since_launch > 1.0) {
-        guidance_mode_ = FAR;
-    } else {
-        guidance_mode_ = INITIAL;
-    }
-
-    double acceleration = parent->physics_state.recorded_acceleration.norm();
-    //std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
-    double gain_limiter = 1-get_g_limit_fraction(acceleration, 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
-    vector::localspace guidance_pid_inputs;
-    switch(guidance_mode_) {
-        case INITIAL:
-            guidance_pid_inputs = get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, 10.0 * gain_limiter);
-            break;
-        case FAR:
-            guidance_pid_inputs = 
-                get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 30.0 * gain_limiter) +
-                get_guidance_direct(current_detection_relative_worldspace, parent, 5.0 * gain_limiter) +
-                get_guidance_first_degree_prediction(current_detection_relative_worldspace, parent, 0.0 * gain_limiter);
-            break;
-        case CLOSE:
-            guidance_pid_inputs = get_guidance_proportional_navigation(current_detection_relative_worldspace, parent, 50.0 * gain_limiter);
-            break;
-        default:
-            guidance_pid_inputs = vector::worldspace(0, 0, 0);
-            break;
-    }
-    
-    //std::cout << interp << std::endl;
-    pid_roll.update(guidance_pid_inputs.x());
-    pid_pitch.update(guidance_pid_inputs.y());
-    pid_yaw.update(guidance_pid_inputs.z());
-    
-    if (std::isnan(guidance_pid_inputs.x())
-    || std::isnan(guidance_pid_inputs.y())
-    || std::isnan(guidance_pid_inputs.z())
-    || std::isnan(pid_roll.output)
-    || std::isnan(pid_pitch.output)
-    || std::isnan(pid_yaw.output)) {
-        std::cout << "NaN detected in sensor_ir \n";
-        std::cout << *(int*)nullptr;
-    }
-
-    last_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
-    controls::input* pitch = parent->control_bindings.get_input(controls::pitch);
-    if (pitch) pitch->response_unmultiplied = pid_pitch.output;
-    controls::input* yaw = parent->control_bindings.get_input(controls::yaw);
-    if (yaw) yaw->response_unmultiplied = pid_yaw.output;
-    controls::input* roll = parent->control_bindings.get_input(controls::roll);
-    if (roll) roll->response_unmultiplied = pid_roll.output;
-}
-
-double sensor_ir::get_g_limit_fraction(double current_acceleration, double g_limit_min, double g_limit_max) {
-    double g_limit_fraction = (current_acceleration-g_limit_min) / (g_limit_max-g_limit_min);
-    g_limit_fraction = std::clamp(g_limit_fraction, 0.0, 1.0);
-    return g_limit_fraction;
-}
-
-vector::worldspace sensor_ir::limit_g_forces(vector::worldspace unlimited_inputs, vector::localspace limited_inputs, double current_acceleration, double g_limit_min, double g_limit_max) {
-    double g_limit_fraction = get_g_limit_fraction(current_acceleration, g_limit_min, g_limit_max);
-    return (1 - g_limit_fraction) * unlimited_inputs + g_limit_fraction * limited_inputs;
 void sensor_ir::update(physics_object::object* parent) {}
 
 void sensor_ir::update_detection(physics_object::object* parent) {
