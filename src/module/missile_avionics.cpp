@@ -25,27 +25,19 @@ enum guidance_mode {
 };
 
 void missile_avionics::update(physics_object::object* parent) {
-    std::cout << "missile_avionics position: " << position.str() << "\n";
-    std::cout << "missile_avionics rotation: " << rotation << "\n";
     sensor_ir* sensor_ptr;
     for (std::shared_ptr<module>& module_ : parent->properties.modules) {
         if (sensor_ptr = dynamic_cast<sensor_ir*>(&(*module_))) break;
     }
     if (!sensor_ptr) return;
-    std::cout << "this: " << this << "\n";
 
-    sensor_ptr->update_current_and_last_detection(parent);
+    sensor_ptr->update_detection(parent);
     vector::worldspace current_detection_relative_worldspace = sensor_ptr->current_detection_relative_worldspace;
-    std::cout << "current_detection_relative_worldspace: " << current_detection_relative_worldspace.str() << "\n";
     vector::worldspace detection_velocity = sensor_ptr->detection_velocity;
-    std::cout << "detection_velocity: " << detection_velocity.str() << "\n";
     time_since_launch += constants::DELTA_T;
 
     double target_distance = current_detection_relative_worldspace.norm();
     if (target_distance != 0) record_target_distance = fmin(record_target_distance, target_distance);
-    //std::cout << "record target distance: " << record_target_distance << std::endl;
-
-    std::cout << "time since launch: " << time_since_launch << "\n";
 
     guidance_mode guidance_mode_;
     if (time_since_launch < 0.3) {
@@ -57,9 +49,6 @@ void missile_avionics::update(physics_object::object* parent) {
     } else {
         guidance_mode_ = INITIAL;
     }
-
-    //TESTING:
-    //guidance_mode_ = INITIAL;
 
     double acceleration = parent->physics_state.recorded_acceleration.norm();
     std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
@@ -82,9 +71,6 @@ void missile_avionics::update(physics_object::object* parent) {
             break;
     }
     
-    std::cout << "guidance_pid_inputs: " << guidance_pid_inputs << "\n";
-
-    //std::cout << interp << std::endl;
     pid_roll.update(guidance_pid_inputs.x());
     pid_pitch.update(guidance_pid_inputs.y());
     pid_yaw.update(guidance_pid_inputs.z());
@@ -104,10 +90,6 @@ void missile_avionics::update(physics_object::object* parent) {
     if (yaw) yaw->response_unmultiplied = pid_yaw.output;
     controls::input* roll = parent->control_bindings.get_input(controls::roll);
     if (roll) roll->response_unmultiplied = pid_roll.output;
-
-    if (pitch) std::cout << "pitch: " << pitch->response_unmultiplied << "\n";
-    if (yaw) std::cout << "yaw: " << yaw->response_unmultiplied << "\n";
-    if (roll) std::cout << "roll: " << roll->response_unmultiplied << "\n";
 }
 
 double missile_avionics::get_g_limit_fraction(double current_acceleration, double g_limit_min, double g_limit_max) {
@@ -144,30 +126,22 @@ double missile_avionics::find_smallest_positive_root(double a, double b, double 
 }
 
 vector::localspace missile_avionics::get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
-    std::cout << "get_guidance_direct START\n";
-    std::cout << "current_detection_relative_worldspace: " << current_detection_relative_worldspace.str() << "\n";
     vector::scopespace current_detection = signal_point(
         current_detection_relative_worldspace,
         vector::worldspace(0, 0, 0),
         rotation * parent->physics_state.rotation,
         1.0 // unimportant
     ).position_scopespace;
-    std::cout << "current_detection: " << current_detection.str() << "\n";
     if (std::isnan(current_detection.distance()) || std::isnan(current_detection.scope_x()) || std::isnan(current_detection.scope_y())) {
         current_detection = vector::scopespace();
     }
-    std::cout << "current_detection post nancheck: " << current_detection.str() << "\n";
     current_detection.scope_x() *= gain;
     current_detection.scope_y() *= gain;
-    std::cout << "current_detection post gain: " << current_detection.str() << "\n";
     vector::localspace output(
         -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
         -current_detection.scope_y(),
         current_detection.scope_x()
     );
-    std::cout << "accel output: " << output << "\n";
-    std::cout << "get_guidance_direct END\n\n";
-    //std::cout << "get_guidance_direct output: " << output.str() << "\n";
     return output;
 }
 
