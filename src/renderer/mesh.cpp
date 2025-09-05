@@ -1,14 +1,12 @@
 #include "mesh.hpp"
 #include "../collision/collider.hpp"
 
-mesh::mesh() {
-    //std::cout << "New mesh created";
-}
+mesh::mesh() {}
+
 mesh::mesh(std::vector<vertex>& vertices_) {
-    //std::cout << "New mesh created\n";
 
     /*
-    currently this fucks up lighting
+    this is faster but doesn't work with sun lighting since that is applied per-triangle, meaning shared vertices get overwritten
     vertices = vertices_;
     std::sort(vertices.begin(), vertices.end());
     vertices.erase(unique(vertices.begin(), vertices.end()), vertices.end());

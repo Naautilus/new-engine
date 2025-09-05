@@ -50,7 +50,7 @@ void missile_avionics::update(physics_object::object* parent) {
     }
 
     double acceleration = parent->physics_state.recorded_acceleration.norm();
-    //std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
+    if (globals::SHOW_MISSILE_ACCELERATION) std::cout << "M/S^2: " << acceleration << std::string((int)(acceleration / constants::STANDARD_GRAVITY), '#') << "\n";
     double gain_limiter = 1-get_g_limit_fraction(acceleration, 40*constants::STANDARD_GRAVITY, 60*constants::STANDARD_GRAVITY);
     vector::localspace guidance_pid_inputs;
     switch(guidance_mode_) {
@@ -80,7 +80,7 @@ void missile_avionics::update(physics_object::object* parent) {
     || std::isnan(pid_roll.output)
     || std::isnan(pid_pitch.output)
     || std::isnan(pid_yaw.output)) {
-        std::cout << "NaN detected in sensor_ir " << this << "\n";
+        std::cout << "NaN detected in pid inputs/outputs of sensor_ir " << this << "\n";
     }
 
     controls::input* pitch = parent->control_bindings.get_input(controls::pitch);
@@ -173,23 +173,14 @@ vector::localspace missile_avionics::get_guidance_first_degree_prediction(vector
 vector::localspace missile_avionics::get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain) {
     double LOOK_AHEAD_TIME = 1; // for turning an acceleration request into an aimpoint request
     vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
-    //std::cout << "current_detection_worldspace: " << current_detection_worldspace.str() << "\n";
     vector::worldspace missile_velocity = parent->physics_state.velocity;
     vector::worldspace enemy_velocity = detection_velocity;
-    //std::cout << "enemy_velocity: " << enemy_velocity.str() << "\n";
     vector::worldspace relative_velocity = enemy_velocity - missile_velocity;
     vector::worldspace relative_position = current_detection_relative_worldspace;
     vector::worldspace line_of_sight_rotation_vector = (relative_position.cross(relative_velocity)) / (relative_position.dot(relative_position));
     vector::worldspace desired_acceleration = -gain * ((relative_velocity.norm()) * (missile_velocity / missile_velocity.norm())).cross(line_of_sight_rotation_vector);
     vector::worldspace aimpoint = LOOK_AHEAD_TIME * missile_velocity + 0.5 * LOOK_AHEAD_TIME * LOOK_AHEAD_TIME * desired_acceleration;
-    //std::cout << "aimpoint: " << aimpoint.str() << "\n";
-    vector::scopespace current_detection = signal_point(
-        aimpoint,
-        vector::worldspace(0, 0, 0),
-        rotation * parent->physics_state.rotation,
-        1.0 // unimportant
-    ).position_scopespace;
-    //std::cout << "current_detection: " << current_detection.str() << "\n";
+    vector::scopespace current_detection = signal_point(aimpoint, rotation * parent->physics_state.rotation).position_scopespace;
     return get_guidance_direct(aimpoint, parent, gain);
 }
 

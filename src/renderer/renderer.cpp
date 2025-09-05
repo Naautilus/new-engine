@@ -326,7 +326,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         glUniform1f(shader_time, time);
         if (frame_count % 100 == 0) {
             double fps = 1/renderer_dt;
-            //std::cout << "fps: " << fps << "\n";
+            if (globals::SHOW_FPS) std::cout << "fps: " << fps << "\n";
         }
     }
     glfwTerminate();

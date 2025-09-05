@@ -14,6 +14,7 @@ struct signal_point {
     double distance_weight = 0;
     signal_point();
     signal_point(vector::worldspace target_position, vector::worldspace sensor_position, Eigen::Quaterniond rotation, double base_signal_strength);
+    signal_point(vector::worldspace position_relative_worldspace, Eigen::Quaterniond rotation);
     signal_point(double distance_, double scope_x_, double scope_y_, double signal_strength_);
     std::string str();
 };

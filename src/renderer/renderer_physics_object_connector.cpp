@@ -308,33 +308,20 @@ void renderer::create_ground_models(std::vector<mesh>& models, camera_properties
 	}
 
 	if (new_ground_ready) {
-		//auto time_initial = std::chrono::high_resolution_clock::now();
 		models.clear();
 		for (int i = 0; i < ground.size(); i++) {
 			models.push_back(ground[i]);
 		}
 		std::thread t(recalculate_ground, std::ref(new_ground_ready), std::ref(ground), camera_properties_.last_camera_position, camera_properties_.last_camera_target_velocity);
 		t.detach();
-		//auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time_initial);
-		//std::cout << "time taken (new_ground_ready swap): " << time_taken << std::endl;
 		new_ground_ready = false;
 	}
-
-	//std::cout << "ground_models_start_point: " << ground_models_start_point << "\t";
-	//std::cout << "models.size() before reduction: " << models.size() << "\t";
 
     // clear models, but keep around the part of the vector that the ground recalculation will use
 	while (models.size() > ground_models_start_point) {
 		models.pop_back();
 	}
 
-	/*std::cout << "models.size() after reduction: " << models.size() << "\t";
-	long total_vertices = 0;
-	for (mesh& m : models) {
-		total_vertices += m.indices.size();
-	}
-	std::cout << "total_vertices: " << total_vertices << "\n";
-    */
 }
 
 void renderer::create_models_from_physics_objects(std::vector<mesh>& models, camera_properties& camera_properties_) {

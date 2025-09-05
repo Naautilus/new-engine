@@ -22,6 +22,14 @@ signal_point::signal_point(vector::worldspace target_position, vector::worldspac
     signal_strength = base_signal_strength / (position_localspace.squaredNorm());
 }
 
+signal_point::signal_point(vector::worldspace position_relative_worldspace, Eigen::Quaterniond rotation) {
+    vector::localspace position_localspace = position_relative_worldspace.to_localspace(rotation);
+    position_scopespace.distance() = position_localspace.x();
+    position_scopespace.scope_x() = position_localspace.y() / position_localspace.x();
+    position_scopespace.scope_y() = position_localspace.z() / position_localspace.x();
+    signal_strength = 0;
+}
+
 signal_point::signal_point(double distance_, double scope_x_, double scope_y_, double signal_strength_) {
     position_scopespace.distance() = distance_;
     position_scopespace.scope_x() = scope_x_;
@@ -147,14 +155,11 @@ signal_point sensor_cell_grid::get_largest_signal() {
         max_signal_point = signal_point(1, 0, 0, 123);
         max_signal_point.distance_weight = 1.0;
     }
-    //std::cout << "largest signal: [" << max_signal_point.position_scopespace.scope_x() << "][" << max_signal_point.position_scopespace.scope_y() << "] @ " << max_signal_strength << "\n";
     return max_signal_point;
 }
 
 double sensor_cell_grid::distance_between_grid_cells() {
-    double output = points[1][0].position_scopespace.scope_x() - points[0][0].position_scopespace.scope_x();
-    //std::cout << "distance_between_grid_cells: " << output << "\n";
-    return output;
+    return (points[1][0].position_scopespace.scope_x() - points[0][0].position_scopespace.scope_x());
 }
 
 void sensor_cell_grid::print(vector::scopespace target, vector::scopespace center) {
@@ -247,12 +252,6 @@ std::vector<signal_point> sensor_ir::get_signals_from_physics_objects(physics_ob
 
 vector::scopespace sensor_ir::get_target_direction(physics_object::object* parent) {
     std::vector<signal_point> signals_unfiltered = get_signals_from_physics_objects(parent);
-    /*
-    std::cout << "signals_unfiltered [size " << signals_unfiltered.size() << "]:\n";
-    for (signal_point& s : signals_unfiltered) {
-        std::cout << s.str() << "\n";
-    }
-    */
     const double LAST_TARGET_BONUS = 0.4;
     sensor_cell_grid grid = sensor_cell_grid(constants::SENSOR_IR_GRID_WIDTH, view_cone_halfarc);
     double target_recognition_radius = tan(target_recognition_cone_halfarc * std::numbers::pi / 180);
@@ -291,31 +290,14 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
     */
     target_recognition_radius += grid.distance_between_grid_cells();
 
-    //std::cout << "center (get_largest_signal): " << center.str() << "\n";
-    //std::cout << "target_recognition_radius: " << target_recognition_radius << "\n";
     std::vector<int> signal_indices_in_target_recognition_circle;
     for (int i = 0; i < signals_unfiltered.size(); i++) {
-        //std::cout << "  signals_unfiltered[" << i << "].position_scopespace.scope_x(): " << signals_unfiltered[i].position_scopespace.scope_x() << "\n";
-        //std::cout << "  signals_unfiltered[" << i << "].position_scopespace.scope_y(): " << signals_unfiltered[i].position_scopespace.scope_y() << "\n";
-        //std::cout << "  center.position_scopespace.scope_x(): " << center.position_scopespace.scope_x() << "\n";
-        //std::cout << "  center.position_scopespace.scope_y(): " << center.position_scopespace.scope_y() << "\n";
         double distance_x = signals_unfiltered[i].position_scopespace.scope_x() - center.position_scopespace.scope_x();
         double distance_y = signals_unfiltered[i].position_scopespace.scope_y() - center.position_scopespace.scope_y();
-        //std::cout << "  distance_x: " << distance_x << "\n";
-        //std::cout << "  distance_y: " << distance_y << "\n";
         if (distance_x * distance_x + distance_y * distance_y < target_recognition_radius * target_recognition_radius) {
-            //std::cout << "  pushed";
             signal_indices_in_target_recognition_circle.push_back(i);
         }
-        //std::cout << "\n\n";
     }
-    /*
-    std::cout << "signal_indices_in_target_recognition_circle: {";
-    for (int i : signal_indices_in_target_recognition_circle) {
-        std::cout << i << ", ";
-    }
-    std::cout << "\b\b}\n";
-    */
     
     signal_point signals_averaged = signal_point(0, 0, 0, 0);
     for (int i : signal_indices_in_target_recognition_circle) {
@@ -329,8 +311,6 @@ vector::scopespace sensor_ir::get_target_direction(physics_object::object* paren
     vector::scopespace result = signals_averaged.position_scopespace;
     last_detection_scopespace = signals_averaged.position_scopespace;
     last_detection_signal_strength = signals_averaged.signal_strength;
-    //std::cout << "get_target_direction result: " << result.str() << "\n";
-    //if (globals::tick % 20 == 0) grid.print(result, center.position_scopespace);
     return result;
 }
 

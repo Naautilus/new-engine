@@ -293,13 +293,12 @@ object collider_visual(vector::worldspace position_, collision::collider collide
     o.properties.fixed = true;
     o.properties.functional = false;
     auto mesh_ = mesh(collider_, 1, 0.5, 0.2, 0.8);
-    //std::cout << "mesh_.vertices.size(): " << mesh_.vertices.size() << "\n";
     o.add_physical_structure(module::physical_structure(collision::collider(), std::make_shared<mesh>(mesh_), vector::localspace(0,0,0), vector::localspace(1,1,1) * 1));
     o.physics_state.position = position_;
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = 1; //round(0.1 / constants::DELTA_T);
+    o.properties.ticks_lifetime_remaining = 1;
     return o;
 }
 

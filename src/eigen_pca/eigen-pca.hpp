@@ -199,7 +199,7 @@ namespace math {
             std::cout << "num_col: " << num_col << std::endl;
             std::cout << "num_comp: " << num_comp << std::endl;
             num_comp = std::min(num_row, num_col);
-            std::cout << "num_comp: " << num_comp << std::endl;
+            std::cout << "num_comp after min: " << num_comp << std::endl;
         }
         else if (num_comp <= 0)
         {

@@ -143,14 +143,12 @@ void log_physics_objects() {
     globals::physics_objects_mutex.lock();
     auto physics_objects_ = globals::physics_objects;
     globals::physics_objects_mutex.unlock();
-
-	//std::cout << "-----------------\n";
+	std::cout << "-----------------\n";
 	for (auto o : physics_objects_) {
-        //if (o->mutex) std::lock_guard<std::mutex> lock(*o->mutex);
-		//o->log();
-        //std::cout << o << "\n";
+        if (o->mutex) std::lock_guard<std::mutex> lock(*o->mutex);
+		o->log();
+        std::cout << o << "\n";
 	}
-	
 }
 
 void wait_delta_t() {

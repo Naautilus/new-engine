@@ -59,15 +59,7 @@ std::vector<std::pair<double, color>> ground_color_heightmap = {
 
 color get_ground_color_from_heightmap(double z) {
     z -= constants::WATER_LEVEL;
-    //std::cout << "z: " << z << "\n";
-
-    /*
-    std::cout << "heightmap:\n";
-    for (auto& pair : ground_color_heightmap) {
-        std::cout << pair.first << " -> {" << pair.second.r << ", " << pair.second.g << ", " << pair.second.b << "}\n";
-    }
-    */
-
+    
     if (z < ground_color_heightmap[0].first) return ground_color_heightmap[0].second;
     int last = ground_color_heightmap.size() - 1;
     if (z > ground_color_heightmap[last].first) return ground_color_heightmap[last].second;
@@ -80,14 +72,11 @@ color get_ground_color_from_heightmap(double z) {
     double& higher = ground_color_heightmap[lower_index + 1].first;
     double fraction = (z - lower) / (higher - lower);
 
-    //std::cout << "lower_index: " << lower_index << "\n";
-    //std::cout << "fraction: " << fraction << "\n";
-
     color& lower_color = ground_color_heightmap[lower_index].second;
     color& higher_color = ground_color_heightmap[lower_index + 1].second;
 
     color output = lower_color * (1 - fraction) + higher_color * (fraction);
-    //std::cout << "output: {" << output.r << ", " << output.g << ", " << output.b << "}\n";
+
     return output;
 }
 
@@ -117,7 +106,6 @@ color get_ground_color(double x_, double y_) {
 
 double get_ground_altitude_averaged(double x, double y, double width, int count) {
 
-    ///*
     ground_info ground_info_(x, y, width, count);
     ground_altitude_averaged_mutex.lock();
     if(ground_altitude_averaged.find(ground_info_) != ground_altitude_averaged.end()) {
@@ -126,7 +114,6 @@ double get_ground_altitude_averaged(double x, double y, double width, int count)
         return output;
     }
     ground_altitude_averaged_mutex.unlock();
-    //*/
     
     double sum = 0;
     for (int x_ = 0; x_ < count; x_++) {
@@ -136,17 +123,14 @@ double get_ground_altitude_averaged(double x, double y, double width, int count)
     }
     sum /= (count * count);
 
-    ///*
     ground_altitude_averaged_mutex.lock();
     ground_altitude_averaged[ground_info_] = sum;
     ground_altitude_averaged_mutex.unlock();
-    //*/
     return sum;
 }
 
 color get_ground_color_averaged(double x, double y, double width, int count) {
 
-    ///*
     ground_info ground_info_(x, y, width, count);
     ground_color_averaged_mutex.lock();
     if(ground_color_averaged.find(ground_info_) != ground_color_averaged.end()) {
@@ -155,7 +139,6 @@ color get_ground_color_averaged(double x, double y, double width, int count) {
         return output;
     }
     ground_color_averaged_mutex.unlock();
-    //*/
 
     color sum;
     for (int x_ = 0; x_ < count; x_++) {
@@ -165,11 +148,9 @@ color get_ground_color_averaged(double x, double y, double width, int count) {
     }
     sum /= (count * count);
 
-    ///*
     ground_color_averaged_mutex.lock();
     ground_color_averaged[ground_info_] = sum;
     ground_color_averaged_mutex.unlock();
-    //*/
     return sum;
 }
 
@@ -187,8 +168,6 @@ vector::worldspace get_surface_normal(double x, double y) {
 }
 
 bool line_of_sight(vector::worldspace a, vector::worldspace& b) {
-    //std::cout << a.x() << "," << a.y() << "," << a.z() << "\n";
-    //std::cout << b.x() << "," << b.y() << "," << b.z() << "\n";
     vector::worldspace position_difference = b - a;
     vector::worldspace traveler_probe_location;
     double max_distance_per_altitude = 1;
@@ -197,8 +176,6 @@ bool line_of_sight(vector::worldspace a, vector::worldspace& b) {
     while (distance_traveled < distance_total) {
         double fraction_traveled = distance_traveled / distance_total;
         traveler_probe_location = (1-fraction_traveled) * a + fraction_traveled * b;
-        // seems fine: std::cout << traveler_probe_location.x() << "," << traveler_probe_location.y() << "," << traveler_probe_location.z() << "\n";
-        // the error is here vvv
         double altitude = traveler_probe_location.z() - get_ground_altitude(traveler_probe_location.x(), traveler_probe_location.y());
         if (altitude < 5.0) return false;
         distance_traveled += altitude * max_distance_per_altitude;
@@ -210,11 +187,8 @@ double fluid_density(double altitude) {
 
     fluid_density_map_mutex.lock();
     int altitude_interval = floor(altitude / FLUID_DENSITY_MAP_INTERVAL);
-    //std::cout << "altitude: " << altitude << "\n";
-    //std::cout << "altitude_interval: " << altitude_interval << "\n";
     if(fluid_density_map.find(altitude_interval) != fluid_density_map.end()) {
         double output = fluid_density_map[altitude_interval];
-        //std::cout << "hashed, density: " << output << "\n";
         fluid_density_map_mutex.unlock();
         return output;
     }
@@ -228,7 +202,6 @@ double fluid_density(double altitude) {
     }
 
     fluid_density_map_mutex.lock();
-    //std::cout << "not hashed, density: " << density << "\n";
     fluid_density_map[altitude_interval] = density;
     fluid_density_map_mutex.unlock();
     return density;

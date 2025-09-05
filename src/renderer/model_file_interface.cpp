@@ -69,11 +69,9 @@ mesh stl_to_mesh(std::string model, float r, float g, float b, float sun_factor)
     f.ignore(75); // binary stls have 80 bytes of useless header so this skips the rest past the ASCII STL check
     uint32_t triangle_count;
     f.read(reinterpret_cast<char*>(&triangle_count), 4);
-    //std::cout << "triangles in file " << filename << ": " << triangle_count << "\n";
     float vertex_[3];
     for (int i = 0; i < triangle_count; i++) {
         f.ignore(12); // surface normal
-        //if (f.eof()) std::cout << "EOF reached\n";
         for (int j = 0; j < 3; j++) {
             f.read(reinterpret_cast<char*>(&vertex_), 12);
             vertices.push_back(vertex{
@@ -83,19 +81,8 @@ mesh stl_to_mesh(std::string model, float r, float g, float b, float sun_factor)
                 r, g, b, sun_factor});
         }
         f.ignore(2); // "attribute byte" sometimes used for color in non-standard implementations
-        //vertex& v = vertices[3*i];
-        //std::cout << i << ": {" << v.x << ", " << v.y << ", " << v.z << "}\t";
-        //v = vertices[3*i+1];
-        //std::cout << i << ": {" << v.x << ", " << v.y << ", " << v.z << "}\t";
-        //v = vertices[3*i+2];
-        //std::cout << i << ": {" << v.x << ", " << v.y << ", " << v.z << "}\n";
         
     }
-    //std::cout << "vertices:\n";
-    //for (int i = 0; i < vertices.size(); i++) {
-    //    vertex& v = vertices[i];
-    //    std::cout << (i+1) << "/" << vertices.size() << ": {" << v.x << ", " << v.y << ", " << v.z << "}\n";
-    //}
     return mesh(vertices);
 }
 void mesh_to_stl(std::string model, mesh mesh_data) {
@@ -107,7 +94,6 @@ void mesh_to_stl(std::string model, mesh mesh_data) {
     uint32_t triangle_count = mesh_data.indices.size() / 3;
     write_uint32_t(f, triangle_count);
     for (int i = 0; i < triangle_count; i++) {
-        //std::cout << "tri " << (i+1) << "/" << triangle_count << "\n";
         write_float(f, 0);
         write_float(f, 0);
         write_float(f, 1);

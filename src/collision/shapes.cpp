@@ -46,7 +46,7 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     // Assumes that the planes are not parallel
 
     if (fabs(fabs(direction.dot(p.direction)) - 1) < std::numeric_limits<double>::epsilon()) {
-        //std::cout << "line_of_intersection(plane& p): parallel planes\n";
+        std::cout << "line_of_intersection(plane& p): parallel planes\n";
         return std::nullopt;
     }
     line l;
@@ -71,24 +71,13 @@ std::optional<line> plane::line_of_intersection(plane& p) {
     coefficients_matrix.row(0) = direction;
     coefficients_matrix.row(1) = p.direction;
     coefficients_matrix.row(2) = l.direction;
-    //std::cout << "direction: " << direction.str() << "\n";
-    //std::cout << "p.direction: " << p.direction.str() << "\n";
-    //std::cout << "l.direction: " << l.direction.str() << "\n";
-
-    //for (int i = 0; i < 3; i++) {
-    //    std::cout << "matrix[" << i << "]: " << coefficients_matrix.row(i).str() << "\n";
-    //}
-    
+   
     Eigen::Vector3d constraint_vector;
     constraint_vector[0] = direction.dot(origin);
     constraint_vector[1] = p.direction.dot(p.origin);
     constraint_vector[2] = 0;
-    //std::cout << "direction.dot(origin): " << direction.dot(origin) << "\n";
-    //std::cout << "p.direction.dot(p.origin): " << p.direction.dot(p.origin) << "\n";
-    //std::cout << "0: " << 0 << "\n";
     
     Eigen::Vector3d result = coefficients_matrix.colPivHouseholderQr().solve(constraint_vector);
-    //std::cout << "result: " << result.str() << "\n";
 
     l.origin = result;
 
@@ -154,7 +143,6 @@ double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; tak
     double determinant = edge1.dot(ray_cross_e2);
 
     if (determinant > -epsilon && determinant < epsilon) {
-        //std::cout << "ray parallel to triangle" << std::endl;
         return -1.0;    // this ray is parallel to this triangle.
     }
 
@@ -163,7 +151,6 @@ double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; tak
     double u = inv_determinant * s.dot(ray_cross_e2);
 
     if (u < 0 || u > 1) {
-        //std::cout << "ray fail condition 1" << std::endl;
         return -1.0;
     }
 
@@ -171,20 +158,12 @@ double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; tak
     double v = inv_determinant * r.direction.dot(s_cross_e1);
 
     if (v < 0 || u + v > 1) {
-        //std::cout << "ray fail condition 2" << std::endl;
         return -1.0;
     }
 
     // at this stage we can compute t to find out where the intersection point is on the line.
     double t = inv_determinant * edge2.dot(s_cross_e1);
 
-    //if (t > epsilon) // ray intersection
-    //{
-    //    //return vec3(r.origin + r.direction * t);
-    //}
-    //else // this means that there is a line intersection but not a ray intersection.
-    //    //return {};
-    //std::cout << "triangle {" << points[0].str() << ", " << points[1].str() << ", " << points[2].str() << "} intersects ray {" << r.origin.str() << " + " << r.direction.str() << "x} at x = " << t << std::endl;
     return t;
 }
 bool triangle::is_intersecting_line_segment(line_segment& l) {
@@ -196,16 +175,14 @@ bool triangle::is_intersecting_line_segment(line_segment& l) {
     return true;
 }
 bool triangle::is_intersecting_triangle(triangle& t) {
-    // this function is 99% of the runtime of the collisions algorithm            
+    // note: this function is 99% of the runtime of the collisions algorithm            
     for (int i = 0; i < 3; i++) {
         if (is_intersecting_line_segment(t.edges[i])) {
-            //std::cout << "triangle {" << points[0].str() << ", " << points[1].str() << ", " << points[2].str() << "} intersecting triangle {" << t.points[0].str() << ", " << t.points[1].str() << ", " << t.points[2].str() << "}" << std::endl;
             return true;
         }
     }
     for (int i = 0; i < 3; i++) {
         if (t.is_intersecting_line_segment(edges[i])) {
-            //std::cout << "triangle {" << points[0].str() << ", " << points[1].str() << ", " << points[2].str() << "} intersecting triangle {" << t.points[0].str() << ", " << t.points[1].str() << ", " << t.points[2].str() << "}" << std::endl;
             return true;
         }
     }
@@ -233,15 +210,10 @@ std::optional<line_segment> triangle::intersection(line& l) {
         if (t.value() > 1) continue;
         intersection_points.push_back(edge.point_along_line(t.value()));
     }
-    //std::cout << "intersection(line& l): intersection_points.size() == " << intersection_points.size() << "\n";
     if (intersection_points.size() != 2) {
         return std::nullopt;
     }
     line_segment output = line_segment(intersection_points[0], intersection_points[1]);
-    //std::cout << ":)\n";
-    //std::cout << "origin: " << output.line_.origin.str() << "\n";
-    //std::cout << "direction: " << output.line_.direction.str() << "\n";
-    //std::cout << "length: " << output.length << "\n";
     return output;
 }
 std::optional<line_segment> triangle::intersection(triangle& t) {
@@ -249,22 +221,19 @@ std::optional<line_segment> triangle::intersection(triangle& t) {
     // Assumes that the two triangles are confirmed to be intersecting
     double normal_dot_product = get_normal().dot(t.get_normal());
     if (fabs(fabs(normal_dot_product) - 1) < std::numeric_limits<double>::epsilon()) {
-        //std::cout << "intersection(triangle& t): triangles are coplanar\n";
+        // triangles are coplanar
         return std::nullopt;
     }
     plane p = t.to_plane();
     std::optional<line> plane_intersection_line = to_plane().line_of_intersection(p);
     if (!plane_intersection_line) {
-        //std::cout << "intersection(triangle& t): plane_intersection_line returned no value\n";
         return std::nullopt;
     }
     std::optional<line_segment> t0_intersection = intersection(plane_intersection_line.value());
     std::optional<line_segment> t1_intersection = t.intersection(plane_intersection_line.value());
     if (!t0_intersection || !t1_intersection) {
-        //std::cout << "intersection(triangle& t): at least one intersection returned no value\n";
         return std::nullopt;
     }
-    //std::cout << "intersection(triangle& t): happy path\n";
     return t0_intersection.value().intersection(t1_intersection.value());
 }
 void triangle::update_centroid() {
@@ -344,8 +313,11 @@ bool triangular_prism::surrounds_point(vector::worldspace& input_point) {
     double volume = base_area * extrude_direction.dot(base_normal);
     if (fabs(volume) < 1e-7) return false;
     for (triangle& t : faces) {
-        if (t.point_is_ahead_of_normal(central_point) != t.point_is_ahead_of_normal(input_point)) return false; // if the input point is on the same side of all 8 triangles as the central point of the prism, then it is inside the prism
-        if (t.point_is_ahead_of_normal(central_point) == 0) return false; // the algorithm breaks in the edgecase where a point is coplanar with a triangle, so ignore the prism in that case 
+        // if the input point is on the same side of all 8 triangles as the central point of the prism, then it is inside the prism
+        if (t.point_is_ahead_of_normal(central_point) != t.point_is_ahead_of_normal(input_point)) return false;
+
+        // the algorithm breaks in the edgecase where a point is coplanar with a triangle, so ignore the prism in that case 
+        if (t.point_is_ahead_of_normal(central_point) == 0) return false;
     }
     vector::worldspace minimum_coords = faces[0].points[0];
     vector::worldspace maximum_coords = faces[0].points[0];
@@ -365,9 +337,6 @@ bool triangular_prism::surrounds_point(vector::worldspace& input_point) {
     if (input_point.x() > maximum_coords.x()) return false;
     if (input_point.y() > maximum_coords.y()) return false;
     if (input_point.z() > maximum_coords.z()) return false;
-    //std::cout << "point " << input_point.str() << " is inside prism {" << faces[0].points[0].str() << ", " << faces[0].points[1].str() << ", " << faces[0].points[2].str() << "}, {" << faces[1].points[0].str() << ", " << faces[1].points[1].str() << ", " << faces[1].points[2].str() << "} ";
-    //std::cout << "with center " << central_point.str() << ", ";
-    //std::cout << "volume = " << volume << ", ";
     return true;
 }
 
