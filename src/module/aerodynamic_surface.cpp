@@ -36,12 +36,9 @@ void aerodynamic_surface::update_static_surface(physics_object::object* parent) 
 }
 void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent) {
     vector::localspace rotation_drives(0, 0, 0);
-    controls::input* pitch = parent->control_bindings.get_input(controls::pitch);
-    if (pitch) rotation_drives.y() = pitch->response_multiplied;
-    controls::input* yaw = parent->control_bindings.get_input(controls::yaw);
-    if (yaw) rotation_drives.z() = yaw->response_multiplied;
-    controls::input* roll = parent->control_bindings.get_input(controls::roll);
-    if (roll) rotation_drives.x() = roll->response_multiplied;
+    rotation_drives.y() = parent->control_bindings.get_response(controls::pitch);
+    rotation_drives.z() = parent->control_bindings.get_response(controls::yaw);
+    rotation_drives.x() = parent->control_bindings.get_response(controls::roll);
 
     double response = response_axes.dot(rotation_drives);
     response *= angle_range;

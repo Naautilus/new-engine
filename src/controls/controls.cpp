@@ -6,6 +6,10 @@ key::key(int key_number_, double axis_response_) {
     key_number = key_number_;
     axis_response = axis_response_;
 }
+toggle_key::toggle_key(int key_number_, bool state_that_turns_input_on_) {
+    key_number = key_number_;
+    state_that_turns_input_on = state_that_turns_input_on_;
+}
 mouse_position_input::mouse_position_input(mouse_axis mouse_axis__, double axis_response_) {
     mouse_axis_ = mouse_axis__;
     axis_response = axis_response_;
@@ -18,6 +22,17 @@ input::input(axis axis__, response_type response_type__, double minimum_, double
     inherent_multiplier = inherent_multiplier_;
     response_unmultiplied = 0;
     response_multiplied = 0;
+    optional_toggle_key = std::nullopt;
+}
+input::input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_, toggle_key toggle_key_) {
+    axis_ = axis__;
+    response_type_ = response_type__;
+    minimum = minimum_;
+    maximum = maximum_;
+    inherent_multiplier = inherent_multiplier_;
+    response_unmultiplied = 0;
+    response_multiplied = 0;
+    optional_toggle_key = std::make_optional<toggle_key>(toggle_key_);
 }
 void input::add_key(int key_number, double axis_response) {
     key_inputs.push_back(key(key_number, axis_response));

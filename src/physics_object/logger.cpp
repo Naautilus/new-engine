@@ -39,18 +39,10 @@ void object::log() {
                         << std::format(constants::FORMAT_STRING_G_FORCE, physics_state.recorded_acceleration.y() / constants::STANDARD_GRAVITY) << ", "
                         << std::format(constants::FORMAT_STRING_G_FORCE, physics_state.recorded_acceleration.z() / constants::STANDARD_GRAVITY) << "} ";
     std::cout << "rotation drives PYR { ";
-    controls::input* pitch = control_bindings.get_input(controls::pitch);
-    if (pitch) std::cout << std::format(constants::FORMAT_STRING_UNIT, pitch->response_unmultiplied) << ", ";
-    else std::cout << std::string(5, ' ') << ", ";
-    controls::input* yaw = control_bindings.get_input(controls::yaw);
-    if (yaw) std::cout << std::format(constants::FORMAT_STRING_UNIT, yaw->response_unmultiplied) << ", ";
-    else std::cout << std::string(5, ' ') << ", ";
-    controls::input* roll = control_bindings.get_input(controls::roll);
-    if (roll) std::cout << std::format(constants::FORMAT_STRING_UNIT, roll->response_unmultiplied) << "} ";
-    else std::cout << std::string(5, ' ') << "} ";
-    controls::input* thrust = control_bindings.get_input(controls::engine1);
-    if (thrust) std::cout << "thrust " << std::format(constants::FORMAT_STRING_UNIT, thrust->response_unmultiplied) << " ";
-    else std::cout << std::string(13, ' ');
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::pitch)) << ", ";
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::yaw)) << ", ";
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::roll)) << "} ";
+    std::cout << "thrust " << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::engine1)) << " ";
     std::cout << "AoA " << std::format(constants::FORMAT_STRING_AOA, calculate_aoa()) << " ";
     std::cout << "ALT " << std::format(constants::FORMAT_STRING_ALTITUDE, physics_state.position.z()) << " ";
     std::cout << "@ " << std::format(constants::FORMAT_STRING_SPEED, physics_state.velocity.z()) << " ";

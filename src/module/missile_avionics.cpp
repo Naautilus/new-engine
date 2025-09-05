@@ -83,11 +83,11 @@ void missile_avionics::update(physics_object::object* parent) {
         std::cout << "NaN detected in pid inputs/outputs of sensor_ir " << this << "\n";
     }
 
-    controls::input* pitch = parent->control_bindings.get_input(controls::pitch);
+    controls::input* pitch = parent->control_bindings.get_input_for_axis(controls::pitch);
     if (pitch) pitch->response_unmultiplied = pid_pitch.output;
-    controls::input* yaw = parent->control_bindings.get_input(controls::yaw);
+    controls::input* yaw = parent->control_bindings.get_input_for_axis(controls::yaw);
     if (yaw) yaw->response_unmultiplied = pid_yaw.output;
-    controls::input* roll = parent->control_bindings.get_input(controls::roll);
+    controls::input* roll = parent->control_bindings.get_input_for_axis(controls::roll);
     if (roll) roll->response_unmultiplied = pid_roll.output;
 }
 

@@ -4,5 +4,6 @@
 
 struct control_bindings {
     std::vector<controls::input> inputs;
-    controls::input* get_input(controls::axis axis__);
+    double get_response(controls::axis axis__);
+    controls::input* get_input_for_axis(controls::axis axis__);
 };

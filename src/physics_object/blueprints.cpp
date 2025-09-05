@@ -134,25 +134,42 @@ control_bindings plane_control_bindings_mouse() {
 
 control_bindings plane_control_bindings_wasd() {
     control_bindings control_bindings_;
-    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.3, 0.3, 1);
+    controls::input pitch = controls::input(controls::pitch, controls::trim_resetting, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+    controls::input pitch_fast = controls::input(controls::pitch, controls::trim_resetting, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     pitch.add_key(GLFW_KEY_W, -3);
     pitch.add_key(GLFW_KEY_S, 3);
+    pitch_fast.add_key(GLFW_KEY_W, -3);
+    pitch_fast.add_key(GLFW_KEY_S, 3);
     control_bindings_.inputs.push_back(pitch);
-    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1);
+    control_bindings_.inputs.push_back(pitch_fast);
+
+    controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+    controls::input yaw_fast = controls::input(controls::yaw, controls::trim_resetting, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     yaw.add_key(GLFW_KEY_E, -3);
     yaw.add_key(GLFW_KEY_Q, 3);
+    yaw_fast.add_key(GLFW_KEY_E, -3);
+    yaw_fast.add_key(GLFW_KEY_Q, 3);
     control_bindings_.inputs.push_back(yaw);
-    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1);
+    control_bindings_.inputs.push_back(yaw_fast);
+
+    controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+    controls::input roll_fast = controls::input(controls::roll, controls::trim_resetting, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     roll.add_key(GLFW_KEY_A, -3);
     roll.add_key(GLFW_KEY_D, 3);
+    roll_fast.add_key(GLFW_KEY_A, -3);
+    roll_fast.add_key(GLFW_KEY_D, 3);
     control_bindings_.inputs.push_back(roll);
+    control_bindings_.inputs.push_back(roll_fast);
+
     controls::input engine1 = controls::input(controls::engine1, controls::trim_not_resetting, 0, 1, 1);
     engine1.add_key(GLFW_KEY_Z, 0.5);
     engine1.add_key(GLFW_KEY_X, -0.5);
     control_bindings_.inputs.push_back(engine1);
+
     controls::input gun1 = controls::input(controls::gun1, controls::instant, 0, 1, 1);
     gun1.add_key(GLFW_KEY_SPACE, 1);
     control_bindings_.inputs.push_back(gun1);
+
     return control_bindings_;
 }
 
@@ -187,7 +204,7 @@ object f16_simple_forces_model() {
     o.physics_state.mass = 9300;
     o.physics_state.health = 9300;
     o.physics_state.rotational_inertia = vector::localspace(12874.84, 75673.58, 85554.4);
-    // raw lift/drag figures                    cd/cl, area           axis normal to plane        center of pressure
+    // raw lift/drag figures                            cd/cl, area           axis normal to plane        center of pressure
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.011 * 50.70     , vector::localspace(1, 0, 0), vector::localspace(0, 0, 0)));
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.65 * 40         , vector::localspace(0, 1, 0), vector::localspace(-3, 0, 0.1)));
     o.add_aerodynamic_surface(module::aerodynamic_surface(1.5*50 - 2*2.5    , vector::localspace(0, 0, 1), vector::localspace(0, 0, 0)));

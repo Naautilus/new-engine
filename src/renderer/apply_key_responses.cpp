@@ -29,6 +29,8 @@ double _get_response_for_response_type(double renderer_dt, controls::input& c, d
 
 void _process_control_input(GLFWwindow* window, double renderer_dt, controls::input& c, physics_object::object& o) {
     if (c.key_inputs.size() == 0 && c.mouse_position_inputs.size() == 0) return;
+    if (c.optional_toggle_key &&
+        renderer::key_pressed(window, c.optional_toggle_key->key_number) != c.optional_toggle_key->state_that_turns_input_on) return;
 
     double response_ = 0;
     for (controls::key k : c.key_inputs) {

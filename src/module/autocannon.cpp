@@ -17,9 +17,8 @@ void autocannon::update(physics_object::object* parent) {
 
     ticks_since_last_fired++;
     if (health <= 0) return;
-    controls::input* trigger = parent->control_bindings.get_input(controls::gun1);
-    if (!trigger) return;
-    if (trigger->response_multiplied == 0) return;
+    double trigger_response = parent->control_bindings.get_response(controls::gun1);
+    if (trigger_response == 0) return;
     if (ticks_since_last_fired < 1.0/(rounds_per_second*constants::DELTA_T)) return;
     ticks_since_last_fired = 0;
 

@@ -18,9 +18,7 @@ jet_engine::jet_engine(double max_thrust_, double minimum_throttle_, double maxi
 }
 void jet_engine::update(physics_object::object* parent) {
     if (health <= 0) return;
-    controls::input* throttle = parent->control_bindings.get_input(controls::engine1);
-    double response = 0;
-    if (throttle) response = throttle->response_multiplied;
+    double response = parent->control_bindings.get_response(controls::engine1);
     response = fmax(response, minimum_throttle);
     response = fmin(response, maximum_throttle);
     double thrust = response * max_thrust;
