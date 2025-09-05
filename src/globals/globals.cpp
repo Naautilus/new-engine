@@ -24,6 +24,7 @@ timer::timer timer_ = timer::timer("timer", timer::timer::NANOSECONDS);
 std::vector<std::vector<double>> sensor_ir_activations;
 std::mutex sensor_ir_activations_mutex;
 
+bool MISSILE_CAMERA = false;
 bool SHOW_COLLISION_DEBUGGING = false;
 bool PAUSE_ON_COLLISION = false;
 bool SHOW_MISSILE_ACCELERATION = false;

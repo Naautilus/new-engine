@@ -21,17 +21,17 @@ void object::log() {
     std::cout << "velocity {" << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.x()) << ", " << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.y()) << ", " << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.z()) << "} ";
     Eigen::Vector3d euler = physics_state.rotation.toRotationMatrix().eulerAngles(2, 1, 0);
     std::cout << "rotation YPR {"
-              << std::format(constants::FORMAT_STRING_ROTATION, euler[0] * 180.0 / M_PI) << "°, "  // Yaw (around Z axis)
-              << std::format(constants::FORMAT_STRING_ROTATION, euler[1] * 180.0 / M_PI) << "°, "  // Pitch (around Y axis)
-              << std::format(constants::FORMAT_STRING_ROTATION, euler[2] * 180.0 / M_PI) << "°} ";  // Roll (around X axis)
+              << std::format(constants::FORMAT_STRING_ROTATION, euler[0] * 180.0 / M_PI) << "*, " // Yaw (around Z axis)
+              << std::format(constants::FORMAT_STRING_ROTATION, euler[1] * 180.0 / M_PI) << "*, " // Pitch (around Y axis)
+              << std::format(constants::FORMAT_STRING_ROTATION, euler[2] * 180.0 / M_PI) << "*} ";// Roll (around X axis)
     std::cout << "forward vector {"
                         << std::format(constants::FORMAT_STRING_UNIT, vector::localspace(1,0,0).to_worldspace(physics_state.rotation).x()) << ", "
                         << std::format(constants::FORMAT_STRING_UNIT, vector::localspace(1,0,0).to_worldspace(physics_state.rotation).y()) << ", "
                         << std::format(constants::FORMAT_STRING_UNIT, vector::localspace(1,0,0).to_worldspace(physics_state.rotation).z()) << "} ";
     std::cout << "angular_velocity PYR {"
-                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.y() * 180.0 / std::numbers::pi) << "°, " 
-                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.z() * 180.0 / std::numbers::pi) << "°, " 
-                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.x() * 180.0 / std::numbers::pi) << "°} ";
+                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.y() * 180.0 / std::numbers::pi) << "*, " 
+                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.z() * 180.0 / std::numbers::pi) << "*, " 
+                        << std::format(constants::FORMAT_STRING_ANGULAR_VELOCITY, physics_state.angular_velocity.x() * 180.0 / std::numbers::pi) << "*} ";
     std::cout << "M/S: " << std::format(constants::FORMAT_STRING_SPEED, physics_state.velocity.norm()) << " ";
     std::cout << "G: " 
                         << std::format(constants::FORMAT_STRING_G_FORCE, physics_state.recorded_acceleration.norm() / constants::STANDARD_GRAVITY) << " {"
@@ -54,7 +54,11 @@ void object::log() {
     std::cout << "AoA " << std::format(constants::FORMAT_STRING_AOA, calculate_aoa()) << " ";
     std::cout << "ALT " << std::format(constants::FORMAT_STRING_ALTITUDE, physics_state.position.z()) << " ";
     std::cout << "@ " << std::format(constants::FORMAT_STRING_SPEED, physics_state.velocity.z()) << " ";
-    std::cout << "health " << std::format(constants::FORMAT_STRING_SPEED, physics_state.health) << " ";
+    if (physics_state.health < constants::HIGH_LOW_HEALTH_BOUNDARY) {
+        std::cout << "health " << std::format(constants::FORMAT_STRING_HEALTH_SMALL, physics_state.health) << " ";
+    } else {
+        std::cout << "health " << std::format(constants::FORMAT_STRING_HEALTH_LARGE, physics_state.health) << " ";
+    }
     std::cout << "\n";
 }
 

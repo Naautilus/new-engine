@@ -2,6 +2,7 @@
 #include "simulation_logic/initialize_physics_objects.hpp"
 #include "renderer/renderer_physics_object_connector.hpp"
 #include "globals/globals.hpp"
+#include "simulation_logic/argument_interpreter.hpp"
 
 // x forward, y right, z up
 
@@ -27,7 +28,8 @@ int main(int argc, char* argv[]) {
 
 	renderer r;
 	initialize_physics_objects(args);
-	renderer_function(args);
+    interpret_arguments(args);
+	renderer_function();
 
 	for (double time = 0; time < constants::TIME_LIMIT || constants::TIME_LIMIT == -1; time += constants::DELTA_T) {
 		step_physics_objects();

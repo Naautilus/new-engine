@@ -38,6 +38,7 @@ extern timer::timer timer_;
 extern std::vector<std::vector<double>> sensor_ir_activations;
 extern std::mutex sensor_ir_activations_mutex;
 
+extern bool MISSILE_CAMERA;
 extern bool SHOW_COLLISION_DEBUGGING;
 extern bool PAUSE_ON_COLLISION;
 extern bool SHOW_MISSILE_ACCELERATION;
