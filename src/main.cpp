@@ -1,5 +1,4 @@
 #include "renderer/renderer_thread.hpp"
-#include "simulation_state.hpp"
 #include "simulation_logic/initialize_physics_objects.hpp"
 #include "renderer/renderer_physics_object_connector.hpp"
 #include "globals/globals.hpp"
@@ -10,6 +9,13 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::string> args;
     for (int i = 0; i < argc; i++) args.push_back(argv[i]);
+
+    std::cout << "args: " << "\n";
+    for (std::string& arg : args) {
+        std::cout << arg;
+        std::cout << "\n";
+    }
+    std::cout << "done\n";
     
     models::initialize_models();
     physics_object::blueprints::initialize_blueprints();
@@ -17,7 +23,6 @@ int main(int argc, char* argv[]) {
     globals::paused = true;
     globals::pause_mutex.lock();
 
-	globals::current_simulation_state = std::make_unique<simulation_state>(simulation_state());
 	globals::physics_objects.reserve(100000);
 
 	renderer r;

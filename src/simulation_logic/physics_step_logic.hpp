@@ -1,6 +1,5 @@
 #pragma once
 #include "../collision/logic.hpp"
-#include "../simulation_state.hpp"
 #include "../physics_object/logger.hpp"
 
 void step_physics_objects();

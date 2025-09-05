@@ -28,8 +28,6 @@ struct object;
 
 }
 
-struct simulation_state;
-
 namespace constants {
 
 constexpr std::string FORMAT_STRING_POSITION = "{:10.1f}";

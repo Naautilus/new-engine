@@ -1,6 +1,5 @@
 #include "module.hpp"
 #include "../renderer/models.hpp"
-#include "../simulation_state.hpp"
 #include "../math/random.hpp"
 
 namespace module {

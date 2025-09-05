@@ -8,11 +8,6 @@ fix water physics (the common physics bug of applying more drag than is possible
         (I guess not "start" because the collider velocity cancellation has a solver)
 }
 
-get rid of simulation_state
-    (it's nice in theory but it's an abandoned implementation of variable settings and it's getting in the way of things) {
-    I can add it back later in the cleanup branch when I know what I want from it better and I can make it up-to-date
-}
-
 optimize collisions (both between two meshes and between meshes and points) {
     the f16 touching the ground/runway slows the simulation to 100% time usage
     the f16 inside the bowl (sphere... i never got around to making it a bowl) {

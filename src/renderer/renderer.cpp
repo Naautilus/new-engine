@@ -232,7 +232,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
 
     const GLchar* shader_sky_color_name = "sky_color";
     auto shader_sky_color = glGetUniformLocation(program, shader_sky_color_name);
-    glUniform3f(shader_sky_color, globals::current_simulation_state->sky_color.r, globals::current_simulation_state->sky_color.g, globals::current_simulation_state->sky_color.b);
+    glUniform3f(shader_sky_color, globals::SKY_COLOR.r, globals::SKY_COLOR.g, globals::SKY_COLOR.b);
 
     const GLchar* shader_resolution_name = "resolution";
     auto shader_resolution = glGetUniformLocation(program, shader_resolution_name);

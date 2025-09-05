@@ -100,7 +100,7 @@ double _separate_colliding_physics_objects_sub(vector::worldspace max_displaceme
 
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
     const int ITERATIONS = 7;
-    const double EXPONENT = 2; // to get more precision near less movement
+    const double EXPONENT = 3; // to get more precision near less movement
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
 

@@ -2,7 +2,7 @@
 #include "../constants/constants.hpp"
 #include "../vector/vector_spaces.hpp"
 #include "../timer/timer.hpp"
-#include "../simulation_state.hpp"
+#include "../renderer/color.hpp"
 #include <mutex>
 
 namespace module {
@@ -29,7 +29,6 @@ extern std::vector<std::shared_ptr<physics_object::object>> functional_physics_o
 extern std::mutex functional_physics_objects_mutex;
 
 extern std::default_random_engine rng;
-extern std::unique_ptr<simulation_state> current_simulation_state;
 extern vector::worldspace SUN_DIRECTION;
 extern int tick;
 extern int error_count;
@@ -44,5 +43,9 @@ extern bool PAUSE_ON_COLLISION;
 extern bool SHOW_MISSILE_ACCELERATION;
 extern bool VERBOSE_LOG;
 extern bool SHOW_FPS;
+
+extern const color SKY_COLOR;
+extern double GRAVITY;
+extern double TIMESCALE;
 
 }

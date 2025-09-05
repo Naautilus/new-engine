@@ -95,7 +95,7 @@ void step_physics_object_movement_and_modules() {
         if (o->properties.fixed) continue;
         o->calculate_acceleration();
         o->apply_queued_forces();
-        o->physics_state.velocity += constants::DELTA_T * vector::worldspace(0, 0, -globals::current_simulation_state->gravity);
+        o->physics_state.velocity += constants::DELTA_T * vector::worldspace(0, 0, -globals::GRAVITY);
         o->physics_state.position += constants::DELTA_T * o->physics_state.velocity;
         Eigen::Quaterniond angular_velocity_quaternion = 
         Eigen::AngleAxisd(constants::DELTA_T * o->physics_state.angular_velocity.x(), Eigen::Vector3d::UnitX())
@@ -152,7 +152,7 @@ void log_physics_objects() {
 }
 
 void wait_delta_t() {
-	globals::last_time += std::chrono::nanoseconds(static_cast<long>(constants::DELTA_T * 1e9 / globals::current_simulation_state->timescale));
+	globals::last_time += std::chrono::nanoseconds(static_cast<long>(constants::DELTA_T * 1e9 / globals::TIMESCALE));
 	auto now = std::chrono::high_resolution_clock::now();
 	if (globals::last_time > now) {
 		while (globals::last_time > now) now = std::chrono::high_resolution_clock::now();

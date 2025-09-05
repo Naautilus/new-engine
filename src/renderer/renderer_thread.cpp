@@ -9,6 +9,8 @@ void renderer_function(std::vector<std::string> args) {
     bool missile_camera = false;
 
     if (std::find(args.begin(), args.end(), "-missile-cam") != args.end()) missile_camera = true;
+    
+    std::cout << "missile_camera: " << missile_camera << "\n";
 
 	glfwInit();
     const GLFWvidmode* video_mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
