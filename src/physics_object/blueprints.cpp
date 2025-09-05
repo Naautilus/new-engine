@@ -109,7 +109,7 @@ object debris_1kg() {
     return debris(1.0);
 }
 
-
+// note: in the current direct, PIDless plane control, mouse is pretty horrible to use
 control_bindings plane_control_bindings_mouse() {
     control_bindings control_bindings_;
     controls::input pitch = controls::input(controls::pitch, controls::instant, -0.3, 0.3, 1);
