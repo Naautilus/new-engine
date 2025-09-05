@@ -54,6 +54,7 @@ extern const double WATER_LEVEL;
 extern const double AIR_DENSITY;
 extern const double AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE;
 extern const double WATER_DENSITY;
+extern const double AUTOCANNON_FIRE_AHEAD_DISTANCE;
 extern const int SENSOR_IR_GRID_WIDTH;
 
 }

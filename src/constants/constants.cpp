@@ -18,6 +18,8 @@ const double AIR_DENSITY = 1.293;
 const double AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE = 7990.0;
 const double WATER_DENSITY = 1000;
 
+const double AUTOCANNON_FIRE_AHEAD_DISTANCE = 30.0;
+
 const int SENSOR_IR_GRID_WIDTH = 50;
 
 }
