@@ -5,9 +5,9 @@
       "name": "plane1",
       "position": {
         "relative_to_ground": false,
-        "x": 9500,
-        "y": -1000,
-        "z": 5310
+        "x": 14750,
+        "y": 10000,
+        "z": 7000
       },
       "velocity": {
         "localspace": true,
