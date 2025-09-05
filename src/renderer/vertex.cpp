@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "vertex.hpp"
 
 bool vertex::operator==(const vertex& v) const {

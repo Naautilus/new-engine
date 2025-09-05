@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "model_file_interface.hpp"
 
 

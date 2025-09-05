@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "control_bindings.hpp"
 
 controls::input* control_bindings::get_input(controls::axis axis__) {

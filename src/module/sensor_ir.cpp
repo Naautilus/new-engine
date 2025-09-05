@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "sensor_ir.hpp"
 #include "../physics_object/object.hpp"
 

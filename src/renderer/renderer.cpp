@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "renderer.hpp"
 #include "../physics_object/object.hpp"
 #include "mesh.hpp"

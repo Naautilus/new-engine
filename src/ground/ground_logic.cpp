@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "ground_logic.hpp"
 #include "../renderer/color.hpp"
 

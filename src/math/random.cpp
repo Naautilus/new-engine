@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "random.hpp"
 
 double random(double min, double max) {

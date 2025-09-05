@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "constants.hpp"
 
 namespace constants {

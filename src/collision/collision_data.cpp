@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "collision_data.hpp"
 
 namespace collision {

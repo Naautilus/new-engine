@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "pid.hpp"
 
 pid::pid() {

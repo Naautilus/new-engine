@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "module.hpp"
 #include "../renderer/models.hpp"
 #include "../simulation_state.hpp"

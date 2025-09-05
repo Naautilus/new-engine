@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "blueprints.hpp"
 #include "object.hpp"
 #include "../renderer/models.hpp"

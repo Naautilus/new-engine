@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "solid_rocket_motor.hpp"
 #include "../physics_object/object.hpp"
 #include "../math/random.hpp"

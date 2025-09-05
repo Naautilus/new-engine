@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "renderer_thread.hpp"
 
 void renderer_function_sleep() {

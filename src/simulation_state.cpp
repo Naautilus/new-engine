@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "simulation_state.hpp"
 #include "../ground/ground_logic.hpp"
 

@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "color.hpp"
 
 bool color::operator==(const color& c) const {

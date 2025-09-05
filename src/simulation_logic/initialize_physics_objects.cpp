@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "initialize_physics_objects.hpp"
 #include "../physics_object/object.hpp"
 using json = nlohmann::json;

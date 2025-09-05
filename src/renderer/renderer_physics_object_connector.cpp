@@ -1,4 +1,3 @@
-// top of cpp marker
 #include "renderer_physics_object_connector.hpp"
 
 vector::localspace camera_offset;
