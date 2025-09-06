@@ -3,7 +3,7 @@
 namespace collision {
 
 void create_debris_for_objects(physics_object::object& a, physics_object::object& b, double desired_debris_mass, vector::worldspace& collision_point) {
-    if (desired_debris_mass < 10) return;
+    if (desired_debris_mass < 1) return;
 
     const double DIRECTION_RANDOMIZATION = 0.03;
     const double MAGNITUDE_MEAN = 0.9; // values >1 will be recalculated
@@ -11,7 +11,7 @@ void create_debris_for_objects(physics_object::object& a, physics_object::object
     const double FRAGMENT_SPREAD_DIRECTIONALITY = 0.4; // 0 is spread evenly between the two colliding objects, 1 is heavily biased towards the heavier object
     const double FRAGMENT_SPREAD_DIRECTION_1_CHANCE = 0.7;
     const double FRAGMENT_PARTICULATE_WIDTH_EXPONENT = -0.8; // around -1.0 to -0.8 in real data, but that's for space and not a burning wreck
-    const double DEBRIS_COUNT_MULTIPLIER = 0.125;
+    const double DEBRIS_COUNT_MULTIPLIER = 0.6;
     std::normal_distribution<double> random_velocity_offset(0, DIRECTION_RANDOMIZATION);
     std::normal_distribution<double> random_velocity_magnitude(MAGNITUDE_MEAN, MAGNITUDE_STDEV);
     std::normal_distribution<double> random_interpolation(0.5, 0.15);
@@ -286,7 +286,7 @@ void process_ground_collision(physics_object::object& o) {
     ground_object.physics_state.rotational_inertia = vector::worldspace(1,1,1) * 8.04e37; // Earth rotational inertia
     
     if (!o.properties.functional) {
-        double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());
+        double altitude = ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y()) - o.physics_state.position.z();
         if (altitude < 0) o.physics_state.health = 0;
         return;
     }

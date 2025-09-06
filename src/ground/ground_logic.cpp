@@ -176,7 +176,7 @@ bool line_of_sight(vector::worldspace a, vector::worldspace& b) {
     while (distance_traveled < distance_total) {
         double fraction_traveled = distance_traveled / distance_total;
         traveler_probe_location = (1-fraction_traveled) * a + fraction_traveled * b;
-        double altitude = traveler_probe_location.z() - get_ground_altitude(traveler_probe_location.x(), traveler_probe_location.y());
+        double altitude = get_ground_altitude(traveler_probe_location.x(), traveler_probe_location.y()) - traveler_probe_location.z();
         if (altitude < 5.0) return false;
         distance_traveled += altitude * max_distance_per_altitude;
     }

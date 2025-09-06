@@ -69,8 +69,6 @@ void missile_avionics::update(physics_object::object* parent) {
             guidance_pid_inputs = vector::worldspace(0, 0, 0);
             break;
     }
-    
-    guidance_pid_inputs = vector::localspace(1, 0, 0); // slam clockwise roll
 
     pid_roll.update(guidance_pid_inputs.x());
     pid_pitch.update(guidance_pid_inputs.y());
@@ -139,7 +137,7 @@ vector::localspace missile_avionics::get_guidance_direct(vector::worldspace curr
     current_detection.scope_x() *= gain;
     current_detection.scope_y() *= gain;
     vector::localspace output(
-        -parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
+        parent->physics_state.angular_velocity.to_localspace(parent->physics_state.rotation).x(),
         -current_detection.scope_y(),
         current_detection.scope_x()
     );

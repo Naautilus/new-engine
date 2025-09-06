@@ -31,15 +31,15 @@ object aim9x() {
     o.add_aerodynamic_surface(module::aerodynamic_surface( 0.3 * 3.02*0.127  , vector::localspace(0, 0, 1), vector::localspace(0, 0, 0)));
     // control surfaces
     // front surfaces
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 0, 1), vector::localspace( 1.0408421327,  0.11,     0), vector::localspace( 0.1, 1, 0), vector::localspace( 0, 1, 0), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 0, 1), vector::localspace( 1.0408421327, -0.11,     0), vector::localspace(-0.1, 1, 0), vector::localspace( 0, 1, 0), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 1, 0), vector::localspace( 1.0408421327,     0,  0.11), vector::localspace( 0.1, 0, 1), vector::localspace( 0, 0, 1), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 1, 0), vector::localspace( 1.0408421327,     0, -0.11), vector::localspace(-0.1, 0, 1), vector::localspace( 0, 0, 1), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 0, 1), vector::localspace( 1.0408421327,  0.11,     0), vector::localspace(-0.1, 1, 0), vector::localspace( 0, 1, 0), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 0, 1), vector::localspace( 1.0408421327, -0.11,     0), vector::localspace( 0.1, 1, 0), vector::localspace( 0, 1, 0), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 1, 0), vector::localspace( 1.0408421327,     0,  0.11), vector::localspace(-0.1, 0, 1), vector::localspace( 0, 0, 1), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0261506402, vector::localspace(0, 1, 0), vector::localspace( 1.0408421327,     0, -0.11), vector::localspace( 0.1, 0, 1), vector::localspace( 0, 0, 1), 22.5));
     // rear surfaces
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 0, 1), vector::localspace(-1.4129078725,  0.11,     0), vector::localspace( 0.1,-1, 0), vector::localspace( 0, 1, 0), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 0, 1), vector::localspace(-1.4129078725, -0.11,     0), vector::localspace(-0.1,-1, 0), vector::localspace( 0, 1, 0), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 1, 0), vector::localspace(-1.4129078725,     0,  0.11), vector::localspace( 0.1, 0,-1), vector::localspace( 0, 0, 1), 22.5));
-    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 1, 0), vector::localspace(-1.4129078725,     0, -0.11), vector::localspace(-0.1, 0,-1), vector::localspace( 0, 0, 1), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 0, 1), vector::localspace(-1.4129078725,  0.11,     0), vector::localspace(-0.1,-1, 0), vector::localspace( 0, 1, 0), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 0, 1), vector::localspace(-1.4129078725, -0.11,     0), vector::localspace( 0.1,-1, 0), vector::localspace( 0, 1, 0), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 1, 0), vector::localspace(-1.4129078725,     0,  0.11), vector::localspace(-0.1, 0,-1), vector::localspace( 0, 0, 1), 22.5));
+    o.add_aerodynamic_surface(module::aerodynamic_surface( 1.0 * 0.0192643050, vector::localspace(0, 1, 0), vector::localspace(-1.4129078725,     0, -0.11), vector::localspace( 0.1, 0,-1), vector::localspace( 0, 0, 1), 22.5));
 
     controls::input pitch = controls::input(controls::pitch, controls::instant, -1, 1, 1);
     controls::input yaw = controls::input(controls::yaw, controls::instant, -1, 1, 1);
