@@ -21,7 +21,6 @@ bool collider::check_collision_point_to_model(collider& c) {
 
     if ((bounding_box_center - path_center).squaredNorm() > (bounding_box_radius + path_radius) * (bounding_box_radius + path_radius)) return false;
     for (triangle& t : c.model_data) {
-        //if (!tri1.is_intersecting_triangle_bounding_box(tri2)) continue;
         if ((t.centroid - path_center).squaredNorm() > (t.radius + path_radius) * (t.radius + path_radius)) continue;
         if (t.is_intersecting_line_segment(path_to_check)) return true;
     }
@@ -77,12 +76,14 @@ bool collider::check_collision_model_to_model(collider& c) {
 vector::worldspace collider::get_collision_position_point_to_model(collider& c) {
     // just the raw position is good enough for things like missile and bullet hits, rather than factoring in the sub-tick movement
     return position;
-    //double min_distance = 0;
-    //ray r = ray(position, velocity);
-    //for (triangle& tri : c.model_data) {
-    //    if (!tri.is_intersecting_ray(r)) continue;
-    //    double distance = tri()
-    //}
+    /*
+    double min_distance = 0;
+    ray r = ray(position, velocity);
+    for (triangle& tri : c.model_data) {
+        if (!tri.is_intersecting_ray(r)) continue;
+        double distance = tri()
+    }
+    */
 }
 std::optional<vector::worldspace> collider::get_collision_normal_point_to_model(collider& c) {
     ray r = static_cast<ray>(line(position, velocity));
@@ -161,7 +162,7 @@ std::optional<std::vector<vector::worldspace>> collider::get_collision_normal_mo
         input_points.push_back(point.z());
     }
     size_t dimensions = 3;
-    size_t pca_output_count = 3; // max allowed for 3d
+    size_t pca_output_count = 3; // max possible for 3d
     std::optional<std::pair<Eigen::MatrixXd, Eigen::VectorXd>> principal_components_and_eigenvalues_optional = 
         math::pca(input_points, dimensions, points_in_pca_space, pca_output_count, math::PCA_ALG::COV, math::DATA_NORM::MEAN, false);
     

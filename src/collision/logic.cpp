@@ -130,7 +130,7 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
 
 void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
     const double COEFFICIENT_OF_FRICTION = 1.0;
-    const double BOUNCE = 0.0; // 0.0 = no bounce
+    const double BOUNCE = 0.0; // 0.0 = no bounce, >0.0 = bounce
     
     if (globals::PAUSE_ON_COLLISION) {
         globals::paused = true;
@@ -236,8 +236,6 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
 
     double debris_mass_sparks = fmin(visual_damage, 20000) * 0.3;
     double debris_mass_impact = fmin(damage, 20000);
-    std::cout << "debris_mass_sparks: " << debris_mass_sparks << "\n";
-    std::cout << "debris_mass_impact: " << debris_mass_impact << "\n";
     create_debris_for_objects(a, b, debris_mass_sparks, collision_point, true);
     create_debris_for_objects(a, b, debris_mass_impact, collision_point, false);
     
@@ -315,57 +313,8 @@ void process_ground_collision(physics_object::object& o) {
 
         if (!m->collider.check_collision(ground_collider)) continue;
         process_colliding_physics_objects(m->collider, ground_collider, o, ground_object);
-        //o.physics_state.position += vector::worldspace(0, 0, 0.01);
-
         
     }
-    
-    
-    /*
-    globals::physics_objects_mutex.lock();
-    globals::physics_objects.push_back(physics_object::blueprints::collider_visual(vector::worldspace(0, 0, 0), ground_collider));
-    globals::physics_objects_mutex.unlock();
-    */
-
-
-    /*
-    double altitude = o.physics_state.position.z() - ground::get_ground_altitude(o.physics_state.position.x(), o.physics_state.position.y());
-    if (altitude > 5) return;
-    o.physics_state.velocity *= pow(0.5, constants::DELTA_T);
-    if (altitude > 0) return;
-    
-    vector::worldspace ground_normal = ground::get_surface_normal(o.physics_state.position.x(), o.physics_state.position.y());
-    vector::worldspace velocity_planar = o.physics_state.velocity - ground_normal*ground_normal.dot(o.physics_state.velocity);
-    vector::worldspace velocity_normal = -ground_normal*ground_normal.dot(o.physics_state.velocity);
-    
-    if (!o.properties.functional && o.physics_state.velocity.squaredNorm() < 3*3) {
-        o.physics_state.velocity *= 0.1;
-        o.physics_state.angular_velocity *= 0.1;
-        o.physics_state.position.z() += 0.01 - altitude;
-        return;
-    }
-
-    if (angle_of_incidence(o.physics_state.velocity, ground_normal) > 80.0 && o.physics_state.mass <= 50.0) { // little objects <50kg can ricochet
-        o.physics_state.velocity = 0.4*velocity_planar + 0.8*velocity_normal;
-        o.physics_state.position.z() += 0.01 - altitude;
-        return;
-    }
-    
-    if (impact_velocity(o.physics_state.velocity, ground_normal) > 20.0) {
-        physics_object::object b;
-        b.physics_state.mass = o.physics_state.mass * 1;
-        b.physics_state.position = o.physics_state.position;
-        o.physics_state.velocity = velocity_planar + 2 * velocity_normal;
-        //b.physics_state.velocity = o.physics_state.velocity;
-        create_debris_for_objects(b, o, o.physics_state.health);
-        o.physics_state.health = 0;
-        return;
-    }
-    
-    o.physics_state.velocity = velocity_planar;
-    o.physics_state.position.z() += 0.01 - altitude;
-    */
-    
 }
 
 }

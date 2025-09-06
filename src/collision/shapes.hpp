@@ -31,6 +31,8 @@ struct line_segment {
     double length = 0;
     line_segment() {}
     line_segment(vector::worldspace origin, vector::worldspace end, line_segment_normalization normalization = NORMALIZED);
+
+    // Assumes that the two line segments are intersecting
     line_segment intersection(line_segment& l);
 };
 struct triangle {
@@ -68,7 +70,14 @@ struct triangle {
     void update_bounding_box();
 };
 struct triangular_prism {
-    std::vector<triangle> faces; // base, end, (p0-p1)(base-end) quad tri-pair, (p1-p2)(base-end) quad tri-pair, (p2-p0)(base-end) quad tri-pair
+    /*
+    faces are in the order: 
+    base, end,
+    (p0-p1)(base-end) quad represented by 2 tris,
+    (p1-p2)(base-end) quad represented by 2 tris,
+    (p2-p0)(base-end) quad represented by 2 tris
+    */
+    std::vector<triangle> faces;
     vector::worldspace central_point;
     triangular_prism();
     triangular_prism(triangle& base, vector::worldspace& extrude_direction);

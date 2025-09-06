@@ -3,7 +3,6 @@
 uniform float time;
 uniform float z_near;
 uniform float z_far;
-//uniform float fog_1_over_e_factor;
 uniform vec3 sky_color;
 uniform vec2 resolution;
 uniform float fov;
@@ -24,7 +23,6 @@ return clamp((x*(a*x+b))/(x*(c*x+d)+e), 0.0, 1.0);
 
 void main()
 {
-    float gamma = 2.2;
     float sky_brightness = 1.0 * air_density;
 
     float fog_1_over_e_factor = 200000 / air_density;
@@ -46,14 +44,8 @@ void main()
     float distance_xy = distance_z * unit_distances_from_center;
     float distance = sqrt(distance_xy * distance_xy + distance_z * distance_z);
 
-    //float fog_fraction = (distance - fog_start) / (fog_end - fog_start);
-    //fog_fraction = min(1.0, fog_fraction);
-    //fog_fraction = max(0.0, fog_fraction);
-
     float fog_fraction = 1 - exp(-distance / fog_1_over_e_factor);
 
-    //linear color to srgb
-    //vec3 color_srgb = pow(color, 1.0/gamma);
     vec3 color_srgb = sqrt(color);
     vec3 sky_color_srgb = sqrt(sky_color * sky_brightness);
 

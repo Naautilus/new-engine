@@ -20,6 +20,7 @@ struct localspace : public Eigen::Vector3d {
     std::string str();
 };
 
+// the scope_x and scope_y are in perspective (i.e., a localspace vector's y and z are divided by x when turned into a scopespace point)
 struct scopespace {
 
     private:

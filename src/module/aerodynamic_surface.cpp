@@ -27,7 +27,6 @@ void aerodynamic_surface::update(physics_object::object* parent) {
 void aerodynamic_surface::update_static_surface(physics_object::object* parent) {
     vector::worldspace surface_velocity = parent->physics_state.velocity - parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
     if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
-    //vector::worldspace surface_velocity = parent->physics_state.velocity; // higher performance, a little less accurate
     vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
     double force = v.dot(unrotated_direction) / v.norm();
     vector::localspace force2 = -force * 0.5 * ground::fluid_density(position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position).z()) * surface_area * unrotated_direction * v.squaredNorm();

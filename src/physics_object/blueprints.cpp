@@ -80,7 +80,7 @@ object debris(double mass, bool hot) {
     double drag_front_multiplier = 1; // when front and side differ, pieces tend to completely lose control and disperse immediately so it's not advised
     object o("");
     o.properties.functional = false;
-    double scale = cbrt(mass * 0.003);//0.001
+    double scale = cbrt(mass * 0.003);
     if (hot) {
         o.add_physical_structure(module::physical_structure(collision::collider(), models::debris_1kg_bright, vector::localspace(0, 0, 0), vector::localspace(1, 1, 1) * 3 * scale));
         o.properties.ticks_lifetime_remaining = (0.015/random(0.05, 1)) / constants::DELTA_T;
@@ -212,7 +212,10 @@ object f16_simple_forces_model() {
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0,  6.5, 0), vector::localspace(-1, 0, 0), vector::localspace(0, 1, 0), 20));
     // rudder
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.4           , vector::localspace(0, 1, 0), vector::localspace(  -8,  0, -3.5), vector::localspace( 0, 0,-1), vector::localspace(0, 0, 1), 30));
-    // counteract control surfaces with the opposite wings
+    /*
+    counteract control surfaces' surface area with the same area negated in unmoving aero surfaces,
+    since the raw lift/drag figures already account for the impact of the unrotated control surfaces
+    */
     // elevators
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-3.8          , vector::localspace(0, 0, 1), vector::localspace(   -8, -3.2, 0)));
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-3.8          , vector::localspace(0, 0, 1), vector::localspace(   -8,  3.2, 0)));
@@ -220,7 +223,6 @@ object f16_simple_forces_model() {
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-2.4          , vector::localspace(0, 1, 0), vector::localspace(   -8,  0, -3.5)));
     o.add_jet_engine(module::jet_engine(130000, 0, 1, vector::localspace(1, 0, 0), vector::localspace(-3, 0, 0), 4.85, 0.59, 500));
     //o.add_autocannon(autocannon(bullet_20mm, 1050, 100, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
-    //o.add_autocannon(autocannon(debris_1kg, 100, 10, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
     o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
     return o;
 }
@@ -296,7 +298,7 @@ object cube(vector::worldspace position_, double scale, double r, double g, doub
     o.physics_state.mass = 1;
     o.physics_state.health = 1;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1);
-    o.properties.ticks_lifetime_remaining = 0;//round(1.0 / constants::DELTA_T);
+    o.properties.ticks_lifetime_remaining = 1;//round(1.0 / constants::DELTA_T);
     return o;
 }
 

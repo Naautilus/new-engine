@@ -90,10 +90,6 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
         }
     }
 
-	//double x_center = last_camera_position.x() + last_camera_forward_direction.x() * tile_size * count * 0;
-	//double y_center = last_camera_position.y() + last_camera_forward_direction.y() * tile_size * count * 0;
-	//double x_pos = (x_ + round(x_center/tile_size)) * tile_size;
-	//double y_pos = (y_ + round(y_center/tile_size)) * tile_size;
 	double x_pos = (x_ + round(last_camera_position_.x()/tile_size)) * tile_size;
 	double y_pos = (y_ + round(last_camera_position_.y()/tile_size)) * tile_size;
 	double z_pos = vertical_offset;
@@ -221,7 +217,6 @@ std::shared_ptr<physics_object::object> camera_track_physics_object(camera_prope
 		camera_properties_.previous_camera_rotations.erase(camera_properties_.previous_camera_rotations.begin());
 	}
 	Eigen::Quaterniond averaged_camera_rotation = average_approx(camera_properties_.previous_camera_rotations);
-	//Eigen::Quaterniond averagedCameraRotation = o->physics_state.rotation;
 	camera_properties_.update(averaged_camera_rotation, o->physics_state.position, o->physics_state.velocity);
     return o;
 }
@@ -253,9 +248,7 @@ double linear_interpolate(double value_at0, double value_at1, double x) {
 }
 
 double smoothstep(double edge0, double edge1, double x) {
-		// scale, bias and saturate x to 0..1 range
 		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-		// evaluate polynomial
 		return x * x * (3 - 2 * x);
 }
 

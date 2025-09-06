@@ -7,7 +7,7 @@ namespace collision {
     
 struct collision_data {
     vector::worldspace position;
-    vector::worldspace normal; // pca_tertiary
+    vector::worldspace normal; // aka pca_tertiary
     std::optional<vector::worldspace> pca_primary;
     std::optional<vector::worldspace> pca_secondary;
     std::optional<std::vector<vector::worldspace>> intersection_points;

@@ -68,7 +68,7 @@ void initialize_models() {
     flame_trail = std::make_shared<mesh>(models::stl_to_mesh("flame_trail", 10, 0.3, 0.15, 0));
     aim9x = std::make_shared<mesh>(models::stl_to_mesh("aim9x", 0.175, 0.175, 0.175, 1));
     bullet_octahedron = std::make_shared<mesh>(models::stl_to_mesh("bullet_octahedron", 1, 0.4, 0.4, 0));
-    debris_1kg = std::make_shared<mesh>(models::stl_to_mesh("debris_1kg", 0.1, 0.1, 0.1, 0.4)); // old rgb 0.275
+    debris_1kg = std::make_shared<mesh>(models::stl_to_mesh("debris_1kg", 0.1, 0.1, 0.1, 0.4));
     debris_1kg_bright = std::make_shared<mesh>(models::stl_to_mesh("debris_1kg", 3, 2, 0.6, 0));
     f16 = std::make_shared<mesh>(models::stl_to_mesh("f16", 0.13, 0.13, 0.14, 1));
     f16_wrapped = std::make_shared<mesh>(models::stl_to_mesh("f16_wrapped", 0.2, 0.2, 0.2, 1));

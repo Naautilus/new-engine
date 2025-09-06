@@ -3,11 +3,9 @@
 #include "../ground/ground_logic.hpp"
 #include "../math/pid.hpp"
 
-// x = forward distance, y and z = perspectivified
-//struct vector::scopespace : vector::localspace {};
 
 namespace module {
-
+    
 struct signal_point {
     vector::scopespace position_scopespace;
     double signal_strength;

@@ -101,7 +101,7 @@ color get_ground_color(double x_, double y_) {
         float noise = (float)perlin.octave2D_01((x / PERLIN_WIDTH[i]), (y / PERLIN_WIDTH[i]), 4);
         sum += noise * PERLIN_COLOR_EFFECT[i];
     }
-    return get_ground_color_from_heightmap(get_ground_altitude(x_, y_));// * (1 + sum);
+    return get_ground_color_from_heightmap(get_ground_altitude(x_, y_));
 }
 
 double get_ground_altitude_averaged(double x, double y, double width, int count) {

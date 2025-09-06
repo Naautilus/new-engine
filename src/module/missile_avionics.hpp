@@ -10,7 +10,7 @@ struct missile_avionics : module {
     double record_target_distance = std::numeric_limits<double>::max();
     pid pid_pitch;
     pid pid_yaw;
-    pid pid_roll; // fed angular velocity, so P is D really
+    pid pid_roll; // note: fed angular velocity, not angle
     double time_since_launch = 0;
     vector::worldspace get_worldspace_position(physics_object::object* parent);
     void update(physics_object::object* parent) override;

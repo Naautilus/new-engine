@@ -1,9 +1,6 @@
 #include "sensor_ir.hpp"
 #include "../physics_object/object.hpp"
 
-// x = forward distance, y and z = perspectivified
-//struct vector::scopespace : vector::localspace {};
-
 namespace module {
 
 signal_point::signal_point() {
@@ -227,7 +224,6 @@ vector::worldspace sensor_ir::get_enemy_velocity(vector::worldspace current_dete
 std::vector<signal_point> sensor_ir::get_signals_from_physics_objects(physics_object::object* parent) {
     std::vector<signal_point> output;
     double max_scopespace_offset = tan(view_cone_halfarc * std::numbers::pi / 180);
-//
     globals::functional_physics_objects_mutex.lock();
     auto functional_physics_objects_ = globals::functional_physics_objects;
     globals::functional_physics_objects_mutex.unlock();

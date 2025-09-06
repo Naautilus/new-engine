@@ -1,24 +1,20 @@
-// top of cpp marker
 #include "shapes.hpp"
 
 namespace collision {
 
 line::line() {}
+
 line::line(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
     direction = direction_;
 }
+
 double line::distance_along_line(vector::worldspace input_point) {
-    input_point -= origin; // offset the input point to be relative to the triangle
+    input_point -= origin;
     return input_point.dot(direction);
 }
-std::optional<double> line::distance_to_intersection(line& l) {
-    // Original implementation was bugged. Original:
-    /*
-    double t = (l.origin - origin).cross(l.direction).norm() / direction.cross(l.direction).norm();
-    return t;
-    */
 
+std::optional<double> line::distance_to_intersection(line& l) {
     vector::worldspace r = l.origin - origin;
     vector::worldspace d1 = direction;
     vector::worldspace d2 = l.direction;
@@ -29,24 +25,26 @@ std::optional<double> line::distance_to_intersection(line& l) {
     double t = r.cross(d2).dot(d1.cross(d2)) / denominator;
     return t;
 }
+
 vector::worldspace line::point_along_line(double t) {
     return origin + t * direction;
 }
 
 plane::plane() {}
+
 plane::plane(vector::worldspace origin_, vector::worldspace direction_) {
     origin = origin_;
     direction = direction_;
 }
+
 double plane::distance_along_normal(vector::worldspace input_point) {
-    input_point -= origin; // offset the input point to be relative to the triangle
+    input_point -= origin;
     return input_point.dot(direction);
 }
+
 std::optional<line> plane::line_of_intersection(plane& p) {
-    // Assumes that the planes are not parallel
 
     if (fabs(fabs(direction.dot(p.direction)) - 1) < std::numeric_limits<double>::epsilon()) {
-        std::cout << "line_of_intersection(plane& p): parallel planes\n";
         return std::nullopt;
     }
     line l;
@@ -92,8 +90,8 @@ line_segment::line_segment(vector::worldspace origin, vector::worldspace end, li
     }
     line_ = line(origin, end);
 }
+
 line_segment line_segment::intersection(line_segment& l) {
-    // Assumes that the two line segments are intersecting
     double line0_min = 0;
     double line0_max = length;
     double line1_min = line_.distance_along_line(l.line_.point_along_line(0));
@@ -113,28 +111,35 @@ line_segment line_segment::intersection(line_segment& l) {
 }
 
 triangle::triangle() {}
+
 triangle::triangle(vector::worldspace points_[3]) {
     points[0] = points_[0];
     points[1] = points_[1];
     points[2] = points_[2];
 }
+
 triangle::triangle(vector::worldspace p0, vector::worldspace p1, vector::worldspace p2) {
     points[0] = p0;
     points[1] = p1;
     points[2] = p2;
 }
-vector::worldspace triangle::get_normal() { // a and b are two vectors representing two sides of the triangle; their cross-product is perpendicular to the triangle
+
+// a and b are two vectors representing two sides of the triangle; their cross-product is perpendicular to the triangle
+vector::worldspace triangle::get_normal() {
     vector::worldspace a = points[1] - points[0];
     vector::worldspace b = points[2] - points[0];
     return a.cross(b).normalized();
 }
+
 int triangle::point_is_ahead_of_normal(vector::worldspace input_point) {
     input_point -= points[0]; // offset the input point to be relative to the triangle
     if (input_point.dot(get_normal()) > 0) return 1;
     if (input_point.dot(get_normal()) < 0) return -1;
     return 0; // if the dot product of the triangle normal and the vector from the triangle's point 0 to the input point is positive, that point is in front of the triangle's plane
 }
-double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; taken from https://en.wikipedia.org/wiki/m%c3%b6ller%e2%80%93_trumbore_intersection_algorithm#definitions and modified
+
+// returns distance along ray; taken from https://en.wikipedia.org/wiki/m%c3%b6ller%e2%80%93_trumbore_intersection_algorithm#definitions and modified
+double triangle::is_intersecting_ray(ray& r){
     constexpr double epsilon = std::numeric_limits<double>::epsilon();
 
     vector::worldspace edge1 = points[1] - points[0];
@@ -166,16 +171,18 @@ double triangle::is_intersecting_ray(ray& r){ // returns distance along ray; tak
 
     return t;
 }
+
+// note: this function is 95% of the runtime of the collisions algorithm
 bool triangle::is_intersecting_line_segment(line_segment& l) {
-    // this function is 95% of the runtime of the collisions algorithm
     if (l.length == 0) return false;
     double intersect_distance = is_intersecting_ray(static_cast<ray&>(l.line_));
     if (intersect_distance < 0 || intersect_distance > l.length) return false;
     //if (intersect_distance < 0 || intersect_distance > 1) return false; // for when the line_segment is unnormalized
     return true;
 }
+
+// note: this function is 99% of the runtime of the collisions algorithm            
 bool triangle::is_intersecting_triangle(triangle& t) {
-    // note: this function is 99% of the runtime of the collisions algorithm            
     for (int i = 0; i < 3; i++) {
         if (is_intersecting_line_segment(t.edges[i])) {
             return true;
@@ -188,6 +195,7 @@ bool triangle::is_intersecting_triangle(triangle& t) {
     }
     return false;
 }
+
 bool triangle::is_intersecting_triangle_bounding_box(triangle& t) {
     return (bounding_box_max.x() > t.bounding_box_min.x() &&
             bounding_box_min.x() < t.bounding_box_max.x() &&
@@ -196,11 +204,13 @@ bool triangle::is_intersecting_triangle_bounding_box(triangle& t) {
             bounding_box_max.z() > t.bounding_box_min.z() &&
             bounding_box_min.z() < t.bounding_box_max.z());
 }
+
 plane triangle::to_plane() {
     return plane(points[0], get_normal());
 }
+
+// Assumes that the triangle is confirmed to be intersecting the line segment
 std::optional<line_segment> triangle::intersection(line& l) {
-    // Assumes that the triangle is confirmed to be intersecting the line segment
     std::vector<vector::worldspace> intersection_points;
     for (int i = 0; i < 3; i++) {
         line edge = line(points[i], points[(i+1)%3] - points[i]);
@@ -216,9 +226,10 @@ std::optional<line_segment> triangle::intersection(line& l) {
     line_segment output = line_segment(intersection_points[0], intersection_points[1]);
     return output;
 }
+
+// https://web.stanford.edu/class/cs277/resources/papers/Moller1997b.pdf
+// Assumes that the two triangles are confirmed to be intersecting
 std::optional<line_segment> triangle::intersection(triangle& t) {
-    // https://web.stanford.edu/class/cs277/resources/papers/Moller1997b.pdf
-    // Assumes that the two triangles are confirmed to be intersecting
     double normal_dot_product = get_normal().dot(t.get_normal());
     if (fabs(fabs(normal_dot_product) - 1) < std::numeric_limits<double>::epsilon()) {
         // triangles are coplanar
@@ -302,7 +313,9 @@ triangular_prism::triangular_prism(triangle& base, vector::worldspace& extrude_d
             base.points[(side+0)%3] + extrude_direction
         ));
     }
-    central_point = (base.points[0] + base.points[1] + base.points[2])/3.0 + extrude_direction/2.0; // used later for checking if a point is inside the prism
+
+    // used later for checking if a point is inside the prism
+    central_point = (base.points[0] + base.points[1] + base.points[2])/3.0 + extrude_direction/2.0;
 }
 bool triangular_prism::surrounds_point(vector::worldspace& input_point) {
     vector::worldspace a = faces[0].points[1] - faces[0].points[0];

@@ -15,7 +15,6 @@ solid_rocket_motor::solid_rocket_motor(double thrust_, double burntime_seconds_r
     health = health_;
 }
 void solid_rocket_motor::update(physics_object::object* parent) {
-    //if (health <= 0) return;
     if (burntime_seconds_remaining <= 0) thrust = 0;
     parent->queue_force(position, thrust * thrust_direction);
     burntime_seconds_remaining -= constants::DELTA_T;

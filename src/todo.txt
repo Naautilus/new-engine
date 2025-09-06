@@ -21,3 +21,9 @@ make objects decrease in height like terrain too?
     (transfer the quadratic height drop to the OpenGL side of the renderer-physics_object connector)
 
 make interfaces between the different parts of the simulation? (collider, control, renderer....)
+
+add a bounding-box-like early-exit check to check_collision_point_to_model
+
+move calculate_acceleration out of logger
+
+remove adjust_quaternion_angle mystery constant
