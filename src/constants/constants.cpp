@@ -12,7 +12,7 @@ const double CYLINDER_VERTICES = 8;
 const double PLANET_RADIUS = 6357000;
 const double STANDARD_GRAVITY = 9.81;
 
-const double WATER_LEVEL = 5000;
+const double WATER_LEVEL = -5000;
 
 const double AIR_DENSITY = 1.293;
 const double AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE = 7990.0;

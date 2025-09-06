@@ -76,8 +76,8 @@ mesh stl_to_mesh(std::string model, float r, float g, float b, float sun_factor)
             f.read(reinterpret_cast<char*>(&vertex_), 12);
             vertices.push_back(vertex{
                 vertex_[0],
-                vertex_[1],
-                vertex_[2],
+                -vertex_[1],
+                -vertex_[2],
                 r, g, b, sun_factor});
         }
         f.ignore(2); // "attribute byte" sometimes used for color in non-standard implementations

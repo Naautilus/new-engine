@@ -34,9 +34,9 @@ struct ground_info_hash {
 const siv::PerlinNoise::seed_type seed = 1234567u;
 const siv::PerlinNoise perlin{ seed };
 std::vector<double> PERLIN_WIDTH =          {    25,  1000, 10000, 100000};
-std::vector<double> PERLIN_HEIGHT_EFFECT =  {     5,   100,  5000,  20000};
+std::vector<double> PERLIN_HEIGHT_EFFECT =  {    -5,  -100, -5000, -20000};
 std::vector<double> PERLIN_COLOR_EFFECT =   { 0.025, 0.025,     0,      0};
-vector::worldspace TERRAIN_OFFSET(35000, -2000, -10000);
+vector::worldspace TERRAIN_OFFSET(35000, -2000,  10000);
 std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
 std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 std::unordered_map<double, double> fluid_density_map;
@@ -48,24 +48,24 @@ std::mutex fluid_density_map_mutex;
 // relative to water level
 std::vector<std::pair<double, color>> ground_color_heightmap = {
     {    0, color{0.22, 0.12, 0.04}},
-    {   49, color{0.22, 0.12, 0.04}},
-    {   50, color{0.1, 0.1, 0.1}},
-    {   51, color{0.0, 0.08, 0.0}},
-    { 1500, color{0.0, 0.06, 0.0}},
-    { 3500, color{0.1, 0.1, 0.1}},
-    { 5000, color{0.1, 0.1, 0.1}},
-    { 5100, color{1.0, 1.0, 1.0}}
+    {  -49, color{0.22, 0.12, 0.04}},
+    {  -50, color{0.1, 0.1, 0.1}},
+    {  -51, color{0.0, 0.08, 0.0}},
+    {-1500, color{0.0, 0.06, 0.0}},
+    {-3500, color{0.1, 0.1, 0.1}},
+    {-5000, color{0.1, 0.1, 0.1}},
+    {-5100, color{1.0, 1.0, 1.0}}
 };
 
 color get_ground_color_from_heightmap(double z) {
     z -= constants::WATER_LEVEL;
     
-    if (z < ground_color_heightmap[0].first) return ground_color_heightmap[0].second;
+    if (z > ground_color_heightmap[0].first) return ground_color_heightmap[0].second;
     int last = ground_color_heightmap.size() - 1;
-    if (z > ground_color_heightmap[last].first) return ground_color_heightmap[last].second;
+    if (z < ground_color_heightmap[last].first) return ground_color_heightmap[last].second;
 
     int lower_index = 0;
-    while (z > ground_color_heightmap[lower_index].first) lower_index++;
+    while (z < ground_color_heightmap[lower_index].first) lower_index++;
     lower_index--;
 
     double& lower = ground_color_heightmap[lower_index].first;
@@ -195,8 +195,8 @@ double fluid_density(double altitude) {
     fluid_density_map_mutex.unlock();
 
     double density;
-    if (altitude > constants::WATER_LEVEL) {
-        density = constants::AIR_DENSITY * exp(-altitude / constants::AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE);
+    if (altitude < constants::WATER_LEVEL) {
+        density = constants::AIR_DENSITY * exp(altitude / constants::AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE);
     } else {
         density = constants::WATER_DENSITY;
     }

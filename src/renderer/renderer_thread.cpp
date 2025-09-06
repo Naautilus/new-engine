@@ -14,16 +14,16 @@ void renderer_function() {
 
     if (globals::MISSILE_CAMERA) {
         renderer_function_sleep();
-        std::thread t1(renderer::run_window, width / 2, height, 0, 0, camera_properties("plane1", true, vector::localspace(-20, 0, 10)));
+        std::thread t1(renderer::run_window, width / 2, height, 0, 0, camera_properties("plane1", true, vector::localspace(-20, 0, -10)));
         renderer_function_sleep();
         t1.detach();
         renderer_function_sleep();
-        std::thread t2(renderer::run_window, width / 2, height, width / 2, 0, camera_properties("aim9x", false, vector::localspace(-20, 0, 10)));
+        std::thread t2(renderer::run_window, width / 2, height, width / 2, 0, camera_properties("aim9x", false, vector::localspace(-20, 0, -10)));
         renderer_function_sleep();
         t2.detach();
     } else {
         renderer_function_sleep();
-        std::thread t1(renderer::run_window, width, height, 0, 0, camera_properties("plane1", true, vector::localspace(-20, 0, 10)));
+        std::thread t1(renderer::run_window, width, height, 0, 0, camera_properties("plane1", true, vector::localspace(-20, 0, -10)));
         renderer_function_sleep();
         t1.detach();
     }

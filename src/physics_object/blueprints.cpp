@@ -145,10 +145,10 @@ control_bindings plane_control_bindings_wasd() {
 
     controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input yaw_fast = controls::input(controls::yaw, controls::trim_resetting, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
-    yaw.add_key(GLFW_KEY_E, -3);
-    yaw.add_key(GLFW_KEY_Q, 3);
-    yaw_fast.add_key(GLFW_KEY_E, -3);
-    yaw_fast.add_key(GLFW_KEY_Q, 3);
+    yaw.add_key(GLFW_KEY_E, 3);
+    yaw.add_key(GLFW_KEY_Q, -3);
+    yaw_fast.add_key(GLFW_KEY_E, 3);
+    yaw_fast.add_key(GLFW_KEY_Q, -3);
     control_bindings_.inputs.push_back(yaw);
     control_bindings_.inputs.push_back(yaw_fast);
 
@@ -180,8 +180,8 @@ control_bindings plane_control_bindings_ijkl() {
     pitch.add_key(GLFW_KEY_K, 3);
     control_bindings_.inputs.push_back(pitch);
     controls::input yaw = controls::input(controls::yaw, controls::trim_resetting, -0.6, 0.6, 1);
-    yaw.add_key(GLFW_KEY_O, -3);
-    yaw.add_key(GLFW_KEY_U, 3);
+    yaw.add_key(GLFW_KEY_O, 3);
+    yaw.add_key(GLFW_KEY_U, -3);
     control_bindings_.inputs.push_back(yaw);
     controls::input roll = controls::input(controls::roll, controls::trim_resetting, -0.4, 0.4, 1);
     roll.add_key(GLFW_KEY_J, -3);
@@ -206,23 +206,23 @@ object f16_simple_forces_model() {
     o.physics_state.rotational_inertia = vector::localspace(12874.84, 75673.58, 85554.4);
     // raw lift/drag figures                            cd/cl, area           axis normal to plane        center of pressure
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.011 * 50.70     , vector::localspace(1, 0, 0), vector::localspace(0, 0, 0)));
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.65 * 40         , vector::localspace(0, 1, 0), vector::localspace(-3, 0, 0.1)));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.65 * 40         , vector::localspace(0, 1, 0), vector::localspace(-3, 0, -0.1)));
     o.add_aerodynamic_surface(module::aerodynamic_surface(1.5*50 - 2*2.5    , vector::localspace(0, 0, 1), vector::localspace(0, 0, 0)));
     // control surfaces
     // elevators
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8, -3.2, 0), vector::localspace( 0, 1, 0), vector::localspace(0, 1, 0), 24));
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8,  3.2, 0), vector::localspace( 0, 1, 0), vector::localspace(0, 1, 0), 24));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8, -3.2, 0), vector::localspace( 0,-1, 0), vector::localspace(0, 1, 0), 24));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8,  3.2, 0), vector::localspace( 0,-1, 0), vector::localspace(0, 1, 0), 24));
     // ailerons
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0, -6.5, 0), vector::localspace(-1, 0, 0), vector::localspace(0, 1, 0), 20));
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0,  6.5, 0), vector::localspace( 1, 0, 0), vector::localspace(0, 1, 0), 20));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0, -6.5, 0), vector::localspace( 1, 0, 0), vector::localspace(0, 1, 0), 20));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0,  6.5, 0), vector::localspace(-1, 0, 0), vector::localspace(0, 1, 0), 20));
     // rudder
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.4           , vector::localspace(0, 1, 0), vector::localspace(   -8,  0, 3.5), vector::localspace( 0, 0, 1), vector::localspace(0, 0, 1), 30));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.4           , vector::localspace(0, 1, 0), vector::localspace(  -8,  0, -3.5), vector::localspace( 0, 0,-1), vector::localspace(0, 0, 1), 30));
     // counteract control surfaces with the opposite wings
     // elevators
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-3.8          , vector::localspace(0, 0, 1), vector::localspace(   -8, -3.2, 0)));
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-3.8          , vector::localspace(0, 0, 1), vector::localspace(   -8,  3.2, 0)));
     // rudder
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-2.4          , vector::localspace(0, 1, 0), vector::localspace(   -8,  0, 3.5)));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-2.4          , vector::localspace(0, 1, 0), vector::localspace(   -8,  0, -3.5)));
     o.add_jet_engine(module::jet_engine(130000, 0, 1, vector::localspace(1, 0, 0), vector::localspace(-3, 0, 0), 4.85, 0.59, 500));
     //o.add_autocannon(autocannon(bullet_20mm, 1050, 100, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
     //o.add_autocannon(autocannon(debris_1kg, 100, 10, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
@@ -341,7 +341,7 @@ object runway(vector::worldspace position_, double heading, double length, doubl
 
     object o("runway");
     o.properties.fixed = true;
-    o.add_physical_structure(module::physical_structure(collision::collider(*runway_base_), runway_base_, vector::localspace(0,0,-SURFACE_SEPARATION_FROM_BASE), vector::localspace(1, 1, 1)));
+    o.add_physical_structure(module::physical_structure(collision::collider(*runway_base_), runway_base_, vector::localspace(0,0,SURFACE_SEPARATION_FROM_BASE), vector::localspace(1, 1, 1)));
     o.add_physical_structure(module::physical_structure(collision::collider(collision::generate_rectangle(length, width, 20)), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
     o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;

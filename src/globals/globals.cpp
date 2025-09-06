@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<physics_object::object>> functional_physics_objects;
 std::mutex functional_physics_objects_mutex;
 
 std::default_random_engine rng;
-vector::worldspace SUN_DIRECTION = vector::worldspace(-1, -1, -1) / vector::worldspace(-1, -1, -1).norm();
+vector::worldspace SUN_DIRECTION = vector::worldspace(1, 1, -1) / vector::worldspace(1, 1, 1).norm();
 int tick = 0;
 int error_count = 0;
 

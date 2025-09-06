@@ -7,7 +7,7 @@
         "relative_to_ground": false,
         "x": 0,
         "y": 0,
-        "z": 9920
+        "z": -9920
       },
       "velocity": {
         "localspace": true,

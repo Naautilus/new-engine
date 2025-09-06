@@ -86,7 +86,7 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
             if (is_y_positive_edge_tile && is_y_positive_edge_vertex) continue;
             if (is_y_negative_edge_tile && is_y_negative_edge_vertex) continue;
 
-            v.z -= 0.1 * tile_size;
+            v.z += 0.1 * tile_size;
         }
     }
 
@@ -138,7 +138,7 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
         double y_relative = v.y - last_camera_position_.y();
         double distance = sqrt(x_relative * x_relative + y_relative * y_relative);
         if (distance > constants::PLANET_RADIUS) v.z += std::numeric_limits<double>::quiet_NaN();
-        v.z += sqrt(constants::PLANET_RADIUS * constants::PLANET_RADIUS - distance * distance) - constants::PLANET_RADIUS;
+        v.z += constants::PLANET_RADIUS - sqrt(constants::PLANET_RADIUS * constants::PLANET_RADIUS - distance * distance);
     }
 
     // convert to opengl coordinate system
@@ -147,7 +147,7 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
 		double y_ = v.y;
 		double z_ = v.z;
 		v.x = y_;
-		v.y = z_;
+		v.y = -z_;
 		v.z = -x_;
 	}
 	return model;
@@ -361,7 +361,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 			    double y_ = v.y;
 			    double z_ = v.z;
 			    v.x = y_;
-			    v.y = z_;
+			    v.y = -z_;
 			    v.z = -x_;
             }
             apply_sunlight_to_model(m);
@@ -405,7 +405,7 @@ void renderer::create_models_from_physics_objects(std::vector<mesh>& models, cam
 			double y_ = v.y;
 			double z_ = v.z;
 			v.x = y_;
-			v.y = z_;
+			v.y = -z_;
 			v.z = -x_;
 		}
 		apply_sunlight_to_model(model_rotated);
@@ -462,7 +462,7 @@ void renderer::create_sensor_preview(std::vector<mesh>& models, camera_propertie
                 double y_ = v.y;
                 double z_ = v.z;
                 v.x = y_;
-                v.y = z_;
+                v.y = -z_;
                 v.z = -x_;
             }
 

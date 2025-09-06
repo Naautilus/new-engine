@@ -4,7 +4,7 @@
 #include "globals/globals.hpp"
 #include "simulation_logic/argument_interpreter.hpp"
 
-// x forward, y right, z up
+// x forward, y right, z down
 
 int main(int argc, char* argv[]) {
 

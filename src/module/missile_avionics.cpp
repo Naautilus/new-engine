@@ -70,6 +70,8 @@ void missile_avionics::update(physics_object::object* parent) {
             break;
     }
     
+    guidance_pid_inputs = vector::localspace(1, 0, 0); // slam clockwise roll
+
     pid_roll.update(guidance_pid_inputs.x());
     pid_pitch.update(guidance_pid_inputs.y());
     pid_yaw.update(guidance_pid_inputs.z());
