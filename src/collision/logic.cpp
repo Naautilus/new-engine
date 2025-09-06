@@ -2,8 +2,8 @@
 
 namespace collision {
 
-void create_debris_for_objects(physics_object::object& a, physics_object::object& b, double desired_debris_mass, vector::worldspace& collision_point) {
-    if (desired_debris_mass < 1) return;
+void create_debris_for_objects(physics_object::object& a, physics_object::object& b, double desired_debris_mass, vector::worldspace& collision_point, bool hot_only) {
+    if (desired_debris_mass < 1.0) return;
 
     const double DIRECTION_RANDOMIZATION = 0.03;
     const double MAGNITUDE_MEAN = 0.9; // values >1 will be recalculated
@@ -29,9 +29,13 @@ void create_debris_for_objects(physics_object::object& a, physics_object::object
     for (double& mass : debris_masses) mass *= mass_factor;
 
     for (double mass : debris_masses) {
+
+        bool hot;
+        if (hot_only) hot = true;
+        else hot = (random(0, 1) < 0.7);
     
         double object_weight_ratio = a.physics_state.mass / b.physics_state.mass;
-        if (object_weight_ratio < 1) object_weight_ratio = 1 / object_weight_ratio;
+        if (object_weight_ratio < 1.0) object_weight_ratio = 1.0 / object_weight_ratio;
         double interp = std::clamp(random_interpolation(globals::rng), 0.0, 1.0);
         if (random(0.0, 1.0) > FRAGMENT_SPREAD_DIRECTION_1_CHANCE) {
             interp = pow(interp, pow(object_weight_ratio, FRAGMENT_SPREAD_DIRECTIONALITY)); // direction 1 - the fragments directed towards the bigger vehicle; should be more likely
@@ -41,7 +45,7 @@ void create_debris_for_objects(physics_object::object& a, physics_object::object
     
         vector::worldspace position = collision_point;
         vector::worldspace velocity = (1-interp) * a.physics_state.velocity + interp * b.physics_state.velocity;
-        auto d = std::make_shared<physics_object::object>(physics_object::blueprints::debris(mass));
+        auto d = std::make_shared<physics_object::object>(physics_object::blueprints::debris(mass, hot));
         d->physics_state.position = position;
         d->physics_state.velocity = velocity;
     
@@ -91,7 +95,7 @@ double _separate_colliding_physics_objects_sub(vector::worldspace max_displaceme
 
         if (colliding) fraction += fraction_change;
         else fraction -= fraction_change;
-        fraction_change /= 2;
+        fraction_change /= 2.0;
     }
 
     fraction += fraction_change;
@@ -100,7 +104,7 @@ double _separate_colliding_physics_objects_sub(vector::worldspace max_displaceme
 
 void separate_colliding_physics_objects(vector::worldspace direction, collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
     const int ITERATIONS = 7;
-    const double EXPONENT = 3; // to get more precision near less movement
+    const double EXPONENT = 3.0; // to get more precision near less movement
 
     double total_mass = a.physics_state.mass + b.physics_state.mass;
 
@@ -113,7 +117,7 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
     double fraction_direction_a = _separate_colliding_physics_objects_sub( max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
     double fraction_direction_b = _separate_colliding_physics_objects_sub(-max_displacement, total_mass, ITERATIONS, EXPONENT, original_position_a, original_position_b, a_collider, b_collider, a, b);
 
-    if (fraction_direction_b < fraction_direction_a) max_displacement *= -1;
+    if (fraction_direction_b < fraction_direction_a) max_displacement *= -1.0;
     double fraction = fmin(fraction_direction_a, fraction_direction_b);
 
     move_colliding_physics_objects(
@@ -126,7 +130,7 @@ void separate_colliding_physics_objects(vector::worldspace direction, collision:
 
 void process_colliding_physics_objects(collision::collider& a_collider, collision::collider& b_collider, physics_object::object& a, physics_object::object& b) {
     const double COEFFICIENT_OF_FRICTION = 1.0;
-    const double BOUNCE = 0; // 0 = no bounce
+    const double BOUNCE = 0.0; // 0.0 = no bounce
     
     if (globals::PAUSE_ON_COLLISION) {
         globals::paused = true;
@@ -151,28 +155,28 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
     // fraction of the tangential velocity to cancel out, based on the coefficient of friction
     double fraction_tangential = fmin(1.0, COEFFICIENT_OF_FRICTION * (delta_velocity_normal.norm() / delta_velocity_tangential.norm()));
    
-    if (collision_normal.dot(delta_velocity) < 0) collision_normal *= -1;
+    if (collision_normal.dot(delta_velocity) < 0) collision_normal *= -1.0;
     
     if (globals::SHOW_COLLISION_DEBUGGING) {
         globals::physics_objects_mutex.lock();
-        for (double line_position = 2; line_position <= 5; line_position += 0.05) {
+        for (double line_position = 2.0; line_position <= 5.0; line_position += 0.05) {
             auto collision_visual = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_normal, 0.1, 0, 0, 1));
-            collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+            collision_visual->physics_state.position += 1.0 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2.0;
             globals::physics_objects.push_back(collision_visual);
 
             if (!collision_data_.pca_primary || !collision_data_.pca_secondary) continue;
 
             auto collision_visual_pca_primary = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_data_.pca_primary.value(), 0.1, 1, 0, 0));
-            collision_visual_pca_primary->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+            collision_visual_pca_primary->physics_state.position += 1.0 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2.0;
             globals::physics_objects.push_back(collision_visual_pca_primary);
 
             auto collision_visual_pca_secondary = std::make_shared<physics_object::object>(physics_object::blueprints::cube(collision_point + line_position * collision_data_.pca_secondary.value(), 0.1, 0, 1, 0));
-            collision_visual_pca_secondary->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+            collision_visual_pca_secondary->physics_state.position += 1.0 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2.0;
             globals::physics_objects.push_back(collision_visual_pca_secondary);
         }
         globals::physics_objects_mutex.unlock();
         if (collision_data_.intersection_points) {
-            std::vector<double> overlap_visual_scales = {10, 1000};
+            std::vector<double> overlap_visual_scales = {10.0, 1000.0};
             for (double overlap_visual_scale : overlap_visual_scales) {
                 globals::physics_objects_mutex.lock();
                 for (vector::worldspace& point : collision_data_.intersection_points.value()) {
@@ -180,7 +184,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
                     collision_visual->physics_state.position -= collision_point;
                     collision_visual->physics_state.position *= overlap_visual_scale;
                     collision_visual->physics_state.position += collision_point;
-                    collision_visual->physics_state.position += 1 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2;
+                    collision_visual->physics_state.position += 1.0 * constants::DELTA_T * (a.physics_state.velocity + b.physics_state.velocity) / 2.0;
                     globals::physics_objects.push_back(collision_visual);
                 }
                 globals::physics_objects_mutex.unlock();
@@ -228,7 +232,14 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
 
     if (damage != 0) std::cout << "damage: " << damage << "\n";
 
-    create_debris_for_objects(a, b, fmin(damage, 20000), collision_point);
+    double visual_damage = constants::DAMAGE_MULTIPLIER * minimum_mass * delta_velocity.squaredNorm();
+
+    double debris_mass_sparks = fmin(visual_damage, 20000) * 0.3;
+    double debris_mass_impact = fmin(damage, 20000);
+    std::cout << "debris_mass_sparks: " << debris_mass_sparks << "\n";
+    std::cout << "debris_mass_impact: " << debris_mass_impact << "\n";
+    create_debris_for_objects(a, b, debris_mass_sparks, collision_point, true);
+    create_debris_for_objects(a, b, debris_mass_impact, collision_point, false);
     
     if (a_collider.type != model_collider || b_collider.type != model_collider) return;
 

@@ -75,8 +75,7 @@ Eigen::Quaterniond random_quaternion() {
     return Eigen::Quaterniond(x, y, s*u, s*v);
 }
 
-object debris(double mass) {
-    bool hot = (random(0, 1) < 0.7);
+object debris(double mass, bool hot) {
     double drag_side_multiplier = 1;
     double drag_front_multiplier = 1; // when front and side differ, pieces tend to completely lose control and disperse immediately so it's not advised
     object o("");
@@ -103,10 +102,6 @@ object debris(double mass) {
     o.add_aerodynamic_surface(module::aerodynamic_surface(drag_side_multiplier *scale*scale, vector::localspace(0,1,0), vector::localspace(   random(-1,1)*0.2*scale, 0, random(-1,1)*0.2*scale   )));
     o.add_aerodynamic_surface(module::aerodynamic_surface(drag_front_multiplier*scale*scale, vector::localspace(0,0,1), vector::localspace(   random(-1,1)*0.2*scale,    random(-1,1)*0.2*scale, 0)));
     return o;
-}
-
-object debris_1kg() {
-    return debris(1.0);
 }
 
 // note: in the current direct, PIDless plane control, mouse is pretty horrible to use
@@ -391,7 +386,6 @@ object bowl(vector::worldspace position_, double scale = 1) {
 void initialize_blueprints() {
     named_objects.push_back(named_blueprint<object>{aim9x, "aim9x"});
     named_objects.push_back(named_blueprint<object>{bullet_20mm, "bullet_20mm"});
-    named_objects.push_back(named_blueprint<object>{debris_1kg, "debris_1kg"});
     named_objects.push_back(named_blueprint<object>{f16_simple_forces_model, "f16_simple_forces_model"});
     named_objects.push_back(named_blueprint<object>{sun, "sun"});
     named_control_bindings.push_back(named_blueprint<control_bindings>{plane_control_bindings_mouse, "plane_control_bindings_mouse"});
