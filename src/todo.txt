@@ -27,3 +27,5 @@ add a bounding-box-like early-exit check to check_collision_point_to_model
 move calculate_acceleration out of logger
 
 remove adjust_quaternion_angle mystery constant
+
+fix bullets passing through stuff

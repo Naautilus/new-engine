@@ -5,8 +5,8 @@
 
 namespace module {
 
-struct missile_avionics : module {
-    missile_avionics(double p, double i, double d, Eigen::Quaterniond rotation_, vector::localspace position_);
+struct missile_guidance : module {
+    missile_guidance(double p, double i, double d, Eigen::Quaterniond rotation_, vector::localspace position_);
     double record_target_distance = std::numeric_limits<double>::max();
     pid pid_pitch;
     pid pid_yaw;

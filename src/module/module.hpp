@@ -52,7 +52,7 @@ struct module {
 struct aerodynamic_surface;
 struct autocannon;
 struct jet_engine;
-struct missile_avionics;
+struct missile_guidance;
 struct physical_structure;
 struct sensor_ir;
 struct solid_rocket_motor;

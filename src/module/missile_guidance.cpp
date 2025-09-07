@@ -1,10 +1,10 @@
-#include "missile_avionics.hpp"
+#include "missile_guidance.hpp"
 #include "sensor_ir.hpp"
 #include "../physics_object/object.hpp"
 
 namespace module {
 
-missile_avionics::missile_avionics(double p, double i, double d, Eigen::Quaterniond rotation_, vector::localspace position_) {
+missile_guidance::missile_guidance(double p, double i, double d, Eigen::Quaterniond rotation_, vector::localspace position_) {
     pid_pitch = pid(p, i, d, 1.0);
     pid_yaw = pid(p, i, d, 1.0);
     pid_roll = pid(p, i, d, 1.0);
@@ -12,7 +12,7 @@ missile_avionics::missile_avionics(double p, double i, double d, Eigen::Quaterni
     position = position_;
 }
 
-vector::worldspace missile_avionics::get_worldspace_position(physics_object::object* parent) {
+vector::worldspace missile_guidance::get_worldspace_position(physics_object::object* parent) {
     return position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position);
 }
 
@@ -23,7 +23,7 @@ enum guidance_mode {
     CLOSE
 };
 
-void missile_avionics::update(physics_object::object* parent) {
+void missile_guidance::update(physics_object::object* parent) {
     sensor_ir* sensor_ptr;
     for (std::shared_ptr<module>& module_ : parent->properties.modules) {
         if (sensor_ptr = dynamic_cast<sensor_ir*>(&(*module_))) break;
@@ -91,18 +91,18 @@ void missile_avionics::update(physics_object::object* parent) {
     if (roll) roll->response_unmultiplied = pid_roll.output;
 }
 
-double missile_avionics::get_g_limit_fraction(double current_acceleration, double g_limit_min, double g_limit_max) {
+double missile_guidance::get_g_limit_fraction(double current_acceleration, double g_limit_min, double g_limit_max) {
     double g_limit_fraction = (current_acceleration-g_limit_min) / (g_limit_max-g_limit_min);
     g_limit_fraction = std::clamp(g_limit_fraction, 0.0, 1.0);
     return g_limit_fraction;
 }
 
-vector::worldspace missile_avionics::limit_g_forces(vector::worldspace unlimited_inputs, vector::localspace limited_inputs, double current_acceleration, double g_limit_min, double g_limit_max) {
+vector::worldspace missile_guidance::limit_g_forces(vector::worldspace unlimited_inputs, vector::localspace limited_inputs, double current_acceleration, double g_limit_min, double g_limit_max) {
     double g_limit_fraction = get_g_limit_fraction(current_acceleration, g_limit_min, g_limit_max);
     return (1 - g_limit_fraction) * unlimited_inputs + g_limit_fraction * limited_inputs;
 }
 
-double missile_avionics::get_time_to_impact_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent) {
+double missile_guidance::get_time_to_impact_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent) {
     vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
     vector::worldspace missile_velocity = parent->physics_state.velocity;
     vector::worldspace enemy_velocity = detection_velocity;
@@ -112,7 +112,7 @@ double missile_avionics::get_time_to_impact_first_degree_prediction(vector::worl
     return time_to_impact;
 }
 
-double missile_avionics::find_smallest_positive_root(double a, double b, double c) {
+double missile_guidance::find_smallest_positive_root(double a, double b, double c) {
     double determinant = b*b - 4*a*c;
     if (determinant < 0) return -1.0;
     if (a == 0) return -1.0;
@@ -124,7 +124,7 @@ double missile_avionics::find_smallest_positive_root(double a, double b, double 
     return root2;
 }
 
-vector::localspace missile_avionics::get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
+vector::localspace missile_guidance::get_guidance_direct(vector::worldspace current_detection_relative_worldspace, physics_object::object* parent, double gain) {
     vector::scopespace current_detection = signal_point(
         current_detection_relative_worldspace,
         vector::worldspace(0, 0, 0),
@@ -144,14 +144,14 @@ vector::localspace missile_avionics::get_guidance_direct(vector::worldspace curr
     return output;
 }
 
-vector::localspace missile_avionics::get_guidance_target_velocity(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain) {
+vector::localspace missile_guidance::get_guidance_target_velocity(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain) {
     vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
     vector::worldspace enemy_velocity = detection_velocity;
     vector::worldspace aimpoint = enemy_velocity;
     return get_guidance_direct(aimpoint, parent, gain);
 }
 
-vector::localspace missile_avionics::get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain, double speed_adjustment) {
+vector::localspace missile_guidance::get_guidance_first_degree_prediction(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain, double speed_adjustment) {
     vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
     vector::worldspace missile_velocity = parent->physics_state.velocity;
     missile_velocity *= (missile_velocity.norm() + speed_adjustment) / missile_velocity.norm();
@@ -170,7 +170,7 @@ vector::localspace missile_avionics::get_guidance_first_degree_prediction(vector
     return get_guidance_direct(aimpoint, parent, gain);
 }
 
-vector::localspace missile_avionics::get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain) {
+vector::localspace missile_guidance::get_guidance_proportional_navigation(vector::worldspace current_detection_relative_worldspace, vector::worldspace detection_velocity, physics_object::object* parent, double gain) {
     double LOOK_AHEAD_TIME = 1; // for turning an acceleration request into an aimpoint request
     vector::worldspace current_detection_worldspace = current_detection_relative_worldspace + get_worldspace_position(parent);
     vector::worldspace missile_velocity = parent->physics_state.velocity;
@@ -186,7 +186,7 @@ vector::localspace missile_avionics::get_guidance_proportional_navigation(vector
 
 }
 
-void physics_object::object::add_missile_avionics(module::missile_avionics a) {
-	std::shared_ptr<module::module> m = std::make_shared<module::missile_avionics>(a);
+void physics_object::object::add_missile_guidance(module::missile_guidance a) {
+	std::shared_ptr<module::module> m = std::make_shared<module::missile_guidance>(a);
 	properties.modules.push_back(m);
 }

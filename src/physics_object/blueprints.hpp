@@ -3,7 +3,7 @@
 #include "../module/aerodynamic_surface.hpp"
 #include "../module/autocannon.hpp"
 #include "../module/jet_engine.hpp"
-#include "../module/missile_avionics.hpp"
+#include "../module/missile_guidance.hpp"
 #include "../module/physical_structure.hpp"
 #include "../module/sensor_ir.hpp"
 #include "../module/solid_rocket_motor.hpp"
