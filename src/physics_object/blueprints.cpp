@@ -222,8 +222,12 @@ object f16_simple_forces_model() {
     // rudder
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*-2.4          , vector::localspace(0, 1, 0), vector::localspace(   -8,  0, -3.5)));
     o.add_jet_engine(module::jet_engine(130000, 0, 1, vector::localspace(1, 0, 0), vector::localspace(-3, 0, 0), 4.85, 0.59, 500));
-    //o.add_autocannon(autocannon(bullet_20mm, 1050, 100, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
-    o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
+    
+    if (globals::BULLETS_INSTEAD_OF_MISSILES) {
+        o.add_autocannon(module::autocannon(bullet_20mm, 1050, 100, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
+    } else {
+        o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
+    }
     return o;
 }
 

@@ -124,13 +124,14 @@ void step_physics_objects() {
     //globals::physics_objects_mutex.lock();
     step_physics_object_ground_collisions();
     //globals::physics_objects_mutex.unlock();
-
+    
+    // this needs to be above the deletion step for warheads to detonate on physics_object destruction (when health = 0)
     //globals::physics_objects_mutex.lock();
-    step_physics_object_deletion();
+    step_physics_object_movement_and_modules();
     //globals::physics_objects_mutex.unlock();
 
     //globals::physics_objects_mutex.lock();
-    step_physics_object_movement_and_modules();
+    step_physics_object_deletion();
     //globals::physics_objects_mutex.unlock();
 
     globals::tick++;

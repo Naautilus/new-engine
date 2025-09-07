@@ -44,6 +44,7 @@ extern bool PAUSE_ON_COLLISION;
 extern bool SHOW_MISSILE_ACCELERATION;
 extern bool VERBOSE_LOG;
 extern bool SHOW_FPS;
+extern bool BULLETS_INSTEAD_OF_MISSILES;
 
 extern const color SKY_COLOR;
 extern double GRAVITY;
