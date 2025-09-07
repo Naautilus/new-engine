@@ -25,7 +25,8 @@ void aerodynamic_surface::update(physics_object::object* parent) {
     else update_dynamic_surface(parent);
 }
 void aerodynamic_surface::update_static_surface(physics_object::object* parent) {
-    vector::worldspace surface_velocity = parent->physics_state.velocity - parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
+    vector::worldspace surface_velocity = parent->physics_state.velocity;// + parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
+    surface_velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
     if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
     vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
     double force = v.dot(unrotated_direction) / v.norm();
@@ -35,9 +36,9 @@ void aerodynamic_surface::update_static_surface(physics_object::object* parent) 
 }
 void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent) {
     vector::localspace rotation_drives(0, 0, 0);
+    rotation_drives.x() = parent->control_bindings.get_response(controls::roll, controls::external);
     rotation_drives.y() = parent->control_bindings.get_response(controls::pitch, controls::external);
     rotation_drives.z() = parent->control_bindings.get_response(controls::yaw, controls::external);
-    rotation_drives.x() = parent->control_bindings.get_response(controls::roll, controls::external);
 
     double response = response_axes.dot(rotation_drives);
     response *= angle_range;
@@ -45,7 +46,8 @@ void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent)
     rotation = Eigen::AngleAxisd(response, rotation_axis);
     rotated_direction = rotation * unrotated_direction;
 
-    vector::worldspace surface_velocity = parent->physics_state.velocity - parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
+    vector::worldspace surface_velocity = parent->physics_state.velocity;
+    surface_velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
     if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
     vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
     double force = v.dot(rotated_direction) / v.norm();

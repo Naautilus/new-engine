@@ -141,9 +141,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings control_bindings_;
     
     controls::input pitch = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::external, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input pitch_fast = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     pitch.add_key(GLFW_KEY_W, -3);
     pitch.add_key(GLFW_KEY_S, 3);
     pitch_fast.add_key(GLFW_KEY_W, -3);
@@ -152,9 +152,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings_.inputs.push_back(pitch_fast);
 
     controls::input yaw = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::external, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input yaw_fast = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     yaw.add_key(GLFW_KEY_E, 3);
     yaw.add_key(GLFW_KEY_Q, -3);
     yaw_fast.add_key(GLFW_KEY_E, 3);
@@ -163,9 +163,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings_.inputs.push_back(yaw_fast);
 
     controls::input roll = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::external, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input roll_fast = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     roll.add_key(GLFW_KEY_A, -3);
     roll.add_key(GLFW_KEY_D, 3);
     roll_fast.add_key(GLFW_KEY_A, -3);

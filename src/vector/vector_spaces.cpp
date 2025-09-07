@@ -9,8 +9,9 @@ std::string worldspace::str() {
     output += std::format(constants::FORMAT_STRING_POSITION, z()) + "}";
     return output;
 }
+
 worldspace worldspace::add_angular_velocity(worldspace relative_position, worldspace angular_velocity) {
-    return *this - angular_velocity.cross(relative_position);
+    return *this + angular_velocity.cross(relative_position);
 }
 
 void localspace::clamp() {
