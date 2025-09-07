@@ -200,11 +200,11 @@ std::shared_ptr<physics_object::object> camera_track_physics_object(camera_prope
 	if (!o) return o;
 
 	Eigen::Quaterniond vehicle_point_direction = o->physics_state.rotation;
-    vector::worldspace vehicle_point_vector = vehicle_point_direction.conjugate() * vector::worldspace::UnitX();
+    vector::worldspace vehicle_point_vector = vector::localspace(1, 0, 0).to_worldspace(vehicle_point_direction);
     //Eigen::Quaterniond vehicle_travel_direction = Eigen::Quaterniond::FromTwoVectors(o->physics_state.velocity, vector::worldspace(1, 0, 0));
     Eigen::Quaterniond vehicle_travel_direction = Eigen::Quaterniond::Identity();
-    vehicle_travel_direction = vehicle_travel_direction * Eigen::AngleAxisd(atan2(vehicle_point_vector.z(), sqrt(vehicle_point_vector.x()*vehicle_point_vector.x() + vehicle_point_vector.y()*vehicle_point_vector.y())), vector::worldspace::UnitY()); // pitch
-    vehicle_travel_direction = vehicle_travel_direction * Eigen::AngleAxisd(-atan2(vehicle_point_vector.y(), vehicle_point_vector.x()), vector::worldspace::UnitZ()); // yaw
+    vehicle_travel_direction = Eigen::AngleAxisd(-atan2(vehicle_point_vector.z(), sqrt(vehicle_point_vector.x()*vehicle_point_vector.x() + vehicle_point_vector.y()*vehicle_point_vector.y())), vector::worldspace::UnitY()) * vehicle_travel_direction; // pitch
+    vehicle_travel_direction = Eigen::AngleAxisd(atan2(vehicle_point_vector.y(), vehicle_point_vector.x()), vector::worldspace::UnitZ()) * vehicle_travel_direction; // yaw
     /*
     std::vector<Eigen::Quaterniond> average_;
     average_.push_back(vehicle_point_direction);

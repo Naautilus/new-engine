@@ -90,12 +90,12 @@ void renderer::manual_camera_movement(GLFWwindow* window, double renderer_dt, ca
     translation *= translation_speed * renderer_dt;
     
     vector::worldspace rotation_axis(0, 0, 0);
-    if (key_pressed(window, GLFW_KEY_U)) rotation_axis.x()++;
-    if (key_pressed(window, GLFW_KEY_O)) rotation_axis.x()--;
-    if (key_pressed(window, GLFW_KEY_K)) rotation_axis.y()++;
-    if (key_pressed(window, GLFW_KEY_I)) rotation_axis.y()--;
-    if (key_pressed(window, GLFW_KEY_J)) rotation_axis.z()++;
-    if (key_pressed(window, GLFW_KEY_L)) rotation_axis.z()--;
+    if (key_pressed(window, GLFW_KEY_U)) rotation_axis.x()--;
+    if (key_pressed(window, GLFW_KEY_O)) rotation_axis.x()++;
+    if (key_pressed(window, GLFW_KEY_K)) rotation_axis.y()--;
+    if (key_pressed(window, GLFW_KEY_I)) rotation_axis.y()++;
+    if (key_pressed(window, GLFW_KEY_J)) rotation_axis.z()--;
+    if (key_pressed(window, GLFW_KEY_L)) rotation_axis.z()++;
     rotation_axis *= ROTATION_SPEED * renderer_dt * (camera_properties_.fov / 90);
     
     double fov_multiplier = 0;
@@ -105,7 +105,7 @@ void renderer::manual_camera_movement(GLFWwindow* window, double renderer_dt, ca
     fov_multiplier += 1;
 
     Eigen::Quaterniond& rotation = camera_properties_.previous_camera_rotations.back();
-    rotation = Eigen::AngleAxisd(rotation_axis.norm(), rotation_axis.normalized()) * rotation;
+    rotation = rotation * Eigen::AngleAxisd(rotation_axis.norm(), rotation_axis.normalized());
 
     vector::worldspace position = camera_properties_.last_camera_position;
     position += translation.to_worldspace(rotation);

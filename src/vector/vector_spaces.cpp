@@ -62,19 +62,19 @@ std::string scopespace::str() {
 }
 
 localspace worldspace::to_localspace(Eigen::Quaterniond q) {
-    return q * (*this);
-}
-
-localspace worldspace::to_localspace_positional(Eigen::Quaterniond q, worldspace position) {
-    return q * ((*this) - position);
-}
-
-worldspace localspace::to_worldspace(Eigen::Quaterniond q) {
     return q.inverse() * (*this);
 }
 
+localspace worldspace::to_localspace_positional(Eigen::Quaterniond q, worldspace position) {
+    return q.inverse() * ((*this) - position);
+}
+
+worldspace localspace::to_worldspace(Eigen::Quaterniond q) {
+    return q * (*this);
+}
+
 worldspace localspace::to_worldspace_positional(Eigen::Quaterniond q, worldspace position) {
-    return (q.inverse() * (*this)) + position;
+    return (q * (*this)) + position;
 }
 
 }

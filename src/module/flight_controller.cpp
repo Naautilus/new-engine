@@ -36,7 +36,7 @@ flight_controller::flight_controller(
 }
 
 void flight_controller::update(physics_object::object* parent) {
-
+    return;
     double desired_roll_rate = max_roll_rate * parent->control_bindings.get_response(controls::roll, controls::flight_controller);
     double desired_pitch_rate = max_pitch_rate * parent->control_bindings.get_response(controls::pitch, controls::flight_controller);
     double desired_yaw_rate = max_yaw_rate * parent->control_bindings.get_response(controls::yaw, controls::flight_controller);
@@ -45,9 +45,9 @@ void flight_controller::update(physics_object::object* parent) {
     std::cout << "desired_pitch_rate: " << desired_pitch_rate << "\n";
     std::cout << "desired_yaw_rate: " << desired_yaw_rate << "\n";
     
-    desired_rotation = Eigen::AngleAxisd(desired_roll_rate, vector::worldspace::UnitX()) * desired_rotation;
-    desired_rotation = Eigen::AngleAxisd(desired_pitch_rate, vector::worldspace::UnitY()) * desired_rotation;
-    desired_rotation = Eigen::AngleAxisd(desired_yaw_rate, vector::worldspace::UnitZ()) * desired_rotation;
+    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_roll_rate, vector::worldspace::UnitX());
+    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_pitch_rate, vector::worldspace::UnitY());
+    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_yaw_rate, vector::worldspace::UnitZ());
 
     parent->physics_state.rotation = desired_rotation;
     

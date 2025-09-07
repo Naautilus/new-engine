@@ -383,7 +383,7 @@ object runway(vector::worldspace position_, double heading, double length, doubl
     o.add_physical_structure(module::physical_structure(collision::collider(collision::generate_rectangle(length, width, 20)), runway_surface_, vector::localspace(0,0,0), vector::localspace(1, 1, 0.1)));
     o.properties.modules.back()->position = vector::localspace(0, 0, 10);
     o.physics_state.position = position_;
-    o.physics_state.rotation = Eigen::AngleAxisd(-heading * std::numbers::pi / 180, vector::worldspace::UnitZ());
+    o.physics_state.rotation = Eigen::AngleAxisd(heading * std::numbers::pi / 180, vector::worldspace::UnitZ());
     o.physics_state.mass = 1e100;
     o.physics_state.health = 1e100;
     o.physics_state.rotational_inertia = vector::localspace(1, 1, 1) * 1e100;

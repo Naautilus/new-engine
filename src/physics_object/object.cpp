@@ -24,7 +24,7 @@ void object::apply_force(vector::worldspace origin, vector::worldspace direction
     Eigen::Matrix3d rotation_matrix = physics_state.rotation.toRotationMatrix();
     Eigen::Matrix3d world_inertia_matrix = rotation_matrix * local_inertia_matrix * rotation_matrix.transpose();
     Eigen::Vector3d angular_acceleration = world_inertia_matrix.inverse() * torque;
-    physics_state.angular_velocity -= constants::DELTA_T * angular_acceleration;
+    physics_state.angular_velocity += constants::DELTA_T * angular_acceleration;
 }
 void object::queue_force(vector::worldspace origin, vector::worldspace direction) {
     properties.force_queue.push_back(std::pair<vector::worldspace, vector::worldspace>(origin, direction));
