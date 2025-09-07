@@ -35,25 +35,25 @@ vertex vertex::operator-(const vertex& v) const {
         sun_factor - v.sun_factor
     };
 }
-vertex vertex::operator*(const double& d) const {
+vertex vertex::operator*(const float& f) const {
     return vertex{
-        x * d,
-        y * d,
-        z * d,
-        r * d,
-        g * d,
-        b * d,
-        sun_factor * d
+        x * f,
+        y * f,
+        z * f,
+        r * f,
+        g * f,
+        b * f,
+        sun_factor * f
     };
 }
-vertex vertex::operator/(const double& d) const {
+vertex vertex::operator/(const float& f) const {
     return vertex{
-        x / d,
-        y / d,
-        z / d,
-        r / d,
-        g / d,
-        b / d,
-        sun_factor / d
+        x / f,
+        y / f,
+        z / f,
+        r / f,
+        g / f,
+        b / f,
+        sun_factor / f
     };
 }

@@ -8,6 +8,6 @@ struct vertex{
 	bool operator<(const vertex& v) const;
     vertex operator+(const vertex& v) const;
     vertex operator-(const vertex& v) const;
-    vertex operator*(const double& d) const;
-    vertex operator/(const double& d) const;
+    vertex operator*(const float& f) const;
+    vertex operator/(const float& f) const;
 };
