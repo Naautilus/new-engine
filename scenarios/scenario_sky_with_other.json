@@ -22,12 +22,12 @@
       "name": "plane2",
       "position": {
         "relative_to_ground": false,
-        "x": 0,
-        "y": -500,
+        "x": -930,
+        "y": 495,
         "z": -10000
       },
       "rotation": {
-        "degrees_around_axis": -45,
+        "degrees_around_axis": 0,
         "axis": {
           "x": 0,
           "y": 0,

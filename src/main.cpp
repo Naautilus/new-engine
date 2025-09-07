@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
     std::cout << "done\n";
     
     models::initialize_models();
+    interpret_arguments(args);
     physics_object::blueprints::initialize_blueprints();
 
     globals::paused = true;
@@ -28,7 +29,6 @@ int main(int argc, char* argv[]) {
 
 	renderer r;
 	initialize_physics_objects(args);
-    interpret_arguments(args);
 	renderer_function();
 
 	for (double time = 0; time < constants::TIME_LIMIT || constants::TIME_LIMIT == -1; time += constants::DELTA_T) {
