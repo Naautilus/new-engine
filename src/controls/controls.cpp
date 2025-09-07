@@ -14,9 +14,10 @@ mouse_position_input::mouse_position_input(mouse_axis mouse_axis__, double axis_
     mouse_axis_ = mouse_axis__;
     axis_response = axis_response_;
 }
-input::input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_) {
+input::input(axis axis__, response_type response_type__, input_destination destination_, double minimum_, double maximum_, double inherent_multiplier_) {
     axis_ = axis__;
     response_type_ = response_type__;
+    destination = destination_;
     minimum = minimum_;
     maximum = maximum_;
     inherent_multiplier = inherent_multiplier_;
@@ -24,9 +25,10 @@ input::input(axis axis__, response_type response_type__, double minimum_, double
     response_multiplied = 0;
     optional_toggle_key = std::nullopt;
 }
-input::input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_, toggle_key toggle_key_) {
+input::input(axis axis__, response_type response_type__, input_destination destination_, double minimum_, double maximum_, double inherent_multiplier_, toggle_key toggle_key_) {
     axis_ = axis__;
     response_type_ = response_type__;
+    destination = destination_;
     minimum = minimum_;
     maximum = maximum_;
     inherent_multiplier = inherent_multiplier_;

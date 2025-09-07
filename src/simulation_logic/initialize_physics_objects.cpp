@@ -78,6 +78,7 @@ void initialize_physics_objects(std::vector<std::string> args) {
                 std::string control_bindings_name = physics_object_["control_bindings"];
                 for (auto named_control_bindings : physics_object::blueprints::named_control_bindings) {
                     if (named_control_bindings.name == control_bindings_name) {
+                        // i claim to be a never nester and then do this shit
                         control_bindings_creator = named_control_bindings.blueprint_creator;
                         control_bindings_found = true;
                     }
@@ -135,7 +136,7 @@ void initialize_physics_objects(std::vector<std::string> args) {
             if (physics_object_.contains("rotation")) o->physics_state.rotation = rotation;
             if (physics_object_.contains("velocity")) o->physics_state.velocity = velocity;
             if (physics_object_.contains("position")) o->physics_state.position = position;
-            if (physics_object_.contains("control_bindings")) o->control_bindings = control_bindings_creator();
+            if (physics_object_.contains("control_bindings")) o->control_bindings.add_bindings(control_bindings_creator());
             globals::physics_objects_mutex.lock();
             globals::physics_objects.push_back(o);
             globals::physics_objects_mutex.unlock();

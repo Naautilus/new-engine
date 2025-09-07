@@ -23,8 +23,9 @@ children should:
 - have a void update(physics_object::object* parent) override {} function
 - have a void physics_object::object::add_this_module_type(this_module_type t) {} function outside the struct definition
 - have a void add_this_module_type(this_module_type t); declared at the end of the object.cpp file
-- have a void add_this_module_type(this_module_type t); defined at the end of the module's .cpp file and .hpp file
+- have a void add_this_module_type(this_module_type t); defined at the end of the module's .hpp file
 - have an incomplete type defined at the end of this file
+- be included with #include "../module/this_module_type.hpp" in ../physics_object/blueprints.hpp
 */
 
 namespace module {
@@ -51,6 +52,7 @@ struct module {
 
 struct aerodynamic_surface;
 struct autocannon;
+struct flight_controller;
 struct jet_engine;
 struct missile_guidance;
 struct physical_structure;

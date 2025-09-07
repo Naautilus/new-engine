@@ -32,6 +32,7 @@ struct object {
 
     void add_aerodynamic_surface(module::aerodynamic_surface a);
     void add_autocannon(module::autocannon a);
+    void add_flight_controller(module::flight_controller f);
     void add_jet_engine(module::jet_engine j);
     void add_missile_guidance(module::missile_guidance a);
     void add_physical_structure(module::physical_structure s);

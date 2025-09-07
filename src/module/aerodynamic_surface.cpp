@@ -35,14 +35,14 @@ void aerodynamic_surface::update_static_surface(physics_object::object* parent) 
 }
 void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent) {
     vector::localspace rotation_drives(0, 0, 0);
-    rotation_drives.y() = parent->control_bindings.get_response(controls::pitch);
-    rotation_drives.z() = parent->control_bindings.get_response(controls::yaw);
-    rotation_drives.x() = parent->control_bindings.get_response(controls::roll);
+    rotation_drives.y() = parent->control_bindings.get_response(controls::pitch, controls::external);
+    rotation_drives.z() = parent->control_bindings.get_response(controls::yaw, controls::external);
+    rotation_drives.x() = parent->control_bindings.get_response(controls::roll, controls::external);
 
     double response = response_axes.dot(rotation_drives);
     response *= angle_range;
     response *= std::numbers::pi / 180;
-    rotation = Eigen::AngleAxis(response, rotation_axis);
+    rotation = Eigen::AngleAxisd(response, rotation_axis);
     rotated_direction = rotation * unrotated_direction;
 
     vector::worldspace surface_velocity = parent->physics_state.velocity - parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));

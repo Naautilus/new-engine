@@ -19,7 +19,7 @@ void object::log() {
     std::cout << std::string(std::max(10 - (int)properties.name.length(), 0), ' ') << ": ";
     std::cout << "position {" << std::format(constants::FORMAT_STRING_POSITION, physics_state.position.x()) << ", " << std::format(constants::FORMAT_STRING_POSITION, physics_state.position.y()) << ", " << std::format(constants::FORMAT_STRING_POSITION, physics_state.position.z()) << "} ";
     std::cout << "velocity {" << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.x()) << ", " << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.y()) << ", " << std::format(constants::FORMAT_STRING_VELOCITY, physics_state.velocity.z()) << "} ";
-    Eigen::Vector3d euler = physics_state.rotation.toRotationMatrix().eulerAngles(2, 1, 0);
+    Eigen::Vector3d euler = physics_state.rotation.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
     std::cout << "rotation YPR {"
               << std::format(constants::FORMAT_STRING_ROTATION, euler[0] * 180.0 / M_PI) << "*, "
               << std::format(constants::FORMAT_STRING_ROTATION, euler[1] * 180.0 / M_PI) << "*, "
@@ -39,10 +39,10 @@ void object::log() {
                         << std::format(constants::FORMAT_STRING_G_FORCE, physics_state.recorded_acceleration.y() / constants::STANDARD_GRAVITY) << ", "
                         << std::format(constants::FORMAT_STRING_G_FORCE, physics_state.recorded_acceleration.z() / constants::STANDARD_GRAVITY) << "} ";
     std::cout << "rotation drives PYR { ";
-    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::pitch)) << ", ";
-    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::yaw)) << ", ";
-    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::roll)) << "} ";
-    std::cout << "thrust " << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::engine1)) << " ";
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::pitch, controls::external)) << ", ";
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::yaw, controls::external)) << ", ";
+    std::cout << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::roll, controls::external)) << "} ";
+    std::cout << "thrust " << std::format(constants::FORMAT_STRING_UNIT, control_bindings.get_response(controls::engine1, controls::external)) << " ";
     std::cout << "AoA " << std::format(constants::FORMAT_STRING_AOA, calculate_aoa()) << " ";
     std::cout << "ALT " << std::format(constants::FORMAT_STRING_ALTITUDE, physics_state.position.z()) << " ";
     std::cout << "@ " << std::format(constants::FORMAT_STRING_SPEED, physics_state.velocity.z()) << " ";

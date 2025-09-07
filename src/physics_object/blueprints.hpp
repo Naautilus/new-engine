@@ -2,6 +2,7 @@
 #include "../module/module.hpp"
 #include "../module/aerodynamic_surface.hpp"
 #include "../module/autocannon.hpp"
+#include "../module/flight_controller.hpp"
 #include "../module/jet_engine.hpp"
 #include "../module/missile_guidance.hpp"
 #include "../module/physical_structure.hpp"

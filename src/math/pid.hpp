@@ -12,5 +12,7 @@ struct pid {
 	int previous_input_buffer_position = 0;
     pid();
 	pid(double p, double i, double d, double authority_limit_);
+
+    // input assumed to be offset such that setpoint = 0
 	void update(double input);
 };

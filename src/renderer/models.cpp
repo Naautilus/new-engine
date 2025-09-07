@@ -9,7 +9,7 @@ Eigen::Quaterniond random_quaternion_biased(double angle) {
 	double angle_x = angle * sin(angle2);
 	double angle_y = angle * cos(angle2);
 	double angle_z = random(0.0, 2.0*std::numbers::pi);
-	return Eigen::AngleAxis(angle_x, vector::localspace(1, 0, 0)) * Eigen::AngleAxis(angle_y, vector::localspace(0, 1, 0)) * Eigen::AngleAxis(angle_z, vector::localspace(0, 0, 1));
+	return Eigen::AngleAxisd(angle_x, vector::localspace(1, 0, 0)) * Eigen::AngleAxisd(angle_y, vector::localspace(0, 1, 0)) * Eigen::AngleAxisd(angle_z, vector::localspace(0, 0, 1));
 }
 
 std::vector<vertex> random_isoceles_triangle(double offset_xy_, double offset_z_) {

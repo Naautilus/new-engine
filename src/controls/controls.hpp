@@ -2,6 +2,11 @@
 #include "../constants/constants.hpp"
 
 namespace controls {
+
+enum input_destination {
+    external,
+    flight_controller
+};
   	
 enum axis {
     roll, // rotation X
@@ -47,8 +52,9 @@ struct input {
     std::vector<key> key_inputs;
     std::vector<mouse_position_input> mouse_position_inputs;
     std::optional<toggle_key> optional_toggle_key;
-    input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_);
-    input(axis axis__, response_type response_type__, double minimum_, double maximum_, double inherent_multiplier_, toggle_key toggle_key_);
+    input_destination destination;
+    input(axis axis__, response_type response_type__, input_destination destination_, double minimum_, double maximum_, double inherent_multiplier_);
+    input(axis axis__, response_type response_type__, input_destination destination_, double minimum_, double maximum_, double inherent_multiplier_, toggle_key toggle_key_);
     void add_key(int key_number, double axis_response);
     void add_mouse_position_input(mouse_axis mouse_axis__, double axis_response);
     double get_control_multiplier_for_health_fraction(double health_fraction);
