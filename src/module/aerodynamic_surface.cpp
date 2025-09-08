@@ -28,12 +28,9 @@ void aerodynamic_surface::update(physics_object::object* parent) {
     apply_aerodynamic_force(parent, 0);
 }
 
-int MAX_FORCE_ITERATIONS = 8;
+int MAX_FORCE_ITERATIONS = 6;
 void aerodynamic_surface::apply_aerodynamic_force(physics_object::object* parent, int iteration) {
-    if (iteration >= MAX_FORCE_ITERATIONS) {
-        //std::cout << "Continuing due to hitting iteration limit\n";
-        return;
-    }
+    if (iteration >= MAX_FORCE_ITERATIONS) return;
 
     vector::worldspace original_velocity = parent->physics_state.velocity;
     vector::worldspace original_angular_velocity = parent->physics_state.angular_velocity;
@@ -41,7 +38,6 @@ void aerodynamic_surface::apply_aerodynamic_force(physics_object::object* parent
     int subdivisions = 1;
     for (int i = 0; i < iteration; i++) subdivisions *= 2;
     double multiplier = 1.0 / subdivisions;
-
     bool max_deviation_exceeded = false;
 
     for (int i = 0; i < subdivisions; i++) {
@@ -54,25 +50,18 @@ void aerodynamic_surface::apply_aerodynamic_force(physics_object::object* parent
         double MAX_ALLOWED_DOT_PRODUCT_DEVIATION = 0.5;
         vector::worldspace initial_surface_velocity = parent->physics_state.velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
         parent->apply_force(position, force2 * multiplier);
-        //std::cout << initial_surface_velocity.to_localspace(parent->physics_state.rotation).dot(rotated_direction) << "\n";
         vector::worldspace new_surface_velocity = parent->physics_state.velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
         double dot_product = initial_surface_velocity.normalized().dot(new_surface_velocity / initial_surface_velocity.norm());
+        
         if (fabs(dot_product - 1.0) > MAX_ALLOWED_DOT_PRODUCT_DEVIATION) {
-            //std::cout << "initial surface velocity: " << initial_surface_velocity.str() << "\n";
-            //std::cout << "new surface velocity: " << new_surface_velocity.str() << "\n";
-            //std::cout << "dot product: " << dot_product << "\n";
-            //std::cout << "apply_aerodynamic_force: dot product of " << dot_product << " exceeds MAX_ALLOWED_DOT_PRODUCT_DEVIATION. multiplier: " << multiplier << "\n";
             max_deviation_exceeded = true;
             break;
         }
     }
-    //std::cout << "\n\n";
 
     if (max_deviation_exceeded) {
-        
         parent->physics_state.velocity = original_velocity;
         parent->physics_state.angular_velocity = original_angular_velocity;
-
         iteration++;
         apply_aerodynamic_force(parent, iteration);
     }

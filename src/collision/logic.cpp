@@ -234,7 +234,7 @@ void process_colliding_physics_objects(collision::collider& a_collider, collisio
 
     double visual_damage = constants::DAMAGE_MULTIPLIER * minimum_mass * delta_velocity.squaredNorm();
 
-    double debris_mass_sparks = fmin(visual_damage, 20000) * 0.3;
+    double debris_mass_sparks = fmin(visual_damage, 20000) * 0.15;
     double debris_mass_impact = fmin(damage, 20000);
     create_debris_for_objects(a, b, debris_mass_sparks, collision_point, true);
     create_debris_for_objects(a, b, debris_mass_impact, collision_point, false);
