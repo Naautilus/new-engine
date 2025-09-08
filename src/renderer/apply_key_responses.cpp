@@ -29,13 +29,17 @@ double _get_external_response_for_response_type(double renderer_dt, controls::in
 
 void _process_control_input(GLFWwindow* window, double renderer_dt, controls::input& c, physics_object::object& o) {
     if (c.key_inputs.size() == 0 && c.mouse_position_inputs.size() == 0) return;
-    if (c.optional_toggle_key &&
-        renderer::key_pressed(window, c.optional_toggle_key->key_number) != c.optional_toggle_key->state_that_turns_input_on) return;
 
     double response_ = 0;
     for (controls::key k : c.key_inputs) {
         if (renderer::key_pressed(window, k.key_number)) response_ += k.axis_response;
     }
+    
+    if (c.optional_toggle_key &&
+        renderer::key_pressed(window, c.optional_toggle_key->key_number) != c.optional_toggle_key->state_that_turns_input_on) {
+            response_ = 0;
+    }
+
     for (controls::mouse_position_input m : c.mouse_position_inputs) {
         response_ += m.axis_response * renderer::mouse_position(window, m.mouse_axis_);
     }

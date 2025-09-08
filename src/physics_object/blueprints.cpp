@@ -109,13 +109,13 @@ control_bindings plane_control_bindings_mouse() {
     control_bindings control_bindings_;
     
     controls::input pitch = controls::input(
-        controls::axis::pitch, controls::response_type::instant, controls::input_destination::flight_controller, -0.3, 0.3, 1);
-    pitch.add_mouse_position_input(controls::MOUSE_Y, -3);
+        controls::axis::pitch, controls::response_type::instant, controls::input_destination::flight_controller, -1.0, 1.0, 1);
+    pitch.add_mouse_position_input(controls::MOUSE_Y, -0.3);
     control_bindings_.inputs.push_back(pitch);
     
     controls::input yaw = controls::input(
-        controls::axis::yaw, controls::response_type::instant, controls::input_destination::flight_controller, -0.6, 0.6, 1);
-    yaw.add_mouse_position_input(controls::MOUSE_X, 3);
+        controls::axis::yaw, controls::response_type::instant, controls::input_destination::flight_controller, -1.0, 1.0, 1);
+    yaw.add_mouse_position_input(controls::MOUSE_X, 1.0);
     control_bindings_.inputs.push_back(yaw);
     
     controls::input roll = controls::input(
@@ -141,9 +141,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings control_bindings_;
     
     controls::input pitch = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::external, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input pitch_fast = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     pitch.add_key(GLFW_KEY_W, -3);
     pitch.add_key(GLFW_KEY_S, 3);
     pitch_fast.add_key(GLFW_KEY_W, -3);
@@ -152,9 +152,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings_.inputs.push_back(pitch_fast);
 
     controls::input yaw = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::external, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input yaw_fast = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     yaw.add_key(GLFW_KEY_E, 3);
     yaw.add_key(GLFW_KEY_Q, -3);
     yaw_fast.add_key(GLFW_KEY_E, 3);
@@ -163,9 +163,9 @@ control_bindings plane_control_bindings_wasd() {
     control_bindings_.inputs.push_back(yaw_fast);
 
     controls::input roll = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::external, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input roll_fast = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::external, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
     roll.add_key(GLFW_KEY_A, -3);
     roll.add_key(GLFW_KEY_D, 3);
     roll_fast.add_key(GLFW_KEY_A, -3);
@@ -237,8 +237,8 @@ object f16_simple_forces_model() {
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8, -3.2, 0), vector::localspace( 0,-1, 0), vector::localspace(0, 1, 0), 24));
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*3.8           , vector::localspace(0, 0, 1), vector::localspace(   -8,  3.2, 0), vector::localspace( 0,-1, 0), vector::localspace(0, 1, 0), 24));
     // ailerons
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0, -6.5, 0), vector::localspace( 1, 0, 0), vector::localspace(0, 1, 0), 20));
-    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0,  6.5, 0), vector::localspace(-1, 0, 0), vector::localspace(0, 1, 0), 20));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0, -6.5, 0), vector::localspace( 1, 0,  0.35), vector::localspace(0, 1, 0), 20));
+    o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.5           , vector::localspace(0, 0, 1), vector::localspace( -5.0,  6.5, 0), vector::localspace(-1, 0, -0.35), vector::localspace(0, 1, 0), 20));
     // rudder
     o.add_aerodynamic_surface(module::aerodynamic_surface(0.5*2.4           , vector::localspace(0, 1, 0), vector::localspace(  -8,  0, -3.5), vector::localspace( 0, 0,-1), vector::localspace(0, 0, 1), 30));
     /*
@@ -258,12 +258,16 @@ object f16_simple_forces_model() {
         o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
     }
 
-    o.add_flight_controller(module::flight_controller(
-        pid(2.0, 0, 1.0, 1.0), 0.01,
-        pid(2.0, 0, 1.0, 1.0), 0.01,
-        pid(1.0, 0, 5.0, 1.0), 0.01,
-        &o
-    ));
+    {
+        using fc = module::flight_controller;
+        o.add_flight_controller(fc(
+            fc::roll_controller (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01)),
+            fc::pitch_controller(pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(10, 20), fc::artificial_stability(1e-7)),
+            fc::yaw_controller  (pid( 50.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(5, 10), fc::artificial_stability(1e-7)),
+            fc::max_setpoint_deviation(15, 0.1),
+            &o
+        ));
+    }
 
     return o;
 }

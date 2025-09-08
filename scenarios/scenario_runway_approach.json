@@ -15,7 +15,7 @@
         "y": 0,
         "z": 0
       },
-      "control_bindings": "plane_control_bindings_wasd"
+      "control_bindings": "plane_control_bindings_mouse"
     },
     {
       "blueprint": "sun"

@@ -5,95 +5,104 @@
 namespace module {
 
 flight_controller::flight_controller(
-    pid pid_roll_, double max_roll_rate_, 
-    pid pid_pitch_, double max_pitch_rate_, 
-    pid pid_yaw_, double max_yaw_rate_,
+    roll_controller  roll_, 
+    pitch_controller pitch_, 
+    yaw_controller   yaw_,
+    max_setpoint_deviation max_setpoint_deviation__,
     physics_object::object* parent) {
     
     std::cout << "flight_controller creation\n";
 
-    pid_roll = pid_roll_;
-    pid_pitch = pid_pitch_;
-    pid_yaw = pid_yaw_;
+    roll  = roll_;
+    pitch = pitch_;
+    yaw   = yaw_;
 
-    max_roll_rate = max_roll_rate_;
-    max_pitch_rate = max_pitch_rate_;
-    max_yaw_rate = max_yaw_rate_;
+    max_setpoint_deviation_.degrees = max_setpoint_deviation__.degrees;
 
     collider = collision::collider();
     
-    controls::input roll = controls::input(
+    controls::input roll_input = controls::input(
         controls::roll, controls::response_type::instant, controls::input_destination::external, -1.0, 1.0, 1.0);
-    parent->control_bindings.inputs.push_back(roll);
+    parent->control_bindings.inputs.push_back(roll_input);
 
-    controls::input pitch = controls::input(
+    controls::input pitch_input = controls::input(
         controls::pitch, controls::response_type::instant, controls::input_destination::external, -1.0, 1.0, 1.0);
-    parent->control_bindings.inputs.push_back(pitch);
+    parent->control_bindings.inputs.push_back(pitch_input);
 
-    controls::input yaw = controls::input(
+    controls::input yaw_input = controls::input(
         controls::yaw, controls::response_type::instant, controls::input_destination::external, -1.0, 1.0, 1.0);
-    parent->control_bindings.inputs.push_back(yaw);
+    parent->control_bindings.inputs.push_back(yaw_input);
 }
 
 void flight_controller::update(physics_object::object* parent) {
-    return;
-    double desired_roll_rate = max_roll_rate * parent->control_bindings.get_response(controls::roll, controls::flight_controller);
-    double desired_pitch_rate = max_pitch_rate * parent->control_bindings.get_response(controls::pitch, controls::flight_controller);
-    double desired_yaw_rate = max_yaw_rate * parent->control_bindings.get_response(controls::yaw, controls::flight_controller);
 
-    std::cout << "desired_roll_rate: " << desired_roll_rate << "\n";
-    std::cout << "desired_pitch_rate: " << desired_pitch_rate << "\n";
-    std::cout << "desired_yaw_rate: " << desired_yaw_rate << "\n";
+    double desired_roll_rate  = roll .rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::roll,  controls::flight_controller);
+    double desired_pitch_rate = pitch.rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::pitch, controls::flight_controller);
+    double desired_yaw_rate   = yaw  .rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::yaw,   controls::flight_controller);
     
-    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_roll_rate, vector::worldspace::UnitX());
+    vector::localspace velocity_localspace = parent->physics_state.velocity.to_localspace(parent->physics_state.rotation);
+
+    double pitch_aoa = 180.0 / std::numbers::pi * atan2(velocity_localspace.z(), velocity_localspace.x());
+    double yaw_aoa   = 180.0 / std::numbers::pi * atan2(velocity_localspace.y(), velocity_localspace.x());
+    double pitch_multiplier_for_aoa = (fabs(pitch_aoa) - pitch.aoa_limit_.degrees_start) / (pitch.aoa_limit_.degrees_end - pitch.aoa_limit_.degrees_start);
+    double yaw_multiplier_for_aoa   = (fabs(yaw_aoa)   - yaw  .aoa_limit_.degrees_start) / (yaw  .aoa_limit_.degrees_end - yaw  .aoa_limit_.degrees_start);
+    pitch_multiplier_for_aoa = std::clamp(1.0 - pitch_multiplier_for_aoa, 0.0, 1.0);
+    yaw_multiplier_for_aoa   = std::clamp(1.0 - yaw_multiplier_for_aoa  , 0.0, 1.0);
+    desired_pitch_rate *= pitch_multiplier_for_aoa;
+    desired_yaw_rate   *= yaw_multiplier_for_aoa;
+
+    desired_pitch_rate -= velocity_localspace.z() * fabs(velocity_localspace.z()) * pitch.artificial_stability_.angular_velocity_per_v_squared;
+    desired_yaw_rate   += velocity_localspace.y() * fabs(velocity_localspace.y()) * yaw  .artificial_stability_.angular_velocity_per_v_squared;
+
+    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_roll_rate,  vector::worldspace::UnitX());
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_pitch_rate, vector::worldspace::UnitY());
-    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_yaw_rate, vector::worldspace::UnitZ());
+    desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_yaw_rate,   vector::worldspace::UnitZ());
 
-    parent->physics_state.rotation = desired_rotation;
-    
-    std::cout << "parent rotation: " << parent->physics_state.rotation << "\n";
-    std::cout << "desired rotation: " << desired_rotation << "\n";
-    Eigen::Quaterniond rotation_error = parent->physics_state.rotation * desired_rotation.conjugate();
-    std::cout << "rotation error: " << rotation_error << "\n";
+    Eigen::Quaterniond rotation_error = desired_rotation * parent->physics_state.rotation.conjugate();
+
+    Eigen::Quaterniond rotation_error_no_roll;
+    {
+        Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
+        rotation_error_no_roll = Eigen::AngleAxisd(rotation_error_euler_angles[0], vector::worldspace::UnitZ()) *
+                                 Eigen::AngleAxisd(rotation_error_euler_angles[1], vector::worldspace::UnitY());
+
+    }
+
+    Eigen::AngleAxisd rotation_error_angle_axis(rotation_error);
+    Eigen::AngleAxisd rotation_error_no_roll_angle_axis(rotation_error_no_roll);
+    Eigen::AngleAxisd rotation_error_blended_roll_angle_axis(rotation_error_no_roll.slerp(max_setpoint_deviation_.roll_importance_multiplier, rotation_error));
+
+    double angle_saturation = 1 - (fmin(rotation_error_blended_roll_angle_axis.angle(), max_setpoint_deviation_.degrees * std::numbers::pi / 180.0) / rotation_error_blended_roll_angle_axis.angle());
+    if (rotation_error_blended_roll_angle_axis.angle() == 0) angle_saturation = 0;
+
+    rotation_error_angle_axis.angle() *= (1 - angle_saturation);
+
+    std::cout << "angle_saturation: " << angle_saturation << "\n";
+
+    Eigen::Quaterniond limited_rotation_error = Eigen::Quaterniond::Identity() * rotation_error_angle_axis;
+    desired_rotation = limited_rotation_error * parent->physics_state.rotation;
 
     Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
 
-    double roll_error = rotation_error_euler_angles.z();
+    double roll_error  = rotation_error_euler_angles.z();
     double pitch_error = rotation_error_euler_angles.y();
-    double yaw_error = rotation_error_euler_angles.x();
+    double yaw_error   = rotation_error_euler_angles.x();
 
-    /*
-    std::cout << "flight_controller desired_roll_rate: " << desired_roll_rate << "\n";
-    std::cout << "flight_controller desired_pitch_rate: " << desired_pitch_rate << "\n";
-    std::cout << "flight_controller desired_yaw_rate: " << desired_yaw_rate << "\n";
-    std::cout << "flight_controller actual_roll_rate: " << actual_roll_rate << "\n";
-    std::cout << "flight_controller actual_pitch_rate: " << actual_pitch_rate << "\n";
-    std::cout << "flight_controller actual_yaw_rate: " << actual_yaw_rate << "\n";
-    */
+    roll .pid_.update(roll_error );
+    pitch.pid_.update(pitch_error);
+    yaw  .pid_.update(yaw_error  );
 
-    std::cout << "roll_error: " << roll_error << "\n";
-    std::cout << "pitch_error: " << pitch_error << "\n";
-    std::cout << "yaw_error: " << yaw_error << "\n";
+    controls::input* roll_input  = parent->control_bindings.get_first_input(controls::roll,  controls::external);
+    controls::input* pitch_input = parent->control_bindings.get_first_input(controls::pitch, controls::external);
+    controls::input* yaw_input   = parent->control_bindings.get_first_input(controls::yaw,   controls::external);
 
-    pid_roll.update(roll_error);
-    pid_pitch.update(pitch_error);
-    pid_yaw.update(yaw_error);
+    if (roll_input)  roll_input ->response_unmultiplied = roll .pid_.output;
+    if (pitch_input) pitch_input->response_unmultiplied = pitch.pid_.output;
+    if (yaw_input)   yaw_input  ->response_unmultiplied = yaw  .pid_.output;
 
-    /*
-    std::cout << "flight_controller roll output: " << pid_roll.output << "\n";
-    std::cout << "flight_controller pitch output: " << pid_pitch.output << "\n";
-    std::cout << "flight_controller yaw output: " << pid_yaw.output << "\n";
-    */
-
-    controls::input* roll = parent->control_bindings.get_first_input(controls::roll, controls::external);
-    if (roll) roll->response_unmultiplied = pid_roll.output;
-    else std::cout << "flight_controller on " << parent->properties.name << ": roll input not found\n";
-    controls::input* pitch = parent->control_bindings.get_first_input(controls::pitch, controls::external);
-    if (pitch) pitch->response_unmultiplied = pid_pitch.output;
-    else std::cout << "flight_controller on " << parent->properties.name << ": pitch input not found\n";
-    controls::input* yaw = parent->control_bindings.get_first_input(controls::yaw, controls::external);
-    if (yaw) yaw->response_unmultiplied = pid_yaw.output;
-    else std::cout << "flight_controller on " << parent->properties.name << ": yaw input not found\n";
+    if (!roll_input)  std::cout << "flight_controller on " << parent->properties.name << ": roll input not found\n";
+    if (!pitch_input) std::cout << "flight_controller on " << parent->properties.name << ": pitch input not found\n";
+    if (!yaw_input)   std::cout << "flight_controller on " << parent->properties.name << ": yaw input not found\n";
 }
 
 }
