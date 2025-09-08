@@ -13,8 +13,8 @@ struct aerodynamic_surface : module {
     aerodynamic_surface(double s, vector::localspace d, vector::localspace p);
     aerodynamic_surface(double s, vector::localspace d, vector::localspace p, vector::localspace response_axes_, vector::localspace rotation_axis_, double a);
     void update(physics_object::object* parent) override;
-    void update_static_surface(physics_object::object* parent);
-    void update_dynamic_surface(physics_object::object* parent);
+    void apply_aerodynamic_force(physics_object::object* parent, int iteration);
+    void rotate_surface(physics_object::object* parent);
 };
 
 }

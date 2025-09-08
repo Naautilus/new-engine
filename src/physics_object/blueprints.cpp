@@ -137,88 +137,84 @@ control_bindings plane_control_bindings_mouse() {
     return control_bindings_;
 }
 
-control_bindings plane_control_bindings_wasd() {
+control_bindings plane_control_bindings_keyboard(int key_pitch_pos, int key_pitch_neg, 
+                                                 int key_yaw_pos, int key_yaw_neg, 
+                                                 int key_roll_pos, int key_roll_neg, 
+                                                 int key_engine_pos, int key_engine_neg,
+                                                 int key_gun1) {
+    controls::input_destination rpy_input_type = controls::input_destination::flight_controller;
+    if (globals::NO_FLIGHT_CONTROLLER) rpy_input_type = controls::input_destination::external;
+
     control_bindings control_bindings_;
-    
+
     controls::input pitch = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.3, 0.3, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::pitch, controls::response_type::trim_resetting, rpy_input_type, -0.25, 0.25, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input pitch_fast = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
-    pitch.add_key(GLFW_KEY_W, -3);
-    pitch.add_key(GLFW_KEY_S, 3);
-    pitch_fast.add_key(GLFW_KEY_W, -3);
-    pitch_fast.add_key(GLFW_KEY_S, 3);
+        controls::axis::pitch, controls::response_type::trim_resetting, rpy_input_type, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+    pitch.add_key(key_pitch_neg, -2);
+    pitch.add_key(key_pitch_pos, 2);
+    pitch_fast.add_key(key_pitch_neg, -3);
+    pitch_fast.add_key(key_pitch_pos, 3);
     control_bindings_.inputs.push_back(pitch);
     control_bindings_.inputs.push_back(pitch_fast);
 
     controls::input yaw = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.6, 0.6, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::yaw, controls::response_type::trim_resetting, rpy_input_type, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input yaw_fast = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
-    yaw.add_key(GLFW_KEY_E, 3);
-    yaw.add_key(GLFW_KEY_Q, -3);
-    yaw_fast.add_key(GLFW_KEY_E, 3);
-    yaw_fast.add_key(GLFW_KEY_Q, -3);
+        controls::axis::yaw, controls::response_type::trim_resetting, rpy_input_type, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+    yaw.add_key(key_yaw_pos, 3);
+    yaw.add_key(key_yaw_neg, -3);
+    yaw_fast.add_key(key_yaw_pos, 6);
+    yaw_fast.add_key(key_yaw_neg, -6);
     control_bindings_.inputs.push_back(yaw);
     control_bindings_.inputs.push_back(yaw_fast);
 
+    double roll_authority = 1.0;
+    if (globals::NO_FLIGHT_CONTROLLER) roll_authority = 0.2;
+
     controls::input roll = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.4, 0.4, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
+        controls::axis::roll, controls::response_type::trim_resetting, rpy_input_type, -roll_authority, roll_authority, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, false));
     controls::input roll_fast = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -1.0, 1.0, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
-    roll.add_key(GLFW_KEY_A, -3);
-    roll.add_key(GLFW_KEY_D, 3);
-    roll_fast.add_key(GLFW_KEY_A, -3);
-    roll_fast.add_key(GLFW_KEY_D, 3);
+        controls::axis::roll, controls::response_type::trim_resetting, rpy_input_type, -roll_authority, roll_authority, 1, controls::toggle_key(GLFW_KEY_LEFT_SHIFT, true));
+    roll.add_key(key_roll_neg, -2);
+    roll.add_key(key_roll_pos, 2);
+    roll_fast.add_key(key_roll_neg, -3);
+    roll_fast.add_key(key_roll_pos, 3);
     control_bindings_.inputs.push_back(roll);
     control_bindings_.inputs.push_back(roll_fast);
 
     controls::input engine1 = controls::input(
         controls::axis::engine1, controls::response_type::trim_not_resetting, controls::input_destination::external, 0, 1, 1);
-    engine1.add_key(GLFW_KEY_Z, 0.5);
-    engine1.add_key(GLFW_KEY_X, -0.5);
+    engine1.add_key(key_engine_pos, 0.5);
+    engine1.add_key(key_engine_neg, -0.5);
     control_bindings_.inputs.push_back(engine1);
 
     controls::input gun1 = controls::input(
         controls::axis::gun1, controls::response_type::instant, controls::input_destination::external, 0, 1, 1);
-    gun1.add_key(GLFW_KEY_SPACE, 1);
+    gun1.add_key(key_gun1, 1);
     control_bindings_.inputs.push_back(gun1);
 
     return control_bindings_;
 }
 
+control_bindings plane_control_bindings_wasd() {
+    return plane_control_bindings_keyboard(
+        GLFW_KEY_S, GLFW_KEY_W,
+        GLFW_KEY_E, GLFW_KEY_Q,
+        GLFW_KEY_D, GLFW_KEY_A,
+        GLFW_KEY_Z, GLFW_KEY_X,
+        GLFW_KEY_SPACE
+    );
+}
+
 control_bindings plane_control_bindings_ijkl() {
-    control_bindings control_bindings_;
-    
-    controls::input pitch = controls::input(
-        controls::axis::pitch, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.3, 0.3, 1);
-    pitch.add_key(GLFW_KEY_I, -3);
-    pitch.add_key(GLFW_KEY_K, 3);
-    control_bindings_.inputs.push_back(pitch);
-    
-    controls::input yaw = controls::input(
-        controls::axis::yaw, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.6, 0.6, 1);
-    yaw.add_key(GLFW_KEY_O, 3);
-    yaw.add_key(GLFW_KEY_U, -3);
-    control_bindings_.inputs.push_back(yaw);
-    
-    controls::input roll = controls::input(
-        controls::axis::roll, controls::response_type::trim_resetting, controls::input_destination::flight_controller, -0.4, 0.4, 1);
-    roll.add_key(GLFW_KEY_J, -3);
-    roll.add_key(GLFW_KEY_L, 3);
-    control_bindings_.inputs.push_back(roll);
-    
-    controls::input engine1 = controls::input(
-        controls::axis::engine1, controls::response_type::trim_not_resetting, controls::input_destination::external, 0, 1, 1);
-    engine1.add_key(GLFW_KEY_N, 0.5);
-    engine1.add_key(GLFW_KEY_M, -0.5);
-    control_bindings_.inputs.push_back(engine1);
-    
-    controls::input gun1 = controls::input(
-        controls::axis::gun1, controls::response_type::instant, controls::input_destination::external, 0, 1, 1);
-    gun1.add_key(GLFW_KEY_B, 1);
-    control_bindings_.inputs.push_back(gun1);
-    return control_bindings_;
+    return plane_control_bindings_keyboard(
+        GLFW_KEY_K, GLFW_KEY_I,
+        GLFW_KEY_O, GLFW_KEY_U,
+        GLFW_KEY_L, GLFW_KEY_J,
+        GLFW_KEY_N, GLFW_KEY_M,
+        GLFW_KEY_B
+    );
 }
 
 object f16_simple_forces_model() {
@@ -258,7 +254,7 @@ object f16_simple_forces_model() {
         o.add_autocannon(module::autocannon(aim9x, 0, 3, vector::localspace(1, 0, 0), vector::localspace(0, 0, 0), 1, 0.1, 100));
     }
 
-    {
+    if (!globals::NO_FLIGHT_CONTROLLER) {
         using fc = module::flight_controller;
         o.add_flight_controller(fc(
             fc::roll_controller (pid(200.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01)),

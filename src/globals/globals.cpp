@@ -31,6 +31,7 @@ bool SHOW_MISSILE_ACCELERATION = false;
 bool VERBOSE_LOG = false;
 bool SHOW_FPS = false;
 bool BULLETS_INSTEAD_OF_MISSILES = false;
+bool NO_FLIGHT_CONTROLLER = false;
 
 const color SKY_COLOR = color{0.08, 0.45, 1.44};
 double GRAVITY = 9.81;

@@ -12,6 +12,7 @@ aerodynamic_surface::aerodynamic_surface(double s, vector::localspace d, vector:
     rotation_axis = vector::localspace(0, 0, 1);
     angle_range = 0;
 }
+
 aerodynamic_surface::aerodynamic_surface(double s, vector::localspace d, vector::localspace p, vector::localspace response_axes_, vector::localspace rotation_axis_, double a) {
     surface_area = s;
     unrotated_direction = d;
@@ -20,21 +21,71 @@ aerodynamic_surface::aerodynamic_surface(double s, vector::localspace d, vector:
     rotation_axis = rotation_axis_;
     angle_range = a;
 }
+
 void aerodynamic_surface::update(physics_object::object* parent) {
-    if (angle_range == 0) update_static_surface(parent);
-    else update_dynamic_surface(parent);
+    int SUBFORCES = 100;
+    rotate_surface(parent);
+    apply_aerodynamic_force(parent, 0);
 }
-void aerodynamic_surface::update_static_surface(physics_object::object* parent) {
-    vector::worldspace surface_velocity = parent->physics_state.velocity;// + parent->physics_state.angular_velocity.cross(position.to_worldspace(parent->physics_state.rotation));
-    surface_velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
-    if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
-    vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
-    double force = v.dot(unrotated_direction) / v.norm();
-    vector::localspace force2 = -force * 0.5 * ground::fluid_density(position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position).z()) * surface_area * unrotated_direction * v.squaredNorm();
-    vector::localspace pos_ = position;
-    parent->queue_force(pos_, force2);
+
+int MAX_FORCE_ITERATIONS = 8;
+void aerodynamic_surface::apply_aerodynamic_force(physics_object::object* parent, int iteration) {
+    if (iteration >= MAX_FORCE_ITERATIONS) {
+        //std::cout << "Continuing due to hitting iteration limit\n";
+        return;
+    }
+
+    vector::worldspace original_velocity = parent->physics_state.velocity;
+    vector::worldspace original_angular_velocity = parent->physics_state.angular_velocity;
+    
+    int subdivisions = 1;
+    for (int i = 0; i < iteration; i++) subdivisions *= 2;
+    double multiplier = 1.0 / subdivisions;
+
+    bool max_deviation_exceeded = false;
+
+    for (int i = 0; i < subdivisions; i++) {
+        vector::worldspace surface_velocity = parent->physics_state.velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
+        if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
+        vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
+        double force = v.dot(rotated_direction) / v.norm();
+        vector::localspace force2 = -force * 0.5 * ground::fluid_density(position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position).z() * -1) * surface_area * rotated_direction * v.squaredNorm();
+        
+        double MAX_ALLOWED_DOT_PRODUCT_DEVIATION = 0.5;
+        vector::worldspace initial_surface_velocity = parent->physics_state.velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
+        parent->apply_force(position, force2 * multiplier);
+        //std::cout << initial_surface_velocity.to_localspace(parent->physics_state.rotation).dot(rotated_direction) << "\n";
+        vector::worldspace new_surface_velocity = parent->physics_state.velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
+        double dot_product = initial_surface_velocity.normalized().dot(new_surface_velocity / initial_surface_velocity.norm());
+        if (fabs(dot_product - 1.0) > MAX_ALLOWED_DOT_PRODUCT_DEVIATION) {
+            //std::cout << "initial surface velocity: " << initial_surface_velocity.str() << "\n";
+            //std::cout << "new surface velocity: " << new_surface_velocity.str() << "\n";
+            //std::cout << "dot product: " << dot_product << "\n";
+            //std::cout << "apply_aerodynamic_force: dot product of " << dot_product << " exceeds MAX_ALLOWED_DOT_PRODUCT_DEVIATION. multiplier: " << multiplier << "\n";
+            max_deviation_exceeded = true;
+            break;
+        }
+    }
+    //std::cout << "\n\n";
+
+    if (max_deviation_exceeded) {
+        
+        parent->physics_state.velocity = original_velocity;
+        parent->physics_state.angular_velocity = original_angular_velocity;
+
+        iteration++;
+        apply_aerodynamic_force(parent, iteration);
+    }
+
 }
-void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent) {
+
+void aerodynamic_surface::rotate_surface(physics_object::object* parent) {
+
+    if (angle_range == 0) {
+        rotated_direction = unrotated_direction;
+        return;
+    }
+
     vector::localspace rotation_drives(0, 0, 0);
     rotation_drives.x() = parent->control_bindings.get_response(controls::roll, controls::external);
     rotation_drives.y() = parent->control_bindings.get_response(controls::pitch, controls::external);
@@ -45,15 +96,6 @@ void aerodynamic_surface::update_dynamic_surface(physics_object::object* parent)
     response *= std::numbers::pi / 180;
     rotation = Eigen::AngleAxisd(response, rotation_axis);
     rotated_direction = rotation * unrotated_direction;
-
-    vector::worldspace surface_velocity = parent->physics_state.velocity;
-    surface_velocity.add_angular_velocity(position.to_worldspace(parent->physics_state.rotation), parent->physics_state.angular_velocity);
-    if (surface_velocity.squaredNorm() < std::numeric_limits<double>::epsilon()) return;
-    vector::localspace v = surface_velocity.to_localspace(parent->physics_state.rotation);
-    double force = v.dot(rotated_direction) / v.norm();
-    vector::localspace force2 = -force * 0.5 * ground::fluid_density(position.to_worldspace_positional(parent->physics_state.rotation, parent->physics_state.position).z()) * surface_area * rotated_direction * v.squaredNorm();
-    vector::localspace pos_ = position;
-    parent->queue_force(pos_, force2);
 }
 
 }

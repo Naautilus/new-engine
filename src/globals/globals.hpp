@@ -45,6 +45,7 @@ extern bool SHOW_MISSILE_ACCELERATION;
 extern bool VERBOSE_LOG;
 extern bool SHOW_FPS;
 extern bool BULLETS_INSTEAD_OF_MISSILES;
+extern bool NO_FLIGHT_CONTROLLER;
 
 extern const color SKY_COLOR;
 extern double GRAVITY;

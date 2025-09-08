@@ -114,7 +114,7 @@ void initialize_physics_objects(std::vector<std::string> args) {
             root_position.y() = physics_object_["position"]["y"];
             root_position.z() = physics_object_["position"]["z"];
             if (physics_object_["position"]["relative_to_ground"]) {
-                root_position.z() += ground::get_ground_altitude(root_position.x(), root_position.y());
+                root_position.z() += fmin(ground::get_ground_altitude(root_position.x(), root_position.y()), -constants::WATER_LEVEL);
             }
         }
 

@@ -5,14 +5,14 @@ namespace constants {
 const double DELTA_T = 0.005;
 const double LOG_INTERVAL = 1;
 const double TIME_LIMIT = -1;
-const double DAMAGE_MULTIPLIER = 1e-4;
+const double DAMAGE_MULTIPLIER = 5e-4;
 const double UNCONTROLLABLE_HEALTH_FRACTION = 0.8;
 const double SAFE_COLLISION_SPEED = 10;
 const double CYLINDER_VERTICES = 8;
 const double PLANET_RADIUS = 6357000;
 const double STANDARD_GRAVITY = 9.81;
 
-const double WATER_LEVEL = -5000;
+const double WATER_LEVEL = 5000;
 
 const double AIR_DENSITY = 1.293;
 const double AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE = 7990.0;

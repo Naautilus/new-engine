@@ -113,7 +113,7 @@ mesh get_terrain_model_tile(double vertical_offset, double original_tile_size, d
         }
     } else {
         for (vertex& v : model.vertices) {
-            v.z += constants::WATER_LEVEL;
+            v.z -= constants::WATER_LEVEL;
 
             /*
             //for reflective overcast appearance:

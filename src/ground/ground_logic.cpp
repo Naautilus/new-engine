@@ -40,7 +40,7 @@ vector::worldspace TERRAIN_OFFSET(35000, -2000,  10000);
 std::unordered_map<ground_info, double, ground_info_hash> ground_altitude_averaged;
 std::unordered_map<ground_info, color, ground_info_hash> ground_color_averaged;
 std::unordered_map<double, double> fluid_density_map;
-const double FLUID_DENSITY_MAP_INTERVAL = 25;
+const double FLUID_DENSITY_MAP_INTERVAL = 5;
 std::mutex ground_altitude_averaged_mutex;
 std::mutex ground_color_averaged_mutex;
 std::mutex fluid_density_map_mutex;
@@ -58,7 +58,7 @@ std::vector<std::pair<double, color>> ground_color_heightmap = {
 };
 
 color get_ground_color_from_heightmap(double z) {
-    z -= constants::WATER_LEVEL;
+    z += constants::WATER_LEVEL;
     
     if (z > ground_color_heightmap[0].first) return ground_color_heightmap[0].second;
     int last = ground_color_heightmap.size() - 1;
@@ -185,18 +185,21 @@ bool line_of_sight(vector::worldspace a, vector::worldspace& b) {
 
 double fluid_density(double altitude) {
 
+    double sea_level_altitude = altitude - constants::WATER_LEVEL;
+
     fluid_density_map_mutex.lock();
     int altitude_interval = floor(altitude / FLUID_DENSITY_MAP_INTERVAL);
     if(fluid_density_map.find(altitude_interval) != fluid_density_map.end()) {
         double output = fluid_density_map[altitude_interval];
         fluid_density_map_mutex.unlock();
+        //std::cout << "density @ " << altitude << ": " << output << "\n";
         return output;
     }
     fluid_density_map_mutex.unlock();
 
     double density;
-    if (altitude < constants::WATER_LEVEL) {
-        density = constants::AIR_DENSITY * exp(altitude / constants::AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE);
+    if (sea_level_altitude > 0) {
+        density = constants::AIR_DENSITY * exp(-sea_level_altitude / constants::AIR_DENSITY_1_OVER_E_FALLOFF_DISTANCE);
     } else {
         density = constants::WATER_DENSITY;
     }

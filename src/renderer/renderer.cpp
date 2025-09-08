@@ -305,7 +305,7 @@ void renderer::run_window(int window_size_x, int window_size_y, int window_pos_x
         std::cout << "ground::fluid_density(constants::WATER_LEVEL + 1): " << ground::fluid_density(constants::WATER_LEVEL + 1) << "\n";
         */
 
-        float fluid_density_fraction = (float)fmin(ground::fluid_density(camera_properties_.camera_position[1]) / ground::fluid_density(constants::WATER_LEVEL + 1), 1.0);
+        float fluid_density_fraction = (float)fmin(ground::fluid_density(-camera_properties_.camera_position[1]) / constants::AIR_DENSITY, 1.0);
         /*
         std::cout << "altitude: " << camera_properties_.camera_position[1] << "\n";
         std::cout << "fluid_density_fraction: " << fluid_density_fraction << "\n";
