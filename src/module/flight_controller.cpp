@@ -40,6 +40,7 @@ void flight_controller::update(physics_object::object* parent) {
     double desired_pitch_rate = pitch.rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::pitch, controls::flight_controller);
     double desired_yaw_rate   = yaw  .rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::yaw,   controls::flight_controller);
     
+    ///*
     vector::localspace velocity_localspace = parent->physics_state.velocity.to_localspace(parent->physics_state.rotation);
 
     double pitch_aoa = 180.0 / std::numbers::pi * atan2(velocity_localspace.z(), velocity_localspace.x());
@@ -53,13 +54,15 @@ void flight_controller::update(physics_object::object* parent) {
 
     desired_pitch_rate -= velocity_localspace.z() * fabs(velocity_localspace.z()) * pitch.artificial_stability_.angular_velocity_per_v_squared;
     desired_yaw_rate   += velocity_localspace.y() * fabs(velocity_localspace.y()) * yaw  .artificial_stability_.angular_velocity_per_v_squared;
+    //*/
 
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_roll_rate,  vector::worldspace::UnitX());
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_pitch_rate, vector::worldspace::UnitY());
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_yaw_rate,   vector::worldspace::UnitZ());
 
-    Eigen::Quaterniond rotation_error = desired_rotation * parent->physics_state.rotation.conjugate();
+    Eigen::Quaterniond rotation_error = parent->physics_state.rotation.conjugate() * desired_rotation;
 
+    /*
     Eigen::Quaterniond rotation_error_no_roll;
     {
         Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
@@ -81,6 +84,7 @@ void flight_controller::update(physics_object::object* parent) {
 
     Eigen::Quaterniond limited_rotation_error = Eigen::Quaterniond::Identity() * rotation_error_angle_axis;
     desired_rotation = limited_rotation_error * parent->physics_state.rotation;
+    */
 
     Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
 
