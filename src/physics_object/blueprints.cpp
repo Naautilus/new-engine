@@ -263,7 +263,7 @@ object f16_simple_forces_model() {
         o.add_flight_controller(fc(
             fc::roll_controller (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01)),
             fc::pitch_controller(pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(10, 20), fc::artificial_stability(1e-7)),
-            fc::yaw_controller  (pid( 50.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(5, 10), fc::artificial_stability(1e-7)),
+            fc::yaw_controller  (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.005), fc::aoa_limit( 0,  4), fc::artificial_stability(1e-7)),
             fc::max_setpoint_deviation(15, 0.1),
             &o
         ));

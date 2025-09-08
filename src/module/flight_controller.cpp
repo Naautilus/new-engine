@@ -45,24 +45,21 @@ void flight_controller::update(physics_object::object* parent) {
 
     double pitch_aoa = 180.0 / std::numbers::pi * atan2(velocity_localspace.z(), velocity_localspace.x());
     double yaw_aoa   = 180.0 / std::numbers::pi * atan2(velocity_localspace.y(), velocity_localspace.x());
-    double pitch_multiplier_for_aoa = (fabs(pitch_aoa) - pitch.aoa_limit_.degrees_start) / (pitch.aoa_limit_.degrees_end - pitch.aoa_limit_.degrees_start);
-    double yaw_multiplier_for_aoa   = (fabs(yaw_aoa)   - yaw  .aoa_limit_.degrees_start) / (yaw  .aoa_limit_.degrees_end - yaw  .aoa_limit_.degrees_start);
-    pitch_multiplier_for_aoa = std::clamp(1.0 - pitch_multiplier_for_aoa, 0.0, 1.0);
-    yaw_multiplier_for_aoa   = std::clamp(1.0 - yaw_multiplier_for_aoa  , 0.0, 1.0);
-    desired_pitch_rate *= pitch_multiplier_for_aoa;
-    desired_yaw_rate   *= yaw_multiplier_for_aoa;
+    double pitch_aoa_saturation = (fabs(pitch_aoa) - pitch.aoa_limit_.degrees_start) / (pitch.aoa_limit_.degrees_end - pitch.aoa_limit_.degrees_start);
+    double yaw_aoa_saturation   = (fabs(yaw_aoa)   - yaw  .aoa_limit_.degrees_start) / (yaw  .aoa_limit_.degrees_end - yaw  .aoa_limit_.degrees_start);
+    pitch_aoa_saturation = fmax(pitch_aoa_saturation, 0.0);
+    yaw_aoa_saturation   = fmax(yaw_aoa_saturation  , 0.0);
+    desired_pitch_rate -= pitch.rate_limit_.angular_velocity * pitch_aoa_saturation * (pitch_aoa>0?1:-1);
+    desired_yaw_rate   += yaw  .rate_limit_.angular_velocity * yaw_aoa_saturation   * (yaw_aoa  >0?1:-1);
 
     desired_pitch_rate -= velocity_localspace.z() * fabs(velocity_localspace.z()) * pitch.artificial_stability_.angular_velocity_per_v_squared;
     desired_yaw_rate   += velocity_localspace.y() * fabs(velocity_localspace.y()) * yaw  .artificial_stability_.angular_velocity_per_v_squared;
-    //*/
 
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_roll_rate,  vector::worldspace::UnitX());
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_pitch_rate, vector::worldspace::UnitY());
     desired_rotation = desired_rotation * Eigen::AngleAxisd(desired_yaw_rate,   vector::worldspace::UnitZ());
 
     Eigen::Quaterniond rotation_error = parent->physics_state.rotation.conjugate() * desired_rotation;
-
-    /*
     Eigen::Quaterniond rotation_error_no_roll;
     {
         Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
@@ -70,11 +67,9 @@ void flight_controller::update(physics_object::object* parent) {
                                  Eigen::AngleAxisd(rotation_error_euler_angles[1], vector::worldspace::UnitY());
 
     }
-
     Eigen::AngleAxisd rotation_error_angle_axis(rotation_error);
     Eigen::AngleAxisd rotation_error_no_roll_angle_axis(rotation_error_no_roll);
     Eigen::AngleAxisd rotation_error_blended_roll_angle_axis(rotation_error_no_roll.slerp(max_setpoint_deviation_.roll_importance_multiplier, rotation_error));
-
     double angle_saturation = 1 - (fmin(rotation_error_blended_roll_angle_axis.angle(), max_setpoint_deviation_.degrees * std::numbers::pi / 180.0) / rotation_error_blended_roll_angle_axis.angle());
     if (rotation_error_blended_roll_angle_axis.angle() == 0) angle_saturation = 0;
 
@@ -83,8 +78,7 @@ void flight_controller::update(physics_object::object* parent) {
     std::cout << "angle_saturation: " << angle_saturation << "\n";
 
     Eigen::Quaterniond limited_rotation_error = Eigen::Quaterniond::Identity() * rotation_error_angle_axis;
-    desired_rotation = limited_rotation_error * parent->physics_state.rotation;
-    */
+    desired_rotation = parent->physics_state.rotation * limited_rotation_error;
 
     Eigen::Vector3d rotation_error_euler_angles = rotation_error.toRotationMatrix().canonicalEulerAngles(2, 1, 0);
 
