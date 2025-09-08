@@ -29,3 +29,5 @@ move calculate_acceleration out of logger
 remove adjust_quaternion_angle mystery constant
 
 fix bullets passing through stuff
+
+move the control mode to an argument rather than a scenario variable

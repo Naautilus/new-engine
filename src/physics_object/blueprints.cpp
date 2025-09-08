@@ -110,7 +110,7 @@ control_bindings plane_control_bindings_mouse() {
     
     controls::input pitch = controls::input(
         controls::axis::pitch, controls::response_type::instant, controls::input_destination::flight_controller, -1.0, 1.0, 1);
-    pitch.add_mouse_position_input(controls::MOUSE_Y, -0.3);
+    pitch.add_mouse_position_input(controls::MOUSE_Y, -1.0);
     control_bindings_.inputs.push_back(pitch);
     
     controls::input yaw = controls::input(
@@ -261,9 +261,9 @@ object f16_simple_forces_model() {
     {
         using fc = module::flight_controller;
         o.add_flight_controller(fc(
-            fc::roll_controller (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01)),
-            fc::pitch_controller(pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(10, 20), fc::artificial_stability(1e-7)),
-            fc::yaw_controller  (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.005), fc::aoa_limit( 0,  4), fc::artificial_stability(1e-7)),
+            fc::roll_controller (pid(200.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01)),
+            fc::pitch_controller(pid(300.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit(20, 40), fc::artificial_stability(1e-7)),
+            fc::yaw_controller  (pid(100.0, 0.0, 4.0, 1.0), fc::rate_limit(0.01), fc::aoa_limit( 0,  3), fc::artificial_stability(1e-7)),
             fc::max_setpoint_deviation(15, 0.1),
             &o
         ));

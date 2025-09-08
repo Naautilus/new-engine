@@ -40,7 +40,6 @@ void flight_controller::update(physics_object::object* parent) {
     double desired_pitch_rate = pitch.rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::pitch, controls::flight_controller);
     double desired_yaw_rate   = yaw  .rate_limit_.angular_velocity * parent->control_bindings.get_response(controls::yaw,   controls::flight_controller);
     
-    ///*
     vector::localspace velocity_localspace = parent->physics_state.velocity.to_localspace(parent->physics_state.rotation);
 
     double pitch_aoa = 180.0 / std::numbers::pi * atan2(velocity_localspace.z(), velocity_localspace.x());
@@ -74,8 +73,6 @@ void flight_controller::update(physics_object::object* parent) {
     if (rotation_error_blended_roll_angle_axis.angle() == 0) angle_saturation = 0;
 
     rotation_error_angle_axis.angle() *= (1 - angle_saturation);
-
-    std::cout << "angle_saturation: " << angle_saturation << "\n";
 
     Eigen::Quaterniond limited_rotation_error = Eigen::Quaterniond::Identity() * rotation_error_angle_axis;
     desired_rotation = parent->physics_state.rotation * limited_rotation_error;
